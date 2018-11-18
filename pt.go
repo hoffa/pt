@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"text/template"
 
 	"gopkg.in/russross/blackfriday.v2"
@@ -68,5 +69,6 @@ func main() {
 		log.Fatal(err)
 	}
 	defer f.Close()
+	sort.Slice(posts, func(i, j int) bool { return posts[i].Date > posts[i].Date })
 	tmpl.ExecuteTemplate(f, "index.tmpl", posts)
 }
