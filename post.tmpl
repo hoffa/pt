@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ .Title }}</title>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: monospace;
+        font-size: 125%;
+        margin: 2em;
+      }
+
+      code,
+      pre {
+        background-color: #eee;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        padding: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    {{ .Content }}
+    <p><a href="../index.html">Back</a></p>
+  </body>
+</html>

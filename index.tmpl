@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chris Rehn</title>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: monospace;
+        font-size: 125%;
+        margin: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Chris Rehn</h1>
+    <p>
+      I'm Chris, a software engineer based in Korea. I’ll try to post toughts
+      and interesting technical stuff here every once in a while.
+    </p>
+    <p>I like simple and robust software, design, skateboarding.</p>
+    <ul>
+      {{ range . }}
+      <li><a href="{{ .Path }}">{{ .Title }}</a></li>
+      {{ end }}
+    </ul>
+  </body>
+</html>
