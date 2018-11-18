@@ -9,11 +9,17 @@ import (
 	"text/template"
 
 	"gopkg.in/russross/blackfriday.v2"
+	"gopkg.in/yaml.v2"
 )
 
+type FrontMatter struct {
+	Title string `yaml:"title"`
+	Date  string `yaml:"date"`
+}
+
 type Post struct {
+	FrontMatter
 	Path    string
-	Title   string
 	Content string
 }
 
@@ -43,14 +49,20 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		i := bytes.Index(b[3:], []byte("---")) + 3
+		var frontMatter FrontMatter
+		if err := yaml.Unmarshal(b[3:i], &frontMatter); err != nil {
+			log.Fatal(err)
+		}
 		post := Post{
-			Path:    target,
-			Title:   string(b[2:bytes.IndexByte(b, byte('\n'))]),
-			Content: string(blackfriday.Run(b)),
+			FrontMatter: frontMatter,
+			Path:        target,
+			Content:     string(blackfriday.Run(b[i+3:])),
 		}
 		posts = append(posts, post)
 		tmpl.ExecuteTemplate(f, "post.tmpl", post)
 	}
+	log.Println("index.html")
 	f, err := os.Create("index.html")
 	if err != nil {
 		log.Fatal(err)

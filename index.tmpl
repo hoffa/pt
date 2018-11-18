@@ -19,7 +19,7 @@
     <h2>Posts</h2>
     <ul>
       {{ range . }}
-        <li><a href="{{ .Path }}">{{ .Title }}</a></li>
+        <li>{{ .Date }} <a href="{{ .Path }}">{{ .Title }}</a></li>
       {{ end }}
     </ul>
   </body>
