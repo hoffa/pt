@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <title>Chris Rehn</title>
-    <meta charset="utf-8" />
+    <title>John Doe</title>
+    <meta charset="utf-8">
     <style>
       body {
         font-family: monospace;
@@ -12,15 +12,11 @@
     </style>
   </head>
   <body>
-    <h1>Chris Rehn</h1>
-    <p>
-      I'm Chris, a software engineer based in Korea. I’ll try to post toughts
-      and interesting technical stuff here every once in a while.
-    </p>
-    <p>I like simple and robust software, design, skateboarding.</p>
+    <h1>John Doe</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     <ul>
       {{ range . }}
-      <li><a href="{{ .Path }}">{{ .Title }}</a></li>
+        <li><a href="{{ .Path }}">{{ .Title }}</a></li>
       {{ end }}
     </ul>
   </body>
