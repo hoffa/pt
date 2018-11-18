@@ -69,6 +69,6 @@ func main() {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	sort.Slice(posts, func(i, j int) bool { return posts[i].Date > posts[i].Date })
+	sort.Slice(posts, func(i, j int) bool { return posts[i].Date > posts[j].Date })
 	tmpl.ExecuteTemplate(f, "index.tmpl", posts)
 }
