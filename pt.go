@@ -17,8 +17,6 @@ type Post struct {
 	Content string
 }
 
-type Posts []Post
-
 func replaceExtension(path, ext string) string {
 	return path[0:len(path)-len(filepath.Ext(path))] + ext
 }
@@ -28,11 +26,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	templ, err := template.ParseGlob("*.tmpl")
+	tmpl, err := template.ParseGlob("*.tmpl")
 	if err != nil {
 		log.Fatal(err)
 	}
-	var posts Posts
+	var posts []Post
 	for _, path := range files {
 		target := replaceExtension(path, ".html")
 		log.Println(target)
@@ -51,12 +49,12 @@ func main() {
 			Content: string(blackfriday.Run(b)),
 		}
 		posts = append(posts, post)
-		templ.ExecuteTemplate(f, "post.tmpl", post)
+		tmpl.ExecuteTemplate(f, "post.tmpl", post)
 	}
 	f, err := os.Create("index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	templ.ExecuteTemplate(f, "index.tmpl", posts)
+	tmpl.ExecuteTemplate(f, "index.tmpl", posts)
 }
