@@ -1,5 +1,7 @@
 # pt
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/hoffa/pt)](https://goreportcard.com/report/github.com/hoffa/pt)
+
 ## Installation
 
 ```shell
