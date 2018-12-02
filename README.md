@@ -10,8 +10,14 @@ go get github.com/hoffa/pt
 
 ## Usage
 
-Put your Markdown files in a directory called `posts`, and run:
+Put your Markdown files somewhere and run:
 
 ```shell
 pt
 ```
+
+## Front matter
+
+`title` and `date` are required.
+
+To hide the page from the posts list, use `hide: true`.
