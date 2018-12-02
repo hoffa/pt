@@ -86,4 +86,3 @@ func main() {
 	sort.Slice(posts, func(i, j int) bool { return posts[i].Date > posts[j].Date })
 	executeTemplate("index.tmpl", "index.html", posts)
 }
-
