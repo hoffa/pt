@@ -1,0 +1,78 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ template "title" . }}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123835517-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-123835517-1");
+    </script>
+    <style>
+      body {
+        font-family: sans-serif;
+        width: 90%;
+        margin: 0 auto;
+        line-height: 1.4;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        padding: 1em;
+        border: 1px dashed;
+        overflow: auto;
+      }
+
+      img {
+        display: block;
+        max-width: 90%;
+        margin: 0 auto;
+      }
+
+      table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 90%;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid;
+        padding: 0.5em;
+      }
+
+      hr {
+        border-style: dashed;
+      }
+
+      ul#menu li {
+        display: inline;
+      }
+
+      ul#menu {
+        padding-left: 0;
+      }
+
+      @media (min-width: 800px) {
+        body {
+          width: 65%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="menu">
+      <li><strong>Chris Rehn</strong></li>
+      <li><a href="/index.html">Home</a></li>
+    </ul>
+    <hr />
+    {{ template "content" . }}
+  </body>
+</html>
+{{ end }}

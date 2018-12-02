@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>John Doe</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      body {
-        font-family: monospace;
-        font-size: 125%;
-        width: 90%;
-        margin: auto;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>John Doe</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    <h2>Posts</h2>
-    <ul>
-      {{ range . }}
-        <li>{{ .Date }} <a href="{{ .Path }}">{{ .Title }}</a></li>
-      {{ end }}
-    </ul>
-  </body>
-</html>
+{{ define "title" }}Chris Rehn{{ end }}
+{{ define "content" }}
+<h1>안녕하세요! 👋</h1>
+<p>I'm Chris, a software engineer based in Korea. Apart from my passion for building stuff, I like design, skateboarding, and making complex things simple. I got some code on <a href="https://github.com/hoffa">GitHub</a>.</p>
+<p>I can be reached at <a href="mailto:chris@rehn.me">chris@rehn.me</a>.</p>
+<h2>Posts</h2>
+<ul>
+  {{ range . }}
+    {{ if not .Hide }}
+      <li>{{ .Date }} <a href="{{ .Path }}">{{ .Title }}</a></li>
+    {{ end }}
+  {{ end }}
+</ul>
+{{ end }}

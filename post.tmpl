@@ -1,30 +1,6 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>{{ .Title }}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      body {
-        font-family: monospace;
-        font-size: 125%;
-        width: 90%;
-        margin: auto;
-      }
-
-      code, pre {
-        background-color: #f2f2f2;
-      }
-
-      pre {
-        white-space: pre-wrap;
-        padding: 1em;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-    <p><a href="../index.html">Back</a></p>
-  </body>
-</html>
+{{ define "title" }}{{ .Title }}{{ end }}
+{{ define "content" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<p><i>Posted on {{ .Date }}</i></p>
+{{ end }}
