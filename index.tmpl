@@ -1,14 +1,14 @@
 {{ define "title" }}Lorem Ipsum{{ end }}
 {{ define "content" }}
-<h1>Hi! 👋</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porttitor velit eget felis tincidunt laoreet. Pellentesque pharetra gravida pretium. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-<p>Donec ac sollicitudin augue. Fusce maximus, lectus at faucibus dignissim, quam velit iaculis dolor, in rhoncus turpis nibh a orci.</p>
-<h2>Posts</h2>
-<ul>
-  {{ range . }}
-    {{ if not .Hide }}
-      <li>{{ .Date }} <a href="{{ .Path }}">{{ .Title }}</a></li>
+  <h1>Hi! 👋</h1>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porttitor velit eget felis tincidunt laoreet. Pellentesque pharetra gravida pretium. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+  <p>Donec ac sollicitudin augue. Fusce maximus, lectus at faucibus dignissim, quam velit iaculis dolor, in rhoncus turpis nibh a orci.</p>
+  <h2>Posts</h2>
+  <ul>
+    {{ range . }}
+      {{ if .Title }}
+        <li>{{ .FormattedDate }} <a href="{{ .Path }}">{{ .Title }}</a></li>
+      {{ end }}
     {{ end }}
-  {{ end }}
-</ul>
+  </ul>
 {{ end }}

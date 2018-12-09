@@ -1,6 +1,10 @@
 {{ define "title" }}{{ .Title }}{{ end }}
 {{ define "content" }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
-<p><i>Posted on {{ .Date }}</i></p>
+  {{ if .Title }}
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    <p><i>Posted on {{ .FormattedDate }}</i></p>
+  {{ else }}
+    {{ .Content }}
+  {{ end }}
 {{ end }}
