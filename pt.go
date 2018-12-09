@@ -12,8 +12,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/gorilla/feeds"
+	"github.com/russross/blackfriday"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/russross/blackfriday.v2"
 )
 
 type Config struct {
@@ -102,7 +102,7 @@ func main() {
 		} else {
 			log.Warn("missing front matter")
 		}
-		content := string(blackfriday.Run(md))
+		content := string(blackfriday.MarkdownCommon(md))
 		post := Post{
 			Title:   frontMatter.Title,
 			Date:    date,
