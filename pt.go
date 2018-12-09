@@ -10,22 +10,22 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/gorilla/feeds"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/russross/blackfriday.v2"
-	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Author     string `yaml:"author"`
-	Email      string `yaml:"email"`
-	DateFormat string `yaml:"dateFormat"`
-	Base       string `yaml:"base"`
+	Author     string `toml:"author"`
+	Email      string `toml:"email"`
+	DateFormat string `toml:"dateFormat"`
+	BaseURL    string `toml:"baseURL"`
 }
 
 type FrontMatter struct {
-	Title string `yaml:"title"`
-	Date  string `yaml:"date"`
+	Title string `toml:"title"`
+	Date  string `toml:"date"`
 }
 
 type Post struct {
@@ -53,21 +53,8 @@ func executeTemplate(source, target string, data interface{}) error {
 	return tmpl.ExecuteTemplate(f, "layout", data)
 }
 
-func loadConfig() (*Config, error) {
-	var config Config
-	f, err := os.Open("pt.yml")
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	if err := yaml.NewDecoder(f).Decode(&config); err != nil {
-		return nil, err
-	}
-	return &config, nil
-}
-
 func separateFrontMatter(b []byte) ([]byte, []byte) {
-	i := bytes.Index(b[3:], []byte("---"))
+	i := bytes.Index(b[3:], []byte("+++"))
 	if i == -1 {
 		// Assume everything is Markdown
 		return nil, b
@@ -76,7 +63,11 @@ func separateFrontMatter(b []byte) ([]byte, []byte) {
 }
 
 func main() {
-	config, err := loadConfig()
+	var config Config
+	_, err := toml.DecodeFile("pt.toml", &config)
+	if err != nil {
+		log.Fatal(err)
+	}
 	var posts []Post
 	if err := filepath.Walk(".", func(path string, f os.FileInfo, err error) error {
 		if filepath.Ext(path) != ".md" {
@@ -92,7 +83,7 @@ func main() {
 		var date time.Time
 		fm, md := separateFrontMatter(b)
 		if fm != nil {
-			if err := yaml.Unmarshal(fm, &frontMatter); err != nil {
+			if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 				return err
 			}
 			date, err = time.Parse("2006-01-02", frontMatter.Date)
@@ -121,10 +112,10 @@ func main() {
 	author := &feeds.Author{Name: config.Author, Email: config.Email}
 	feed := &feeds.Feed{
 		Title:  config.Author,
-		Link:   &feeds.Link{Href: config.Base},
+		Link:   &feeds.Link{Href: config.BaseURL},
 		Author: author,
 	}
-	base, err := url.Parse(config.Base)
+	base, err := url.Parse(config.BaseURL)
 	if err != nil {
 		log.Fatal(err)
 	}

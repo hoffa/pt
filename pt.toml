@@ -1,0 +1,4 @@
+author = "Chris Rehn"
+email = "chris@rehn.me"
+baseURL ="https://rehn.me"
+dateFormat = "Jan 2, 2006"
