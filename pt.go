@@ -32,6 +32,7 @@ type Post struct {
 	Title         string
 	Date          time.Time
 	FormattedDate string
+	URL           *url.URL
 	Path          string
 	Content       string
 }
@@ -68,6 +69,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	base, err := url.Parse(config.BaseURL)
+	if err != nil {
+		log.Fatal(err)
+	}
 	var posts []Post
 	if err := filepath.Walk(".", func(path string, f os.FileInfo, err error) error {
 		if filepath.Ext(path) != ".md" {
@@ -75,6 +80,10 @@ func main() {
 		}
 		log.Println(path)
 		target := replaceExtension(path, ".html")
+		u, err := url.Parse(target)
+		if err != nil {
+			return err
+		}
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
@@ -98,6 +107,7 @@ func main() {
 			Title:         frontMatter.Title,
 			Date:          date,
 			FormattedDate: date.Format(config.DateFormat),
+			URL:           base.ResolveReference(u),
 			Path:          target,
 			Content:       content,
 		}
@@ -115,23 +125,15 @@ func main() {
 		Link:   &feeds.Link{Href: config.BaseURL},
 		Author: author,
 	}
-	base, err := url.Parse(config.BaseURL)
-	if err != nil {
-		log.Fatal(err)
-	}
 	var items []*feeds.Item
 	for _, post := range posts {
 		if post.Title == "" {
 			continue
 		}
-		u, err := url.Parse(post.Path)
-		if err != nil {
-			log.Fatal(err)
-		}
 		items = append(items, &feeds.Item{
 			Title:   post.Title,
 			Author:  author,
-			Link:    &feeds.Link{Href: base.ResolveReference(u).String()},
+			Link:    &feeds.Link{Href: post.URL.String()},
 			Created: post.Date,
 		})
 	}
