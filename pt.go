@@ -63,6 +63,33 @@ func separateFrontMatter(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
+func writeRSS(config *Config, posts []Post) error {
+	author := &feeds.Author{Name: config.Author, Email: config.Email}
+	feed := &feeds.Feed{
+		Title:  config.Author,
+		Link:   &feeds.Link{Href: config.BaseURL},
+		Author: author,
+	}
+	var items []*feeds.Item
+	for _, post := range posts {
+		if post.Title == "" {
+			continue
+		}
+		items = append(items, &feeds.Item{
+			Title:   post.Title,
+			Author:  author,
+			Link:    &feeds.Link{Href: post.URL.String()},
+			Created: post.Date,
+		})
+	}
+	feed.Items = items
+	f, err := os.Create("feed.xml")
+	if err != nil {
+		return err
+	}
+	return feed.WriteRss(f)
+}
+
 func main() {
 	var config Config
 	_, err := toml.DecodeFile("pt.toml", &config)
@@ -103,6 +130,7 @@ func main() {
 			log.Warn("missing front matter")
 		}
 		content := string(blackfriday.MarkdownCommon(md))
+		// &Post ?
 		post := Post{
 			Title:   frontMatter.Title,
 			Date:    date,
@@ -120,32 +148,7 @@ func main() {
 	}
 	sort.Slice(posts, func(i, j int) bool { return posts[i].Date.After(posts[j].Date) })
 	executeTemplate("index.tmpl", "index.html", posts)
-
-	author := &feeds.Author{Name: config.Author, Email: config.Email}
-	feed := &feeds.Feed{
-		Title:  config.Author,
-		Link:   &feeds.Link{Href: config.BaseURL},
-		Author: author,
-	}
-	var items []*feeds.Item
-	for _, post := range posts {
-		if post.Title == "" {
-			continue
-		}
-		items = append(items, &feeds.Item{
-			Title:   post.Title,
-			Author:  author,
-			Link:    &feeds.Link{Href: post.URL.String()},
-			Created: post.Date,
-		})
-	}
-	feed.Items = items
-	f, err := os.Create("feed.xml")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = feed.WriteRss(f)
-	if err != nil {
+	if err := writeRSS(&config, posts); err != nil {
 		log.Fatal(err)
 	}
 }
