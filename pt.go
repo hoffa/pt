@@ -29,12 +29,12 @@ type FrontMatter struct {
 }
 
 type Post struct {
-	Title         string
-	Date          time.Time
-	FormattedDate string
-	URL           *url.URL
-	Path          string
-	Content       string
+	Title   string
+	Date    time.Time
+	URL     *url.URL
+	Path    string
+	Content string
+	Format  func(t time.Time) string
 }
 
 func replaceExtension(path, ext string) string {
@@ -104,12 +104,14 @@ func main() {
 		}
 		content := string(blackfriday.Run(md))
 		post := Post{
-			Title:         frontMatter.Title,
-			Date:          date,
-			FormattedDate: date.Format(config.DateFormat),
-			URL:           base.ResolveReference(u),
-			Path:          target,
-			Content:       content,
+			Title:   frontMatter.Title,
+			Date:    date,
+			URL:     base.ResolveReference(u),
+			Path:    target,
+			Content: content,
+			Format: func(t time.Time) string {
+				return t.Format(config.DateFormat)
+			},
 		}
 		posts = append(posts, post)
 		return executeTemplate("post.tmpl", target, post)

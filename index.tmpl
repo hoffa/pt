@@ -7,7 +7,7 @@
   <ul>
     {{ range . }}
       {{ if .Title }}
-        <li>{{ .FormattedDate }} <a href="{{ .Path }}">{{ .Title }}</a></li>
+        <li>{{ call .Format .Date }} <a href="{{ .Path }}">{{ .Title }}</a></li>
       {{ end }}
     {{ end }}
   </ul>
