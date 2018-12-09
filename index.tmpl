@@ -5,7 +5,7 @@
   <p>Donec ac sollicitudin augue. Fusce maximus, lectus at faucibus dignissim, quam velit iaculis dolor, in rhoncus turpis nibh a orci.</p>
   <h2>Posts</h2>
   <ul>
-    {{ range . }}
+    {{ range .Posts }}
       {{ if .Title }}
         <li><p><a href="{{ .Path }}">{{ .Title }}</a><br>{{ call .Format .Date }}</p></li>
       {{ end }}

@@ -17,10 +17,11 @@ import (
 )
 
 type Config struct {
-	Author     string
-	Email      string
-	DateFormat string
-	BaseURL    string
+	Author          string
+	Email           string
+	DateFormat      string
+	BaseURL         string
+	GoogleAnalytics string
 }
 
 type FrontMatter struct {
@@ -29,12 +30,18 @@ type FrontMatter struct {
 }
 
 type Post struct {
-	Title   string
-	Date    time.Time
-	URL     *url.URL
-	Path    string
-	Content string
-	Format  func(t time.Time) string
+	Title           string
+	Date            time.Time
+	URL             *url.URL
+	Path            string
+	Content         string
+	GoogleAnalytics string
+	Format          func(t time.Time) string
+}
+
+type Index struct {
+	Posts           []Post
+	GoogleAnalytics string
 }
 
 func replaceExtension(path, ext string) string {
@@ -100,7 +107,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var posts []Post
+	index := Index{
+		GoogleAnalytics: config.GoogleAnalytics,
+	}
 	if err := filepath.Walk(".", func(path string, f os.FileInfo, err error) error {
 		if filepath.Ext(path) != ".md" {
 			return nil
@@ -132,23 +141,24 @@ func main() {
 		content := string(blackfriday.MarkdownCommon(md))
 		// &Post ?
 		post := Post{
-			Title:   frontMatter.Title,
-			Date:    date,
-			URL:     base.ResolveReference(u),
-			Path:    target,
-			Content: content,
+			Title:           frontMatter.Title,
+			Date:            date,
+			URL:             base.ResolveReference(u),
+			Path:            target,
+			Content:         content,
+			GoogleAnalytics: config.GoogleAnalytics,
 			Format: func(t time.Time) string {
 				return t.Format(config.DateFormat)
 			},
 		}
-		posts = append(posts, post)
+		index.Posts = append(index.Posts, post)
 		return executeTemplate("post.tmpl", target, post)
 	}); err != nil {
 		log.Fatal(err)
 	}
-	sort.Slice(posts, func(i, j int) bool { return posts[i].Date.After(posts[j].Date) })
-	executeTemplate("index.tmpl", "index.html", posts)
-	if err := writeRSS(&config, posts); err != nil {
+	sort.Slice(index.Posts, func(i, j int) bool { return index.Posts[i].Date.After(index.Posts[j].Date) })
+	executeTemplate("index.tmpl", "index.html", index)
+	if err := writeRSS(&config, index.Posts); err != nil {
 		log.Fatal(err)
 	}
 }
