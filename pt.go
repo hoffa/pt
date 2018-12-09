@@ -17,15 +17,15 @@ import (
 )
 
 type Config struct {
-	Author     string `toml:"author"`
-	Email      string `toml:"email"`
-	DateFormat string `toml:"dateFormat"`
-	BaseURL    string `toml:"baseURL"`
+	Author     string
+	Email      string
+	DateFormat string
+	BaseURL    string
 }
 
 type FrontMatter struct {
-	Title string `toml:"title"`
-	Date  string `toml:"date"`
+	Title string
+	Date  string
 }
 
 type Post struct {
