@@ -19,5 +19,3 @@ pt
 ## Front matter
 
 `title` and `date` are required.
-
-To hide the page from the posts list, use `hide: true`.
