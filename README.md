@@ -18,4 +18,4 @@ pt
 
 ## Front matter
 
-`title` and `date` are required.
+Front matter is in TOML, and requires `title` and `date` fields.
