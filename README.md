@@ -18,4 +18,6 @@ pt
 
 ## Front matter
 
-Front matter is in TOML, and requires `title` and `date` fields.
+Front matter is in TOML. Valid fields are `title` and `date`.
+
+If there is no `title`, the page isn't displayed on the index page.
