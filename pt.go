@@ -80,6 +80,7 @@ func writeRSS(config *Config, posts []Post) error {
 			Author:  author,
 			Link:    &feeds.Link{Href: post.URL.String()},
 			Created: post.Date,
+			Content: post.Content,
 		})
 	}
 	feed.Items = items
