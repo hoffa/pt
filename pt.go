@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -13,7 +14,6 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gorilla/feeds"
 	"github.com/russross/blackfriday"
-	log "github.com/sirupsen/logrus"
 )
 
 type Config struct {
@@ -95,18 +95,18 @@ func main() {
 	var config Config
 	_, err := toml.DecodeFile("pt.toml", &config)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	base, err := url.Parse(config.BaseURL)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	var posts []Post
 	if err := filepath.Walk(".", func(path string, f os.FileInfo, err error) error {
 		if filepath.Ext(path) != ".md" {
 			return nil
 		}
-		log.Println(path)
+		fmt.Println(path)
 		target := replaceExtension(path, ".html")
 		u, err := url.Parse(target)
 		if err != nil {
@@ -128,7 +128,7 @@ func main() {
 				return err
 			}
 		} else {
-			log.Warn("missing front matter")
+			fmt.Println("note: missing front matter")
 		}
 		content := string(blackfriday.MarkdownCommon(md))
 		// &Post ?
@@ -145,11 +145,11 @@ func main() {
 		posts = append(posts, post)
 		return executeTemplate("post.tmpl", target, post)
 	}); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	sort.Slice(posts, func(i, j int) bool { return posts[i].Date.After(posts[j].Date) })
 	executeTemplate("index.tmpl", "index.html", posts)
 	if err := writeRSS(&config, posts); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
