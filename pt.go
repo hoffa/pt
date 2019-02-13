@@ -18,7 +18,6 @@ import (
 
 type Config struct {
 	Author     string
-	Email      string
 	DateFormat string
 	BaseURL    string
 }
@@ -64,7 +63,7 @@ func separateFrontMatter(b []byte) ([]byte, []byte) {
 }
 
 func writeRSS(config *Config, posts []Post) error {
-	author := &feeds.Author{Name: config.Author, Email: config.Email}
+	author := &feeds.Author{Name: config.Author}
 	feed := &feeds.Feed{
 		Title:  config.Author,
 		Link:   &feeds.Link{Href: config.BaseURL},
