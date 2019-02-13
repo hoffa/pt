@@ -123,7 +123,7 @@ func main() {
 			if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 				return err
 			}
-			date, err = time.Parse("2006-01-02", frontMatter.Date)
+			date, err = time.Parse(config.DateFormat, frontMatter.Date)
 			if err != nil {
 				return err
 			}
