@@ -2,9 +2,7 @@
 {{ define "content" }}
   {{ if .Title }}
     <h1>{{ .Title }}</h1>
-    {{ .Content }}
     <p><i>{{ call .Format .Date }}</i></p>
-  {{ else }}
-    {{ .Content }}
   {{ end }}
+  {{ .Content }}
 {{ end }}
