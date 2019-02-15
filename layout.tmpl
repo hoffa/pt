@@ -15,7 +15,7 @@
       <hr />
       FUCKING HELL
       {{ .Content }}
-      {{ if .Index }}
+      {{ if eq .Path "index.html" }}
         <h2>Posts</h2>
         <ul>
           {{ range .Posts }}
