@@ -9,7 +9,7 @@
       <meta name="og:title" content="{{ .FrontMatter.Title }}">
       <meta name="og:description" content="{{ .FrontMatter.Description }}">
       <meta name="og:image" content="{{ .Config.PreviewImageURL }}">
-      <meta name="og:url" content="{{ .Path }}">
+      <meta name="og:url" content="{{ call .Join .Config.BaseURL .Path }}">
       <style>
       body {
         font-family: system-ui, sans-serif;
@@ -30,8 +30,8 @@
     <body>
       <ul id="menu">
         <li><strong>{{ .Config.Author }}</strong></li>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/feed.xml">RSS</a></li>
+        <li><a href="{{ call .Join .Config.BaseURL "index.html" }}">Home</a></li>
+        <li><a href="{{ call .Join .Config.BaseURL "feed.xml" }}">RSS</a></li>
       </ul>
       <hr />
       {{ .Content }}
@@ -40,7 +40,7 @@
         <ul>
           {{ range .Posts }}
             {{ if .FrontMatter.Title }}
-              <li><p><a href="{{ .Path }}">{{ .FrontMatter.Title }}</a><br>{{ .FrontMatter.Date }}</p></li>
+              <li><p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a><br>{{ .FrontMatter.Date }}</p></li>
             {{ end }}
           {{ end }}
         </ul>

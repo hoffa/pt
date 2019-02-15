@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"text/template"
 
@@ -31,6 +33,7 @@ type Post struct {
 	FrontMatter FrontMatter
 	Path        string
 	Content     string
+	Join        func(base, p string) string
 	Posts       []Post
 }
 
@@ -56,8 +59,8 @@ func executeTemplate(post *Post) error {
 	return tmpl.ExecuteTemplate(f, "template", post)
 }
 
-func replaceExtension(path, ext string) string {
-	return path[:len(path)-len(filepath.Ext(path))] + ext
+func replaceExtension(p, ext string) string {
+	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
 func main() {
@@ -67,11 +70,11 @@ func main() {
 		panic(err)
 	}
 	var posts []Post
-	if err := filepath.Walk(".", func(path string, f os.FileInfo, err error) error {
-		if filepath.Ext(path) != ".md" {
+	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
+		if filepath.Ext(p) != ".md" {
 			return nil
 		}
-		b, err := ioutil.ReadFile(path)
+		b, err := ioutil.ReadFile(p)
 		if err != nil {
 			return err
 		}
@@ -80,14 +83,24 @@ func main() {
 		if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 			return err
 		}
-		fmt.Println(path, frontMatter)
-		post := Post{
+		fmt.Println(p, frontMatter)
+		target := replaceExtension(p, ".html")
+		u, err := url.Parse(config.BaseURL)
+		if err != nil {
+			return err
+		}
+		u.Path = path.Join(u.Path, target)
+		posts = append(posts, Post{
 			Config:      config,
 			FrontMatter: frontMatter,
-			Path:        replaceExtension(path, ".html"),
+			Path:        target,
 			Content:     string(blackfriday.MarkdownCommon(md)),
-		}
-		posts = append(posts, post)
+			Join: func(base, p string) string {
+				u, _ := url.Parse(base)
+				u.Path = path.Join(u.Path, p)
+				return u.String()
+			},
+		})
 		return nil
 	}); err != nil {
 		panic(err)
