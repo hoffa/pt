@@ -1,8 +1,0 @@
-{{ define "title" }}{{ .Title }}{{ end }}
-{{ define "content" }}
-  {{ if .Title }}
-    <h1>{{ .Title }}</h1>
-    <p><i>{{ call .Format .Date }}</i></p>
-  {{ end }}
-  {{ .Content }}
-{{ end }}

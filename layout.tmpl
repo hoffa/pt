@@ -2,7 +2,7 @@
   <!DOCTYPE html>
   <html>
     <head>
-      <title>{{ template "title" . }}</title>
+      <title>{{ .Title }}</title>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
@@ -13,7 +13,18 @@
         <li><a href="/feed.xml">RSS</a></li>
       </ul>
       <hr />
-      {{ template "content" . }}
+      FUCKING HELL
+      {{ .Content }}
+      {{ if .Index }}
+        <h2>Posts</h2>
+        <ul>
+          {{ range .Posts }}
+            {{ if .Title }}
+              <li><p><a href="{{ .Path }}">{{ .Title }}</a><br>{{ .Date }}</p></li>
+            {{ end }}
+          {{ end }}
+        </ul>
+      {{ end }}
     </body>
   </html>
 {{ end }}
