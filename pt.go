@@ -8,7 +8,9 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"text/template"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/russross/blackfriday"
@@ -31,6 +33,7 @@ type FrontMatter struct {
 type Post struct {
 	Config      Config
 	FrontMatter FrontMatter
+	Date        time.Time
 	Path        string
 	Content     string
 	Join        func(base, p string) string
@@ -83,6 +86,10 @@ func main() {
 		if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 			return err
 		}
+		date, err := time.Parse(config.DateFormat, frontMatter.Date)
+		if err != nil {
+			return err
+		}
 		fmt.Println(p, frontMatter)
 		target := replaceExtension(p, ".html")
 		u, err := url.Parse(config.BaseURL)
@@ -93,6 +100,7 @@ func main() {
 		posts = append(posts, Post{
 			Config:      config,
 			FrontMatter: frontMatter,
+			Date:        date,
 			Path:        target,
 			Content:     string(blackfriday.MarkdownCommon(md)),
 			Join: func(base, p string) string {
@@ -105,6 +113,7 @@ func main() {
 	}); err != nil {
 		panic(err)
 	}
+	sort.Slice(posts, func(i, j int) bool { return posts[i].Date.After(posts[j].Date) })
 	for _, post := range posts {
 		post.Posts = posts
 		if err := executeTemplate(&post); err != nil {
