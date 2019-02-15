@@ -81,12 +81,11 @@ func main() {
 			return err
 		}
 		fmt.Println(path, frontMatter)
-		content := string(blackfriday.MarkdownCommon(md))
 		post := Post{
 			Config:      config,
 			FrontMatter: frontMatter,
 			Path:        replaceExtension(path, ".html"),
-			Content:     content,
+			Content:     string(blackfriday.MarkdownCommon(md)),
 		}
 		posts = append(posts, post)
 		return nil
