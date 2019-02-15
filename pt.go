@@ -34,10 +34,6 @@ type Post struct {
 	Posts       []Post
 }
 
-func replaceExtension(path, ext string) string {
-	return path[0:len(path)-len(filepath.Ext(path))] + ext
-}
-
 func separateFrontMatter(b []byte) ([]byte, []byte) {
 	i := bytes.Index(b[3:], []byte("+++"))
 	if i == -1 {
@@ -58,7 +54,7 @@ func main() {
 		if filepath.Ext(path) != ".md" {
 			return nil
 		}
-		target := replaceExtension(path, ".html")
+		target := path[0:len(path)-len(filepath.Ext(path))] + ".html"
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
