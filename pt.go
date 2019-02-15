@@ -38,19 +38,6 @@ func replaceExtension(path, ext string) string {
 	return path[0:len(path)-len(filepath.Ext(path))] + ext
 }
 
-func executeTemplate(target string, data interface{}) error {
-	f, err := os.Create(target)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	tmpl, err := template.ParseFiles("template.html")
-	if err != nil {
-		return err
-	}
-	return tmpl.ExecuteTemplate(f, "template", data)
-}
-
 func separateFrontMatter(b []byte) ([]byte, []byte) {
 	i := bytes.Index(b[3:], []byte("+++"))
 	if i == -1 {
@@ -97,7 +84,16 @@ func main() {
 	}
 	for _, post := range posts {
 		post.Posts = posts
-		if err := executeTemplate(post.Path, post); err != nil {
+		f, err := os.Create(post.Path)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+		tmpl, err := template.ParseFiles("template.html")
+		if err != nil {
+			panic(err)
+		}
+		if err := tmpl.ExecuteTemplate(f, "template", post); err != nil {
 			panic(err)
 		}
 	}
