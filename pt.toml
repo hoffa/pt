@@ -1,3 +1,4 @@
 author = "Chris Rehn"
 baseURL ="https://rehn.me"
 dateFormat = "January 2, 2006"
+previewImageURL = "https://placekitten.com/g/512/512"

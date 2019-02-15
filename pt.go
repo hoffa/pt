@@ -13,9 +13,10 @@ import (
 )
 
 type Config struct {
-	Author     string
-	DateFormat string
-	BaseURL    string
+	Author          string
+	DateFormat      string
+	BaseURL         string
+	PreviewImageURL string
 }
 
 type FrontMatter struct {
@@ -26,9 +27,8 @@ type FrontMatter struct {
 
 // Also store a list of all posts??
 type Post struct {
-	Title       string
-	Description string
-	Date        string
+	Config      Config
+	FrontMatter FrontMatter
 	Path        string
 	Content     string
 	Posts       []Post
@@ -85,9 +85,8 @@ func main() {
 		fmt.Println(path, frontMatter)
 		// &Post ?
 		post := Post{
-			Title:       frontMatter.Title,
-			Description: frontMatter.Description,
-			Date:        frontMatter.Date,
+			Config:      config,
+			FrontMatter: frontMatter,
 			Path:        target,
 			Content:     content,
 		}

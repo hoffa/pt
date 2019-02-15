@@ -2,13 +2,18 @@
   <!DOCTYPE html>
   <html>
     <head>
-      <title>{{ .Title }}</title>
+      <title>{{ .FrontMatter.Title }}</title>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="description" content="{{ .FrontMatter.Description }}" />
+      <meta name="og:title" content="{{ .FrontMatter.Title }}">
+      <meta name="og:description" content="{{ .FrontMatter.Description }}">
+      <meta name="og:image" content="{{ .Config.PreviewImageURL }}">
+      <meta name="og:url" content="{{ .Path }}">
     </head>
     <body>
       <ul>
-        <li><strong>John Doe</strong></li>
+        <li><strong>{{ .Config.Author }}</strong></li>
         <li><a href="/index.html">Home</a></li>
         <li><a href="/feed.xml">RSS</a></li>
       </ul>
@@ -19,8 +24,8 @@
         <h2>Posts</h2>
         <ul>
           {{ range .Posts }}
-            {{ if .Title }}
-              <li><p><a href="{{ .Path }}">{{ .Title }}</a><br>{{ .Date }}</p></li>
+            {{ if .FrontMatter.Title }}
+              <li><p><a href="{{ .Path }}">{{ .FrontMatter.Title }}</a><br>{{ .FrontMatter.Date }}</p></li>
             {{ end }}
           {{ end }}
         </ul>
