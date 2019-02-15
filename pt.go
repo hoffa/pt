@@ -43,6 +43,23 @@ func separateFrontMatter(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
+func executeTemplate(post *Post) error {
+	f, err := os.Create(post.Path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	tmpl, err := template.ParseFiles("template.html")
+	if err != nil {
+		return err
+	}
+	return tmpl.ExecuteTemplate(f, "template", post)
+}
+
+func replaceExtension(path, ext string) string {
+	return path[:len(path)-len(filepath.Ext(path))] + ext
+}
+
 func main() {
 	var config Config
 	_, err := toml.DecodeFile("pt.toml", &config)
@@ -54,7 +71,6 @@ func main() {
 		if filepath.Ext(path) != ".md" {
 			return nil
 		}
-		target := path[0:len(path)-len(filepath.Ext(path))] + ".html"
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
@@ -64,13 +80,12 @@ func main() {
 		if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 			return err
 		}
-		content := string(blackfriday.MarkdownCommon(md))
 		fmt.Println(path, frontMatter)
-		// &Post ?
+		content := string(blackfriday.MarkdownCommon(md))
 		post := Post{
 			Config:      config,
 			FrontMatter: frontMatter,
-			Path:        target,
+			Path:        replaceExtension(path, ".html"),
 			Content:     content,
 		}
 		posts = append(posts, post)
@@ -80,16 +95,7 @@ func main() {
 	}
 	for _, post := range posts {
 		post.Posts = posts
-		f, err := os.Create(post.Path)
-		if err != nil {
-			panic(err)
-		}
-		defer f.Close()
-		tmpl, err := template.ParseFiles("template.html")
-		if err != nil {
-			panic(err)
-		}
-		if err := tmpl.ExecuteTemplate(f, "template", post); err != nil {
+		if err := executeTemplate(&post); err != nil {
 			panic(err)
 		}
 	}
