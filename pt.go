@@ -31,7 +31,6 @@ type Post struct {
 	Date        string
 	Path        string
 	Content     string
-	Index       bool
 	Posts       []Post
 }
 
@@ -86,14 +85,14 @@ func main() {
 		fmt.Println(path, frontMatter)
 		// &Post ?
 		post := Post{
-			Title:   frontMatter.Title,
-			Date:    frontMatter.Date,
-			Path:    target,
-			Content: content,
-			Index:   true,
+			Title:       frontMatter.Title,
+			Description: frontMatter.Description,
+			Date:        frontMatter.Date,
+			Path:        target,
+			Content:     content,
 		}
 		posts = append(posts, post)
-		return executeTemplate("layout.tmpl", target, post)
+		return nil
 	}); err != nil {
 		panic(err)
 	}
@@ -101,5 +100,4 @@ func main() {
 		post.Posts = posts
 		executeTemplate("layout.tmpl", post.Path, post)
 	}
-	//executeTemplate("index.tmpl", "index.html", posts)
 }
