@@ -38,17 +38,17 @@ func replaceExtension(path, ext string) string {
 	return path[0:len(path)-len(filepath.Ext(path))] + ext
 }
 
-func executeTemplate(source, target string, data interface{}) error {
+func executeTemplate(target string, data interface{}) error {
 	f, err := os.Create(target)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	tmpl, err := template.ParseFiles("layout.tmpl", source)
+	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {
 		return err
 	}
-	return tmpl.ExecuteTemplate(f, "layout", data)
+	return tmpl.ExecuteTemplate(f, "template", data)
 }
 
 func separateFrontMatter(b []byte) ([]byte, []byte) {
@@ -97,6 +97,8 @@ func main() {
 	}
 	for _, post := range posts {
 		post.Posts = posts
-		executeTemplate("layout.tmpl", post.Path, post)
+		if err := executeTemplate(post.Path, post); err != nil {
+			panic(err)
+		}
 	}
 }

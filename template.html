@@ -1,4 +1,4 @@
-{{ define "layout" }}
+{{ define "template" }}
   <!DOCTYPE html>
   <html>
     <head>
@@ -10,15 +10,30 @@
       <meta name="og:description" content="{{ .FrontMatter.Description }}">
       <meta name="og:image" content="{{ .Config.PreviewImageURL }}">
       <meta name="og:url" content="{{ .Path }}">
+      <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 40em;
+        margin: 0 auto;
+        padding: 0 1em;
+      }
+
+      #menu li {
+        display: inline;
+      }
+
+      #menu {
+        padding: 0;
+      }
+      </style>
     </head>
     <body>
-      <ul>
+      <ul id="menu">
         <li><strong>{{ .Config.Author }}</strong></li>
         <li><a href="/index.html">Home</a></li>
         <li><a href="/feed.xml">RSS</a></li>
       </ul>
       <hr />
-      FUCKING HELL
       {{ .Content }}
       {{ if eq .Path "index.html" }}
         <h2>Posts</h2>

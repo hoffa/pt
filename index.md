@@ -1,9 +1,10 @@
 +++
+title = "Jane Doe"
 description = "Hello, world!"
 date = "December 21, 1992"
 +++
 
-# Hi! 👋
+# Hi!
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porttitor velit eget felis tincidunt laoreet. Pellentesque pharetra gravida pretium. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
 
