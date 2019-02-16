@@ -2,6 +2,12 @@
 
 [![Build Status](https://travis-ci.org/hoffa/pt.svg?branch=master)](https://travis-ci.org/hoffa/pt)
 
+## Features
+
+- Extremely straightforward
+- Tiny
+- Accessible
+
 ## Installation
 
 ```shell
