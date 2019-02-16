@@ -1,3 +1,4 @@
 author = "Jane Doe"
 email = "jane@doe.com"
 baseURL = ""
+dateFormat = "January 2, 2006"

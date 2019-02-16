@@ -43,6 +43,10 @@
     </nav>
     <main>
       <article>
+        {{ if not .Hide }}
+          <h1 class="mb-0">{{ .Title }}</h1>
+          <p><i>{{ .Date.Format .Config.DateFormat }}</i></p>
+        {{ end }}
         {{ .Content }}
       </article>
       {{ if eq .Path "index.html" }}
@@ -55,7 +59,7 @@
                   <p class="mb-0">
                     <a href="{{ call .Join .Config.BaseURL .Path }}">{{ .Title }}</a>
                   </p>
-                  <span>{{ .Date.Format "January 2, 2006" }}</span>
+                  <span>{{ .Date.Format .Config.DateFormat }}</span>
                 </li>
               {{ end }}
             {{ end }}

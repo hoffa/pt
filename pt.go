@@ -19,9 +19,10 @@ import (
 
 // Config represents the config in pt.toml.
 type Config struct {
-	Author  string
-	Email   string
-	BaseURL string
+	Author     string
+	Email      string
+	BaseURL    string
+	DateFormat string
 }
 
 // FrontMatter represents a page's TOML front matter.
