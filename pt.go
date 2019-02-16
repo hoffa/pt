@@ -109,9 +109,10 @@ func writePages(pages []*Page) error {
 func writeRSS(pages []*Page, config *Config) error {
 	author := &feeds.Author{Name: config.Author, Email: config.Email}
 	feed := &feeds.Feed{
-		Title:  config.Author,
-		Link:   &feeds.Link{Href: config.BaseURL},
-		Author: author,
+		Title:   config.Author,
+		Link:    &feeds.Link{Href: config.BaseURL},
+		Author:  author,
+		Updated: time.Now(),
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
