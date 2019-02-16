@@ -47,7 +47,7 @@ type Page struct {
 	Pages       []*Page
 }
 
-func writeRSS(config *Config, pages []*Page) error {
+func writeRSS(pages []*Page, config *Config) error {
 	author := &feeds.Author{Name: config.Author, Email: config.Email}
 	feed := &feeds.Feed{
 		Title:  config.Author,
@@ -117,11 +117,11 @@ func parsePage(p string, config *Config) (FrontMatter, string) {
 }
 
 func writePages(pages []*Page) error {
-	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
 	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {
 		return err
 	}
+	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
 	for _, page := range pages {
 		page.Pages = pages
 		f, err := os.Create(page.Path)
@@ -178,7 +178,7 @@ func main() {
 	if err := writePages(pages); err != nil {
 		panic(err)
 	}
-	if err := writeRSS(&config, pages); err != nil {
+	if err := writeRSS(pages, &config); err != nil {
 		panic(err)
 	}
 }
