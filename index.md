@@ -1,6 +1,6 @@
 +++
 title = "Jane Doe"
-date = "January 6, 2006"
+date = 2006-01-06
 hide = true
 +++
 

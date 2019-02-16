@@ -31,7 +31,7 @@ type Config struct {
 type FrontMatter struct {
 	Title       string
 	Description string
-	Date        string
+	Date        time.Time
 	Hide        bool
 }
 
@@ -40,7 +40,6 @@ type FrontMatter struct {
 type Page struct {
 	Config      *Config
 	FrontMatter *FrontMatter
-	Date        time.Time
 	Path        string
 	Content     string
 	Join        func(base, p string) string
@@ -61,7 +60,7 @@ func writeRSS(pages []*Page, config *Config) error {
 				Title:       page.FrontMatter.Title,
 				Author:      author,
 				Link:        &feeds.Link{Href: page.Join(config.BaseURL, page.Path)},
-				Created:     page.Date,
+				Created:     page.FrontMatter.Date,
 				Description: page.FrontMatter.Description,
 			})
 		}
@@ -86,7 +85,7 @@ func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
-func parsePage(p string, config *Config) (FrontMatter, string) {
+func parsePage(p string) (FrontMatter, string) {
 	b, err := ioutil.ReadFile(p)
 	if err != nil {
 		panic(err)
@@ -95,7 +94,7 @@ func parsePage(p string, config *Config) (FrontMatter, string) {
 	content := string(blackfriday.MarkdownCommon(md))
 	var frontMatter FrontMatter
 	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
-		fmt.Println("warning: cannot parse front matter")
+		fmt.Println("warning:", err)
 	}
 	if frontMatter.Title == "" {
 		fmt.Println("warning: missing title; using path")
@@ -105,13 +104,13 @@ func parsePage(p string, config *Config) (FrontMatter, string) {
 		fmt.Println("warning: missing description; using title")
 		frontMatter.Description = frontMatter.Title
 	}
-	if frontMatter.Date == "" {
+	if frontMatter.Date.IsZero() {
 		fmt.Println("warning: missing date; using modification time")
 		fileInfo, err := os.Stat(p)
 		if err != nil {
 			panic(err)
 		}
-		frontMatter.Date = fileInfo.ModTime().Format(config.DateFormat)
+		frontMatter.Date = fileInfo.ModTime()
 	}
 	return frontMatter, content
 }
@@ -121,7 +120,7 @@ func writePages(pages []*Page) error {
 	if err != nil {
 		return err
 	}
-	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
+	sort.Slice(pages, func(i, j int) bool { return pages[i].FrontMatter.Date.After(pages[j].FrontMatter.Date) })
 	for _, page := range pages {
 		page.Pages = pages
 		f, err := os.Create(page.Path)
@@ -148,11 +147,7 @@ func main() {
 			return nil
 		}
 		fmt.Println(p)
-		frontMatter, content := parsePage(p, &config)
-		date, err := time.Parse(config.DateFormat, frontMatter.Date)
-		if err != nil {
-			fmt.Println("warning:", err)
-		}
+		frontMatter, content := parsePage(p)
 		target := replaceExtension(p, ".html")
 		u, err := url.Parse(config.BaseURL)
 		if err != nil {
@@ -162,7 +157,6 @@ func main() {
 		pages = append(pages, &Page{
 			Config:      &config,
 			FrontMatter: &frontMatter,
-			Date:        date,
 			Path:        target,
 			Content:     content,
 			Join: func(base, p string) string {

@@ -49,7 +49,7 @@
               {{ if not .FrontMatter.Hide }}
                 <li>
                   <p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a></p>
-                  <p><time>{{ .Date.Format .Config.DateFormat }}</time></p>
+                  <p><time>{{ .FrontMatter.Date.Format .Config.DateFormat }}</time></p>
                 </li>
               {{ end }}
             {{ end }}
