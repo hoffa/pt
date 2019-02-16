@@ -82,19 +82,6 @@ func separateFrontMatter(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func executeTemplate(page *Page) error {
-	f, err := os.Create(page.Path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	tmpl, err := template.ParseFiles("template.html")
-	if err != nil {
-		return err
-	}
-	return tmpl.ExecuteTemplate(f, "template", page)
-}
-
 func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
@@ -127,6 +114,26 @@ func parsePage(p string, config *Config) (FrontMatter, string) {
 		frontMatter.Date = fileInfo.ModTime().Format(config.DateFormat)
 	}
 	return frontMatter, content
+}
+
+func writePages(pages []*Page) error {
+	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
+	tmpl, err := template.ParseFiles("template.html")
+	if err != nil {
+		return err
+	}
+	for _, page := range pages {
+		page.Pages = pages
+		f, err := os.Create(page.Path)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		if err := tmpl.ExecuteTemplate(f, "template", page); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func main() {
@@ -168,12 +175,8 @@ func main() {
 	}); err != nil {
 		panic(err)
 	}
-	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
-	for _, page := range pages {
-		page.Pages = pages
-		if err := executeTemplate(page); err != nil {
-			panic(err)
-		}
+	if err := writePages(pages); err != nil {
+		panic(err)
 	}
 	if err := writeRSS(&config, pages); err != nil {
 		panic(err)
