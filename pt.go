@@ -29,20 +29,20 @@ type FrontMatter struct {
 	Title       string
 	Description string
 	Date        string
+	Hide        bool
 }
 
-// Also store a list of all posts??
-type Post struct {
+type Page struct {
 	Config      Config
 	FrontMatter FrontMatter
 	Date        time.Time
 	Path        string
 	Content     string
 	Join        func(base, p string) string
-	Posts       []*Post
+	Pages       []*Page
 }
 
-func writeRSS(config *Config, posts []*Post) error {
+func writeRSS(config *Config, pages []*Page) error {
 	author := &feeds.Author{Name: config.Author, Email: config.Email}
 	feed := &feeds.Feed{
 		Title:  config.Author,
@@ -50,17 +50,16 @@ func writeRSS(config *Config, posts []*Post) error {
 		Author: author,
 	}
 	var items []*feeds.Item
-	for _, post := range posts {
-		if post.FrontMatter.Title == "" {
-			continue
+	for _, page := range pages {
+		if !page.FrontMatter.Hide {
+			items = append(items, &feeds.Item{
+				Title:       page.FrontMatter.Title,
+				Author:      author,
+				Link:        &feeds.Link{Href: page.Join(config.BaseURL, page.Path)},
+				Created:     page.Date,
+				Description: page.FrontMatter.Description,
+			})
 		}
-		items = append(items, &feeds.Item{
-			Title:       post.FrontMatter.Title,
-			Author:      author,
-			Link:        &feeds.Link{Href: post.Join(config.BaseURL, post.Path)},
-			Created:     post.Date,
-			Description: post.FrontMatter.Description,
-		})
 	}
 	feed.Items = items
 	f, err := os.Create("feed.xml")
@@ -79,8 +78,8 @@ func separateFrontMatter(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func executeTemplate(post *Post) error {
-	f, err := os.Create(post.Path)
+func executeTemplate(page *Page) error {
+	f, err := os.Create(page.Path)
 	if err != nil {
 		return err
 	}
@@ -89,7 +88,7 @@ func executeTemplate(post *Post) error {
 	if err != nil {
 		return err
 	}
-	return tmpl.ExecuteTemplate(f, "template", post)
+	return tmpl.ExecuteTemplate(f, "template", page)
 }
 
 func replaceExtension(p, ext string) string {
@@ -102,7 +101,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	var posts []*Post
+	var pages []*Page
 	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) != ".md" {
 			return nil
@@ -127,7 +126,7 @@ func main() {
 			return err
 		}
 		u.Path = path.Join(u.Path, target)
-		posts = append(posts, &Post{
+		pages = append(pages, &Page{
 			Config:      config,
 			FrontMatter: frontMatter,
 			Date:        date,
@@ -143,14 +142,14 @@ func main() {
 	}); err != nil {
 		panic(err)
 	}
-	sort.Slice(posts, func(i, j int) bool { return posts[i].Date.After(posts[j].Date) })
-	for _, post := range posts {
-		post.Posts = posts
-		if err := executeTemplate(post); err != nil {
+	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
+	for _, page := range pages {
+		page.Pages = pages
+		if err := executeTemplate(page); err != nil {
 			panic(err)
 		}
 	}
-	if err := writeRSS(&config, posts); err != nil {
+	if err := writeRSS(&config, pages); err != nil {
 		panic(err)
 	}
 }
