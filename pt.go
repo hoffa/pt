@@ -13,12 +13,14 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/gorilla/feeds"
 	"github.com/russross/blackfriday"
 )
 
 type Config struct {
 	Author          string
 	DateFormat      string
+	Email           string
 	BaseURL         string
 	PreviewImageURL string
 }
@@ -37,7 +39,35 @@ type Post struct {
 	Path        string
 	Content     string
 	Join        func(base, p string) string
-	Posts       []Post
+	Posts       []*Post
+}
+
+func writeRSS(config *Config, posts []*Post) error {
+	author := &feeds.Author{Name: config.Author, Email: config.Email}
+	feed := &feeds.Feed{
+		Title:  config.Author,
+		Link:   &feeds.Link{Href: config.BaseURL},
+		Author: author,
+	}
+	var items []*feeds.Item
+	for _, post := range posts {
+		if post.FrontMatter.Title == "" {
+			continue
+		}
+		items = append(items, &feeds.Item{
+			Title:       post.FrontMatter.Title,
+			Author:      author,
+			Link:        &feeds.Link{Href: post.Join(config.BaseURL, post.Path)},
+			Created:     post.Date,
+			Description: post.FrontMatter.Description,
+		})
+	}
+	feed.Items = items
+	f, err := os.Create("feed.xml")
+	if err != nil {
+		return err
+	}
+	return feed.WriteRss(f)
 }
 
 func separateFrontMatter(b []byte) ([]byte, []byte) {
@@ -72,7 +102,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	var posts []Post
+	var posts []*Post
 	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) != ".md" {
 			return nil
@@ -97,7 +127,7 @@ func main() {
 			return err
 		}
 		u.Path = path.Join(u.Path, target)
-		posts = append(posts, Post{
+		posts = append(posts, &Post{
 			Config:      config,
 			FrontMatter: frontMatter,
 			Date:        date,
@@ -116,8 +146,11 @@ func main() {
 	sort.Slice(posts, func(i, j int) bool { return posts[i].Date.After(posts[j].Date) })
 	for _, post := range posts {
 		post.Posts = posts
-		if err := executeTemplate(&post); err != nil {
+		if err := executeTemplate(post); err != nil {
 			panic(err)
 		}
+	}
+	if err := writeRSS(&config, posts); err != nil {
+		panic(err)
 	}
 }
