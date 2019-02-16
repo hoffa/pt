@@ -1,6 +1,5 @@
 +++
 title = "Jane Doe"
-date = 2006-01-06
 hide = true
 +++
 

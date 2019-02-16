@@ -43,6 +43,67 @@ type Page struct {
 	Pages       []*Page
 }
 
+func replaceExtension(p, ext string) string {
+	return p[:len(p)-len(filepath.Ext(p))] + ext
+}
+
+func separateMarkdown(b []byte) ([]byte, []byte) {
+	i := bytes.Index(b[3:], []byte("+++"))
+	if i == -1 {
+		return nil, b
+	}
+	return b[3 : i+3], b[i+6:]
+}
+
+func parsePage(p string) (*FrontMatter, string) {
+	b, err := ioutil.ReadFile(p)
+	if err != nil {
+		panic(err)
+	}
+	fm, md := separateMarkdown(b)
+	var frontMatter FrontMatter
+	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
+		fmt.Println("warning:", err)
+	}
+	if frontMatter.Title == "" {
+		fmt.Println("warning: missing title; using path")
+		frontMatter.Title = p
+	}
+	if frontMatter.Description == "" {
+		fmt.Println("warning: missing description; using title")
+		frontMatter.Description = frontMatter.Title
+	}
+	if frontMatter.Date.IsZero() {
+		fmt.Println("warning: missing date; using modification time")
+		fileInfo, err := os.Stat(p)
+		if err != nil {
+			panic(err)
+		}
+		frontMatter.Date = fileInfo.ModTime()
+	}
+	return &frontMatter, string(blackfriday.MarkdownCommon(md))
+}
+
+func writePages(pages []*Page) error {
+	tmpl, err := template.ParseFiles("template.html")
+	if err != nil {
+		return err
+	}
+	sort.Slice(pages, func(i, j int) bool { return pages[i].FrontMatter.Date.After(pages[j].FrontMatter.Date) })
+	for _, page := range pages {
+		page.Pages = pages
+		f, err := os.Create(page.Path)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		if err := tmpl.ExecuteTemplate(f, "template", page); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func writeRSS(pages []*Page, config *Config) error {
 	author := &feeds.Author{Name: config.Author, Email: config.Email}
 	feed := &feeds.Feed{
@@ -70,68 +131,6 @@ func writeRSS(pages []*Page, config *Config) error {
 	return feed.WriteRss(f)
 }
 
-func separateFrontMatter(b []byte) ([]byte, []byte) {
-	i := bytes.Index(b[3:], []byte("+++"))
-	if i == -1 {
-		return nil, b
-	}
-	return b[3 : i+3], b[i+6:]
-}
-
-func replaceExtension(p, ext string) string {
-	return p[:len(p)-len(filepath.Ext(p))] + ext
-}
-
-func parsePage(p string) (FrontMatter, string) {
-	b, err := ioutil.ReadFile(p)
-	if err != nil {
-		panic(err)
-	}
-	fm, md := separateFrontMatter(b)
-	content := string(blackfriday.MarkdownCommon(md))
-	var frontMatter FrontMatter
-	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
-		fmt.Println("warning:", err)
-	}
-	if frontMatter.Title == "" {
-		fmt.Println("warning: missing title; using path")
-		frontMatter.Title = p
-	}
-	if frontMatter.Description == "" {
-		fmt.Println("warning: missing description; using title")
-		frontMatter.Description = frontMatter.Title
-	}
-	if frontMatter.Date.IsZero() {
-		fmt.Println("warning: missing date; using modification time")
-		fileInfo, err := os.Stat(p)
-		if err != nil {
-			panic(err)
-		}
-		frontMatter.Date = fileInfo.ModTime()
-	}
-	return frontMatter, content
-}
-
-func writePages(pages []*Page) error {
-	tmpl, err := template.ParseFiles("template.html")
-	if err != nil {
-		return err
-	}
-	sort.Slice(pages, func(i, j int) bool { return pages[i].FrontMatter.Date.After(pages[j].FrontMatter.Date) })
-	for _, page := range pages {
-		page.Pages = pages
-		f, err := os.Create(page.Path)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-		if err := tmpl.ExecuteTemplate(f, "template", page); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func main() {
 	var config Config
 	_, err := toml.DecodeFile("pt.toml", &config)
@@ -153,7 +152,7 @@ func main() {
 		u.Path = path.Join(u.Path, target)
 		pages = append(pages, &Page{
 			Config:      &config,
-			FrontMatter: &frontMatter,
+			FrontMatter: frontMatter,
 			Path:        target,
 			Content:     content,
 			Join: func(base, p string) string {
