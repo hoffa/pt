@@ -17,6 +17,7 @@ import (
 	"github.com/russross/blackfriday"
 )
 
+// Config represents the config in pt.toml.
 type Config struct {
 	Author          string
 	DateFormat      string
@@ -26,6 +27,7 @@ type Config struct {
 	PreviewImageURL string
 }
 
+// FrontMatter represents a page's TOML front matter.
 type FrontMatter struct {
 	Title       string
 	Description string
@@ -33,6 +35,8 @@ type FrontMatter struct {
 	Hide        bool
 }
 
+// Page represents a Markdown page with optional front matter.
+// The struct is passed to template.html during template execution.
 type Page struct {
 	Config      Config
 	FrontMatter FrontMatter

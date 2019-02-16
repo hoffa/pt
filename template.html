@@ -30,11 +30,13 @@
     </style>
   </head>
   <body>
-    <ul id="menu">
-      <li><strong>{{ .Config.Author }}</strong></li>
-      <li><a href="{{ call .Join .Config.BaseURL "index.html" }}">Home</a></li>
-      <li><a href="{{ call .Join .Config.BaseURL "feed.xml" }}">RSS</a></li>
-    </ul>
+    <nav>
+      <ul id="menu">
+        <li><strong>{{ .Config.Author }}</strong></li>
+        <li><a href="{{ call .Join .Config.BaseURL "index.html" }}">Home</a></li>
+        <li><a href="{{ call .Join .Config.BaseURL "feed.xml" }}">RSS</a></li>
+      </ul>
+    </nav>
     <hr>
     {{ .Content }}
     {{ if eq .Path "index.html" }}
