@@ -39,15 +39,16 @@ type Page struct {
 	Config  *Config
 	Path    string
 	Content string
-	Join    func(base, p string) string
 	Pages   []*Page
+	Join    func(base, p string) string
 }
 
 func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
-func separateMarkdown(b []byte) ([]byte, []byte) {
+// Separates front matter from Markdown
+func separateContent(b []byte) ([]byte, []byte) {
 	i := bytes.Index(b[3:], []byte("+++"))
 	if i == -1 {
 		return nil, b
@@ -60,7 +61,7 @@ func parsePage(p string) (*FrontMatter, string) {
 	if err != nil {
 		panic(err)
 	}
-	fm, md := separateMarkdown(b)
+	fm, md := separateContent(b)
 	var frontMatter FrontMatter
 	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 		fmt.Println("warning:", err)
