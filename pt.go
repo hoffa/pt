@@ -22,7 +22,6 @@ type Config struct {
 	Author          string
 	Email           string
 	BaseURL         string
-	Lang            string
 	PreviewImageURL string
 }
 
