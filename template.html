@@ -38,17 +38,26 @@
       </ul>
     </nav>
     <hr>
-    {{ .Content }}
-    {{ if eq .Path "index.html" }}
-      <h2>Posts</h2>
-      <ul>
-        {{ range .Pages }}
-          {{ if not .FrontMatter.Hide }}
-            <li><p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a></p><p>{{ .FrontMatter.Date }}</p></li>
-          {{ end }}
-        {{ end }}
-      </ul>
-    {{ end }}
+    <main>
+      <article>
+        {{ .Content }}
+      </article>
+      {{ if eq .Path "index.html" }}
+        <section>
+          <h2>Posts</h2>
+          <ul>
+            {{ range .Pages }}
+              {{ if not .FrontMatter.Hide }}
+                <li>
+                  <p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a></p>
+                  <p><time>{{ .FrontMatter.Date }}</time></p>
+                </li>
+              {{ end }}
+            {{ end }}
+          </ul>
+        </section>
+      {{ end }}
+    </main>
   </body>
 </html>
 {{ end }}
