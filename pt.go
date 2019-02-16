@@ -35,12 +35,12 @@ type FrontMatter struct {
 // Page represents a Markdown page with optional front matter.
 // The struct is passed to template.html during template execution.
 type Page struct {
-	Config      *Config
-	FrontMatter *FrontMatter
-	Path        string
-	Content     string
-	Join        func(base, p string) string
-	Pages       []*Page
+	*FrontMatter
+	Config  *Config
+	Path    string
+	Content string
+	Join    func(base, p string) string
+	Pages   []*Page
 }
 
 func replaceExtension(p, ext string) string {
@@ -89,7 +89,7 @@ func writePages(pages []*Page) error {
 	if err != nil {
 		return err
 	}
-	sort.Slice(pages, func(i, j int) bool { return pages[i].FrontMatter.Date.After(pages[j].FrontMatter.Date) })
+	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
 	for _, page := range pages {
 		page.Pages = pages
 		f, err := os.Create(page.Path)
@@ -113,13 +113,13 @@ func writeRSS(pages []*Page, config *Config) error {
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
-		if !page.FrontMatter.Hide {
+		if !page.Hide {
 			items = append(items, &feeds.Item{
-				Title:       page.FrontMatter.Title,
+				Title:       page.Title,
 				Author:      author,
 				Link:        &feeds.Link{Href: page.Join(config.BaseURL, page.Path)},
-				Created:     page.FrontMatter.Date,
-				Description: page.FrontMatter.Description,
+				Created:     page.Date,
+				Description: page.Description,
 			})
 		}
 	}
@@ -151,8 +151,8 @@ func main() {
 		}
 		u.Path = path.Join(u.Path, target)
 		pages = append(pages, &Page{
-			Config:      &config,
 			FrontMatter: frontMatter,
+			Config:      &config,
 			Path:        target,
 			Content:     content,
 			Join: func(base, p string) string {

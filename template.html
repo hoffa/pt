@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ .FrontMatter.Title }}</title>
+    <title>{{ .Title }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ .FrontMatter.Description }}">
-    <meta name="og:title" content="{{ .FrontMatter.Title }}">
-    <meta name="og:description" content="{{ .FrontMatter.Description }}">
+    <meta name="description" content="{{ .Description }}">
+    <meta name="og:title" content="{{ .Title }}">
+    <meta name="og:description" content="{{ .Description }}">
     <meta name="og:url" content="{{ call .Join .Config.BaseURL .Path }}">
     <meta name="og:image" content="https://placekitten.com/g/1200/1200">
     <meta name="twitter:card" content="summary">
@@ -46,10 +46,10 @@
           <h2>Posts</h2>
           <ul>
             {{ range .Pages }}
-              {{ if not .FrontMatter.Hide }}
+              {{ if not .Hide }}
                 <li>
-                  <p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a></p>
-                  <p><time>{{ .FrontMatter.Date.Format "January 2, 2006" }}</time></p>
+                  <p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .Title }}</a></p>
+                  <p><time>{{ .Date.Format "January 2, 2006" }}</time></p>
                 </li>
               {{ end }}
             {{ end }}
