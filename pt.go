@@ -116,6 +116,9 @@ func main() {
 		if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 			return err
 		}
+		if frontMatter.Description == "" {
+			frontMatter.Description = frontMatter.Title
+		}
 		date, err := time.Parse(config.DateFormat, frontMatter.Date)
 		if err != nil {
 			return err

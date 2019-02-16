@@ -1,8 +1,7 @@
 +++
 title = "Jane Doe"
-description = "Hello, world!"
 date = "December 21, 1992"
-hide = true
+hide = false
 +++
 
 # Hi!
