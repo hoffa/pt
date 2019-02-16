@@ -1,3 +1,9 @@
++++
+title = "Jane Doe"
+date = "January 6, 2006"
+hide = true
++++
+
 # Hi!
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porttitor velit eget felis tincidunt laoreet. Pellentesque pharetra gravida pretium. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.

@@ -32,13 +32,14 @@ type FrontMatter struct {
 	Title       string
 	Description string
 	Date        string
+	Hide        bool
 }
 
 // Page represents a Markdown page with optional front matter.
 // The struct is passed to template.html during template execution.
 type Page struct {
-	Config      Config
-	FrontMatter FrontMatter
+	Config      *Config
+	FrontMatter *FrontMatter
 	Date        time.Time
 	Path        string
 	Content     string
@@ -55,7 +56,7 @@ func writeRSS(config *Config, pages []*Page) error {
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
-		if page.FrontMatter.Title != "" {
+		if !page.FrontMatter.Hide {
 			items = append(items, &feeds.Item{
 				Title:       page.FrontMatter.Title,
 				Author:      author,
@@ -76,7 +77,6 @@ func writeRSS(config *Config, pages []*Page) error {
 func separateFrontMatter(b []byte) ([]byte, []byte) {
 	i := bytes.Index(b[3:], []byte("+++"))
 	if i == -1 {
-		// Assume everything is Markdown
 		return nil, b
 	}
 	return b[3 : i+3], b[i+6:]
@@ -99,6 +99,30 @@ func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
+func parseFrontMatter(b []byte, p string, config *Config) FrontMatter {
+	var frontMatter FrontMatter
+	if err := toml.Unmarshal(b, &frontMatter); err != nil {
+		fmt.Println("warning: cannot parse front matter")
+	}
+	if frontMatter.Title == "" {
+		fmt.Println("warning: missing title; using path")
+		frontMatter.Title = p
+	}
+	if frontMatter.Description == "" {
+		fmt.Println("warning: missing description; using title")
+		frontMatter.Description = frontMatter.Title
+	}
+	if frontMatter.Date == "" {
+		fmt.Println("warning: missing date; using modification time")
+		fileInfo, err := os.Stat(p)
+		if err != nil {
+			panic(err)
+		}
+		frontMatter.Date = fileInfo.ModTime().Format(config.DateFormat)
+	}
+	return frontMatter
+}
+
 func main() {
 	var config Config
 	_, err := toml.DecodeFile("pt.toml", &config)
@@ -110,22 +134,16 @@ func main() {
 		if filepath.Ext(p) != ".md" {
 			return nil
 		}
+		fmt.Println(p)
 		b, err := ioutil.ReadFile(p)
 		if err != nil {
 			return err
 		}
-		var frontMatter FrontMatter
 		fm, md := separateFrontMatter(b)
-		if err := toml.Unmarshal(fm, &frontMatter); err != nil {
-			return err
-		}
-		if frontMatter.Description == "" {
-			frontMatter.Description = frontMatter.Title
-		}
-		fmt.Println(p)
+		frontMatter := parseFrontMatter(fm, p, &config)
 		date, err := time.Parse(config.DateFormat, frontMatter.Date)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("warning:", err)
 		}
 		target := replaceExtension(p, ".html")
 		u, err := url.Parse(config.BaseURL)
@@ -134,8 +152,8 @@ func main() {
 		}
 		u.Path = path.Join(u.Path, target)
 		pages = append(pages, &Page{
-			Config:      config,
-			FrontMatter: frontMatter,
+			Config:      &config,
+			FrontMatter: &frontMatter,
 			Date:        date,
 			Path:        target,
 			Content:     string(blackfriday.MarkdownCommon(md)),
