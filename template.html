@@ -45,7 +45,7 @@
       <article>
         {{ if not .Hide }}
           <h1 class="mb-0">{{ .Title }}</h1>
-          <p><i>{{ .Date.Format .Config.DateFormat }}</i></p>
+          <span><i>{{ .Date.Format .Config.DateFormat }}</i></span>
         {{ end }}
         {{ .Content }}
       </article>
