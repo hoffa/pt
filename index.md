@@ -1,6 +1,6 @@
 +++
 title = "Jane Doe"
-hide = true
+article = false
 +++
 
 # Hi!

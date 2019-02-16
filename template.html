@@ -43,7 +43,7 @@
     </nav>
     <main>
       <article>
-        {{ if not .Hide }}
+        {{ if .Article }}
           <h1 class="mb-0">{{ .Title }}</h1>
           <span><i>{{ .Date.Format .Config.DateFormat }}</i></span>
         {{ end }}
@@ -54,7 +54,7 @@
           <h2>Posts</h2>
           <ul>
             {{ range .Pages }}
-              {{ if not .Hide }}
+              {{ if .Article }}
                 <li>
                   <p class="mb-0">
                     <a href="{{ call .Join .Config.BaseURL .Path }}">{{ .Title }}</a>

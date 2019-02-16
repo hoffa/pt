@@ -30,7 +30,7 @@ type FrontMatter struct {
 	Title       string
 	Description string
 	Date        time.Time
-	Hide        bool
+	Article     bool
 }
 
 // Page represents a Markdown page with optional front matter.
@@ -63,7 +63,7 @@ func parsePage(p string) (*FrontMatter, string) {
 		panic(err)
 	}
 	fm, md := separateContent(b)
-	var frontMatter FrontMatter
+	frontMatter := FrontMatter{Article: true}
 	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 		fmt.Println("warning:", err)
 	}
@@ -116,7 +116,7 @@ func writeRSS(pages []*Page, config *Config) error {
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
-		if !page.Hide {
+		if page.Article {
 			items = append(items, &feeds.Item{
 				Title:       page.Title,
 				Author:      author,
