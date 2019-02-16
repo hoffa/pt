@@ -32,7 +32,6 @@ type FrontMatter struct {
 	Title       string
 	Description string
 	Date        string
-	Hide        bool
 }
 
 // Page represents a Markdown page with optional front matter.
@@ -56,7 +55,7 @@ func writeRSS(config *Config, pages []*Page) error {
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
-		if !page.FrontMatter.Hide {
+		if page.FrontMatter.Title != "" {
 			items = append(items, &feeds.Item{
 				Title:       page.FrontMatter.Title,
 				Author:      author,

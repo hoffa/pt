@@ -46,7 +46,7 @@
           <h2>Posts</h2>
           <ul>
             {{ range .Pages }}
-              {{ if not .FrontMatter.Hide }}
+              {{ if .FrontMatter.Title }}
                 <li>
                   <p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a></p>
                   <p><time>{{ .FrontMatter.Date }}</time></p>
