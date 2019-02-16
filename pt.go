@@ -99,9 +99,15 @@ func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
-func parseFrontMatter(b []byte, p string, config *Config) FrontMatter {
+func parsePage(p string, config *Config) (FrontMatter, string) {
+	b, err := ioutil.ReadFile(p)
+	if err != nil {
+		panic(err)
+	}
+	fm, md := separateFrontMatter(b)
+	content := string(blackfriday.MarkdownCommon(md))
 	var frontMatter FrontMatter
-	if err := toml.Unmarshal(b, &frontMatter); err != nil {
+	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 		fmt.Println("warning: cannot parse front matter")
 	}
 	if frontMatter.Title == "" {
@@ -120,7 +126,7 @@ func parseFrontMatter(b []byte, p string, config *Config) FrontMatter {
 		}
 		frontMatter.Date = fileInfo.ModTime().Format(config.DateFormat)
 	}
-	return frontMatter
+	return frontMatter, content
 }
 
 func main() {
@@ -135,12 +141,7 @@ func main() {
 			return nil
 		}
 		fmt.Println(p)
-		b, err := ioutil.ReadFile(p)
-		if err != nil {
-			return err
-		}
-		fm, md := separateFrontMatter(b)
-		frontMatter := parseFrontMatter(fm, p, &config)
+		frontMatter, content := parsePage(p, &config)
 		date, err := time.Parse(config.DateFormat, frontMatter.Date)
 		if err != nil {
 			fmt.Println("warning:", err)
@@ -156,7 +157,7 @@ func main() {
 			FrontMatter: &frontMatter,
 			Date:        date,
 			Path:        target,
-			Content:     string(blackfriday.MarkdownCommon(md)),
+			Content:     content,
 			Join: func(base, p string) string {
 				u, _ := url.Parse(base)
 				u.Path = path.Join(u.Path, p)
