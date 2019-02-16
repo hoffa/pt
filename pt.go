@@ -144,16 +144,10 @@ func main() {
 		}
 		fmt.Println(p)
 		frontMatter, content := parsePage(p)
-		target := replaceExtension(p, ".html")
-		u, err := url.Parse(config.BaseURL)
-		if err != nil {
-			return err
-		}
-		u.Path = path.Join(u.Path, target)
 		pages = append(pages, &Page{
 			FrontMatter: frontMatter,
 			Config:      &config,
-			Path:        target,
+			Path:        replaceExtension(p, ".html"),
 			Content:     content,
 			Join: func(base, p string) string {
 				u, _ := url.Parse(base)
