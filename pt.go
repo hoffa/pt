@@ -22,6 +22,7 @@ type Config struct {
 	DateFormat      string
 	Email           string
 	BaseURL         string
+	Lang            string
 	PreviewImageURL string
 }
 
