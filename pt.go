@@ -122,6 +122,7 @@ func writeRSS(pages []*Page, config *Config) error {
 				Link:        &feeds.Link{Href: page.Join(config.BaseURL, page.Path)},
 				Created:     page.Date,
 				Description: page.Description,
+				Content:     page.Content,
 			})
 		}
 	}
