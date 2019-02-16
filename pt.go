@@ -123,11 +123,11 @@ func main() {
 		if frontMatter.Description == "" {
 			frontMatter.Description = frontMatter.Title
 		}
+		fmt.Println(p)
 		date, err := time.Parse(config.DateFormat, frontMatter.Date)
 		if err != nil {
-			return err
+			fmt.Println(err)
 		}
-		fmt.Println(p, frontMatter)
 		target := replaceExtension(p, ".html")
 		u, err := url.Parse(config.BaseURL)
 		if err != nil {
