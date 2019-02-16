@@ -1,50 +1,50 @@
 {{ define "template" }}
-  <!DOCTYPE html>
-  <html lang="{{ .Config.Lang }}">
-    <head>
-      <title>{{ .FrontMatter.Title }}</title>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta name="description" content="{{ .FrontMatter.Description }}" />
-      <meta name="og:title" content="{{ .FrontMatter.Title }}">
-      <meta name="og:description" content="{{ .FrontMatter.Description }}">
-      <meta name="og:image" content="{{ .Config.PreviewImageURL }}">
-      <meta name="og:url" content="{{ call .Join .Config.BaseURL .Path }}">
-      <style>
-      body {
-        font-family: system-ui, sans-serif;
-        max-width: 40em;
-        margin: 0 auto;
-        padding: 0 1em;
-      }
+<!DOCTYPE html>
+<html lang="{{ .Config.Lang }}">
+  <head>
+    <title>{{ .FrontMatter.Title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ .FrontMatter.Description }}">
+    <meta name="og:title" content="{{ .FrontMatter.Title }}">
+    <meta name="og:description" content="{{ .FrontMatter.Description }}">
+    <meta name="og:image" content="{{ .Config.PreviewImageURL }}">
+    <meta name="og:url" content="{{ call .Join .Config.BaseURL .Path }}">
+    <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 40em;
+      margin: 0 auto;
+      padding: 0 1em;
+    }
 
-      #menu li {
-        display: inline;
-      }
+    #menu li {
+      display: inline;
+    }
 
-      #menu {
-        padding: 0;
-      }
-      </style>
-    </head>
-    <body>
-      <ul id="menu">
-        <li><strong>{{ .Config.Author }}</strong></li>
-        <li><a href="{{ call .Join .Config.BaseURL "index.html" }}">Home</a></li>
-        <li><a href="{{ call .Join .Config.BaseURL "feed.xml" }}">RSS</a></li>
-      </ul>
-      <hr />
-      {{ .Content }}
-      {{ if eq .Path "index.html" }}
-        <h2>Posts</h2>
-        <ul>
-          {{ range .Pages }}
-            {{ if not .FrontMatter.Hide }}
-              <li><p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a><br>{{ .FrontMatter.Date }}</p></li>
-            {{ end }}
+    #menu {
+      padding: 0;
+    }
+    </style>
+  </head>
+  <body>
+    <ul id="menu">
+      <li><strong>{{ .Config.Author }}</strong></li>
+      <li><a href="{{ call .Join .Config.BaseURL "index.html" }}">Home</a></li>
+      <li><a href="{{ call .Join .Config.BaseURL "feed.xml" }}">RSS</a></li>
+    </ul>
+    <hr>
+    {{ .Content }}
+    {{ if eq .Path "index.html" }}
+      <h2>Posts</h2>
+      <ul>
+        {{ range .Pages }}
+          {{ if not .FrontMatter.Hide }}
+            <li><p><a href="{{ call .Join .Config.BaseURL .Path }}">{{ .FrontMatter.Title }}</a><br>{{ .FrontMatter.Date }}</p></li>
           {{ end }}
-        </ul>
-      {{ end }}
-    </body>
-  </html>
+        {{ end }}
+      </ul>
+    {{ end }}
+  </body>
+</html>
 {{ end }}
