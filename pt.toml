@@ -1,6 +1,5 @@
 author = "Jane Doe"
 email = "jane@doe.com"
 baseURL = ""
-dateFormat = "January 2, 2006"
 previewImageURL = "https://placekitten.com/g/512/512"
 lang = "en"

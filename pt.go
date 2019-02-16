@@ -20,7 +20,6 @@ import (
 // Config represents the config in pt.toml.
 type Config struct {
 	Author          string
-	DateFormat      string
 	Email           string
 	BaseURL         string
 	Lang            string
