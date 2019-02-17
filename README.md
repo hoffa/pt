@@ -56,21 +56,7 @@ In case of missing values, sensible defaults will be used.
 title = "Hello, world!"
 date = 2019-02-11
 ```
-
-### Variables
-
-#### title
-
-The content title.
-
-#### description
-
-The content description.
-
-#### date
-
-The content creation date.
-
-#### exclude
-
-If `true`, the page won't be included in `.Site.Pages`.
+- `title`: the content title
+- `description`: the content description
+- `date`: the content creation date
+- `exclude`: if `true`, the page won't be included in `.Site.Pages`
