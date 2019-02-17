@@ -20,7 +20,9 @@ go get github.com/hoffa/pt
 pt
 ```
 
-`pt` takes no arguments. Markdown files within the working directory are converted to HTML.
+`pt` takes no arguments.
+
+Markdown files within the working directory are converted to HTML.
 
 ## Demo
 
