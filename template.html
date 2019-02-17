@@ -43,7 +43,7 @@
     </nav>
     <main>
       <article>
-        {{ if .Article }}
+        {{ if ne .Path "index.html" }}
           <h1 class="mb-0">{{ .Title }}</h1>
           <span><i>{{ .Date.Format .Site.Params.dateFormat }}</i></span>
         {{ end }}
@@ -54,14 +54,12 @@
           <h2>Posts</h2>
           <ul>
             {{ range .Site.Pages }}
-              {{ if .Article }}
-                <li>
-                  <p class="mb-0">
-                    <a href="{{ call .Join .Site.BaseURL .Path }}">{{ .Title }}</a>
-                  </p>
-                  <span>{{ .Date.Format .Site.Params.dateFormat }}</span>
-                </li>
-              {{ end }}
+              <li>
+                <p class="mb-0">
+                  <a href="{{ call .Join .Site.BaseURL .Path }}">{{ .Title }}</a>
+                </p>
+                <span>{{ .Date.Format .Site.Params.dateFormat }}</span>
+              </li>
             {{ end }}
           </ul>
         </section>

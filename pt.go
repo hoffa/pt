@@ -31,7 +31,7 @@ type FrontMatter struct {
 	Title       string
 	Description string
 	Date        time.Time
-	Article     bool
+	Exclude     bool
 	Params      map[string]interface{}
 }
 
@@ -64,7 +64,7 @@ func parsePage(p string) (*FrontMatter, string) {
 		panic(err)
 	}
 	fm, md := separateContent(b)
-	frontMatter := FrontMatter{Article: true}
+	var frontMatter FrontMatter
 	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
 		fmt.Println("warning:", err)
 	}
@@ -87,26 +87,20 @@ func parsePage(p string) (*FrontMatter, string) {
 	return &frontMatter, string(blackfriday.MarkdownCommon(md))
 }
 
-func writePages(pages []*Page) error {
-	tmpl, err := template.ParseFiles("template.html")
-	if err != nil {
-		return err
-	}
-	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
+func writePages(tmpl *template.Template, pages []*Page) {
 	for _, page := range pages {
 		f, err := os.Create(page.Path)
 		if err != nil {
-			return err
+			panic(err)
 		}
 		defer f.Close()
 		if err := tmpl.ExecuteTemplate(f, "template", page); err != nil {
-			return err
+			panic(err)
 		}
 	}
-	return nil
 }
 
-func writeRSS(pages []*Page, site *Site) error {
+func writeRSS(pages []*Page, site *Site) {
 	author := &feeds.Author{Name: site.Author, Email: site.Email}
 	feed := &feeds.Feed{
 		Title:   site.Author,
@@ -116,23 +110,23 @@ func writeRSS(pages []*Page, site *Site) error {
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
-		if page.Article {
-			items = append(items, &feeds.Item{
-				Title:       page.Title,
-				Author:      author,
-				Link:        &feeds.Link{Href: page.Join(site.BaseURL, page.Path)},
-				Created:     page.Date,
-				Description: page.Description,
-				Content:     page.Content,
-			})
-		}
+		items = append(items, &feeds.Item{
+			Title:       page.Title,
+			Author:      author,
+			Link:        &feeds.Link{Href: page.Join(site.BaseURL, page.Path)},
+			Created:     page.Date,
+			Description: page.Description,
+			Content:     page.Content,
+		})
 	}
 	feed.Items = items
 	f, err := os.Create("feed.xml")
 	if err != nil {
-		return err
+		panic(err)
 	}
-	return feed.WriteRss(f)
+	if err := feed.WriteRss(f); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
@@ -141,14 +135,19 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	var pages []*Page
+	tmpl, err := template.ParseFiles("template.html")
+	if err != nil {
+		panic(err)
+	}
+	var included []*Page
+	var excluded []*Page
 	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) != ".md" {
 			return nil
 		}
 		fmt.Println(p)
 		frontMatter, content := parsePage(p)
-		pages = append(pages, &Page{
+		page := &Page{
 			FrontMatter: frontMatter,
 			Site:        &site,
 			Path:        replaceExtension(p, ".html"),
@@ -161,16 +160,19 @@ func main() {
 				u.Path = path.Join(u.Path, p)
 				return u.String()
 			},
-		})
+		}
+		if page.Exclude {
+			excluded = append(excluded, page)
+		} else {
+			included = append(included, page)
+		}
 		return nil
 	}); err != nil {
 		panic(err)
 	}
-	site.Pages = pages
-	if err := writePages(pages); err != nil {
-		panic(err)
-	}
-	if err := writeRSS(pages, &site); err != nil {
-		panic(err)
-	}
+	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
+	site.Pages = included
+	writePages(tmpl, included)
+	writePages(tmpl, excluded)
+	writeRSS(included, &site)
 }

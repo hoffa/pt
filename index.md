@@ -1,6 +1,6 @@
 +++
 title = "Jane Doe"
-article = false
+exclude = true
 +++
 
 # Hi!
