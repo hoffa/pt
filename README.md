@@ -14,6 +14,10 @@ Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to
 - Generates pages instantly
 - Generates RSS feed
 
+## Demo
+
+My [website](https://rehn.me). Generated from [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io).
+
 ## Installation
 
 ```shell
@@ -29,10 +33,6 @@ pt
 `pt` takes no arguments.
 
 Markdown files within the working directory are converted to HTML.
-
-## Demo
-
-My [website](https://rehn.me). Generated from [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io).
 
 ## Configuration
 
@@ -54,7 +54,7 @@ baseURL = "https://doe.com"
 
 ## Front matter
 
-Each page can contain a _front matter_. It's the page's metadata.
+Each page can contain a front matter (the page's metadata).
 
 The front matter is written in [TOML](https://github.com/toml-lang/toml), and must be placed at the top within `+++` delimiters.
 
