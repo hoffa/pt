@@ -58,7 +58,7 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func parsePage(p string) (*FrontMatter, string) {
+func parsePage(site *Site, p string) *Page {
 	b, err := ioutil.ReadFile(p)
 	if err != nil {
 		panic(err)
@@ -84,7 +84,20 @@ func parsePage(p string) (*FrontMatter, string) {
 		}
 		frontMatter.Date = fileInfo.ModTime()
 	}
-	return &frontMatter, string(blackfriday.MarkdownCommon(md))
+	return &Page{
+		FrontMatter: &frontMatter,
+		Site:        site,
+		Path:        replaceExtension(p, ".html"),
+		Content:     string(blackfriday.MarkdownCommon(md)),
+		Join: func(base, p string) string {
+			u, err := url.Parse(base)
+			if err != nil {
+				panic(err)
+			}
+			u.Path = path.Join(u.Path, p)
+			return u.String()
+		},
+	}
 }
 
 func writePages(tmpl *template.Template, pages []*Page) {
@@ -142,29 +155,14 @@ func main() {
 	var included []*Page
 	var excluded []*Page
 	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
-		if filepath.Ext(p) != ".md" {
-			return nil
-		}
-		fmt.Println(p)
-		frontMatter, content := parsePage(p)
-		page := &Page{
-			FrontMatter: frontMatter,
-			Site:        &site,
-			Path:        replaceExtension(p, ".html"),
-			Content:     content,
-			Join: func(base, p string) string {
-				u, err := url.Parse(base)
-				if err != nil {
-					panic(err)
-				}
-				u.Path = path.Join(u.Path, p)
-				return u.String()
-			},
-		}
-		if page.Exclude {
-			excluded = append(excluded, page)
-		} else {
-			included = append(included, page)
+		if filepath.Ext(p) == ".md" {
+			fmt.Println(p)
+			page := parsePage(&site, p)
+			if page.Exclude {
+				excluded = append(excluded, page)
+			} else {
+				included = append(included, page)
+			}
 		}
 		return nil
 	}); err != nil {
