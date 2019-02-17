@@ -8,12 +8,11 @@ Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to
 
 ## Features
 
-- Extremely straightforward
 - Tiny
-- Accessible
-- [Single-file template](https://github.com/hoffa/pt/blob/master/template.html)
+- Straightforward
+- Single-file template
 - Generates pages instantly
-- RSS
+- Geberates RSS feed
 
 ## Installation
 
