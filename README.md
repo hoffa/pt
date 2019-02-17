@@ -34,7 +34,7 @@ pt
 
 ## Templating
 
-All Markdown files within the working directory are converted to HTML.
+All Markdown files in the working directory are converted to HTML.
 
 All pages are generated from a single `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
 
@@ -46,7 +46,7 @@ Check out the included [`template.html`](template.html) for example usage.
 
 Configuration is defined in `pt.toml`.
 
-Custom parameters can be defined within the `params` table. They're accessible through `.Site.Params`.
+Custom parameters can be defined in the `params` table. They're accessible through `.Site.Params`.
 
 ### Example
 
@@ -71,7 +71,7 @@ Each page can contain a front matter.
 
 The front matter is written in [TOML](https://github.com/toml-lang/toml), and must be placed at the top within `+++` delimiters.
 
-Custom parameters can be defined within the `params` table. They're accessible through `.Params`.
+Custom parameters can be defined in the `params` table. They're accessible through `.Params`.
 
 ### Example
 
