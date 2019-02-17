@@ -23,6 +23,7 @@ type Config struct {
 	Email      string
 	BaseURL    string
 	DateFormat string
+	Params     map[string]interface{}
 }
 
 // FrontMatter represents a page's TOML front matter.
@@ -31,6 +32,7 @@ type FrontMatter struct {
 	Description string
 	Date        time.Time
 	Article     bool
+	Params      map[string]interface{}
 }
 
 // Page represents a Markdown page with optional front matter.
