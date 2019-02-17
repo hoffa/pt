@@ -32,7 +32,7 @@ Markdown files within the working directory are converted to HTML.
 
 ## Demo
 
-My [website](https://rehn.me) is generated from the [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io) repo.
+My [website](https://rehn.me). Generated from [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io).
 
 ## Configuration
 
