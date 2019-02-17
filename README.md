@@ -7,6 +7,9 @@
 - Extremely straightforward
 - Tiny
 - Accessible
+- [Single-file template](https://github.com/hoffa/pt/blob/master/template.html)
+- Generates pages instantly
+- RSS
 
 ## Installation
 
