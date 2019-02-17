@@ -4,7 +4,7 @@
 
 A minimalist static site generator.
 
-Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to HTML.
+Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to HTML. Uses Go's [`text/template`](https://golang.org/pkg/text/template/).
 
 ## Features
 
@@ -12,7 +12,7 @@ Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to
 - Straightforward
 - Single-file template
 - Generates pages instantly
-- Geberates RSS feed
+- Generates RSS feed
 
 ## Installation
 
