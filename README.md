@@ -33,7 +33,11 @@ My [website](https://rehn.me) is generated from the [hoffa/hoffa.github.io](http
 
 ## Front matter
 
-Front matter is in [TOML](https://github.com/toml-lang/toml). It must be included within an opening and closing `+++` before the content.
+Front matter is in [TOML](https://github.com/toml-lang/toml).
+
+It must be included before the content within an opening and closing `+++`.
+
+If the front matter is missing, sensible defaults are used.
 
 ### Example
 
