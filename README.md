@@ -34,9 +34,19 @@ Markdown files within the working directory are converted to HTML.
 
 My [website](https://rehn.me) is generated from the [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io) repo.
 
-## Site variables
+## Configuration
 
 Site variables are defined in `pt.toml`. They're accessible through `.Site`.
+
+### Example
+
+```toml
+author = "Jane Doe"
+email = "jane@doe.com"
+baseURL = "https://doe.com"
+```
+
+### Variables
 
 - `author`: the site author
 - `email`: the author's email
@@ -56,6 +66,9 @@ In case of missing values, sensible defaults will be used.
 title = "Hello, world!"
 date = 2019-02-11
 ```
+
+### Variables
+
 - `title`: the content title
 - `description`: the content description
 - `date`: the content creation date
