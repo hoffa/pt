@@ -32,17 +32,19 @@ pt
 
 `pt` takes no arguments.
 
-Markdown files within the working directory are converted to HTML.
+## Templating
 
-## Template
+All Markdown files within the working directory are converted to HTML.
 
-All pages are generated from `template.html` using [`text/template`](https://golang.org/pkg/text/template/).
+All pages are generated from `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
 
-All pages can access the same set of variables.
+Each page is passed a [`Page`](https://github.com/hoffa/pt/blob/5b150b52d5856ecadbab6b5ff1fbcc33f2af832e/pt.go#L40-L46) structure, which allows accessing fields such as `.Title` and `.Site.Author`.
+
+Pages are accessible through `.Site.Pages`.
 
 ## Configuration
 
-Configuration is defined in `pt.toml`.
+Configuration is defined in `pt.toml`. It's accessible through `.Site`.
 
 Custom parameters can be defined within the `params` table. They're accessible through `.Site.Params`.
 
@@ -65,7 +67,7 @@ dateFormat = "January 2, 2006"
 
 ## Front matter
 
-Each page can contain a front matter (the page's metadata).
+Each page can contain a front matter (the page's metadata). 
 
 The front matter is written in [TOML](https://github.com/toml-lang/toml), and must be placed at the top within `+++` delimiters.
 
