@@ -34,9 +34,11 @@ pt
 
 ## Templating
 
-All Markdown files within the working directory are converted to HTML. They're generated from `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
+All Markdown files within the working directory are converted to HTML.
 
-Each page is passed a [`Page`](https://github.com/hoffa/pt/blob/5b150b52d5856ecadbab6b5ff1fbcc33f2af832e/pt.go#L40-L46) structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
+They're generated from `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
+
+Each page is passed a [`Page`](https://github.com/hoffa/pt/blob/5b150b52d5856ecadbab6b5ff1fbcc33f2af832e/pt.go#L38-L46) structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
 
 Check out the included [`template.html`](template.html) for example usage.
 
