@@ -16,14 +16,26 @@ go get github.com/hoffa/pt
 
 ## Usage
 
-Put your Markdown files somewhere and run:
-
 ```shell
 pt
 ```
+
+`pt` takes no arguments. Markdown files within the working directory are converted to HTML.
 
 ## Front matter
 
 Front matter is in TOML. Valid fields are `title` and `date`.
 
-If there is no `title`, the page isn't displayed on the index page.
+### Example
+
+```toml
+title = "PKI for busy people"
+date = 2019-02-11
+```
+
+### Variables
+
+- `title`
+- `description`
+- `date`
+- `exclude`
