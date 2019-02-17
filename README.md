@@ -4,14 +4,13 @@
 
 A minimalist static site generator.
 
-Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to HTML.
-
 ## Features
 
 - Tiny
-- Straightforward
+- Straighforward
 - Single-file template
 - Minimal configuration
+- Write pages in [Markdown](https://daringfireball.net/projects/markdown/syntax)
 - Generates pages instantly
 - Generates RSS feed
 
