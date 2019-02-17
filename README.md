@@ -4,7 +4,7 @@
 
 A minimalist static site generator.
 
-Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to HTML. Uses Go's [`text/template`](https://golang.org/pkg/text/template/).
+Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to HTML.
 
 ## Features
 
@@ -34,7 +34,11 @@ pt
 
 Markdown files within the working directory are converted to HTML.
 
-All pages are generated from `template.html`.
+## Template
+
+All pages are generated from `template.html` using [`text/template`](https://golang.org/pkg/text/template/).
+
+All pages can access the same set of variables.
 
 ## Configuration
 
