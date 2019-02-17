@@ -11,6 +11,7 @@ Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to
 - Tiny
 - Straightforward
 - Single-file template
+- Minimal configuration
 - Generates pages instantly
 - Generates RSS feed
 
