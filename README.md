@@ -32,11 +32,15 @@ pt
 
 `pt` takes no arguments.
 
-Markdown files within the working directory are converted to HTML. All pages are generated from [`template.html`](template.html).
+Markdown files within the working directory are converted to HTML.
+
+All pages are generated from `template.html`.
 
 ## Configuration
 
 Configuration is defined in `pt.toml`.
+
+Custom parameters can be defined within the `params` table. They're accessible through `.Site.Params`.
 
 ### Example
 
@@ -44,6 +48,9 @@ Configuration is defined in `pt.toml`.
 author = "Jane Doe"
 email = "jane@doe.com"
 baseURL = "https://doe.com"
+
+[params]
+dateFormat = "January 2, 2006"
 ```
 
 ### Variables
@@ -57,6 +64,8 @@ baseURL = "https://doe.com"
 Each page can contain a front matter (the page's metadata).
 
 The front matter is written in [TOML](https://github.com/toml-lang/toml), and must be placed at the top within `+++` delimiters.
+
+Custom parameters can be defined within the `params` table. They're accessible through `.Params`.
 
 ### Example
 
