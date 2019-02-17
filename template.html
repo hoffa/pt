@@ -45,7 +45,7 @@
       <article>
         {{ if .Article }}
           <h1 class="mb-0">{{ .Title }}</h1>
-          <span><i>{{ .Date.Format .Site.DateFormat }}</i></span>
+          <span><i>{{ .Date.Format .Site.Params.dateFormat }}</i></span>
         {{ end }}
         {{ .Content }}
       </article>
@@ -59,7 +59,7 @@
                   <p class="mb-0">
                     <a href="{{ call .Join .Site.BaseURL .Path }}">{{ .Title }}</a>
                   </p>
-                  <span>{{ .Date.Format .Site.DateFormat }}</span>
+                  <span>{{ .Date.Format .Site.Params.dateFormat }}</span>
                 </li>
               {{ end }}
             {{ end }}

@@ -19,12 +19,11 @@ import (
 
 // Site represents the config in pt.toml.
 type Site struct {
-	Author     string
-	Email      string
-	BaseURL    string
-	DateFormat string
-	Params     map[string]interface{}
-	Pages      []*Page
+	Author  string
+	Email   string
+	BaseURL string
+	Params  map[string]interface{}
+	Pages   []*Page
 }
 
 // FrontMatter represents a page's TOML front matter.
