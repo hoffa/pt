@@ -35,18 +35,18 @@ date = 2019-02-11
 
 ### Variables
 
-#### `title`
+#### title
 
 The content title.
 
-#### `description`
+#### description
 
 The content description.
 
-#### `date`
+#### date
 
 The content creation date.
 
-#### `exclude`
+#### exclude
 
 If `true`, the page won't be included in `.Site.Pages`.
