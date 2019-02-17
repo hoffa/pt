@@ -154,7 +154,10 @@ func main() {
 			Path:        replaceExtension(p, ".html"),
 			Content:     content,
 			Join: func(base, p string) string {
-				u, _ := url.Parse(base)
+				u, err := url.Parse(base)
+				if err != nil {
+					panic(err)
+				}
 				u.Path = path.Join(u.Path, p)
 				return u.String()
 			},
