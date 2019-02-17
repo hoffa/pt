@@ -147,7 +147,7 @@ func main() {
 	var site Site
 	_, err := toml.DecodeFile("pt.toml", &site)
 	if err != nil {
-		panic(err)
+		fmt.Println("warning:", err)
 	}
 	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {
