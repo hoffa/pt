@@ -4,6 +4,8 @@
 
 A minimalist static site generator.
 
+Just converts [Markdown](https://daringfireball.net/projects/markdown/syntax) to HTML.
+
 ## Features
 
 - Extremely straightforward
