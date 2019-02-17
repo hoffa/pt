@@ -20,10 +20,6 @@
         padding: 0 1em;
       }
 
-      .mb-0 {
-        margin-bottom: 0;
-      }
-
       #menu {
         padding: 0;
       }
@@ -49,15 +45,14 @@
           <ul>
             {{ range .Site.Pages }}
               <li>
-                <p class="mb-0"><a href="{{ call .Join .Site.BaseURL .Path }}">{{ .Title }}</a></p>
-                <span>{{ .Date.Format .Site.Params.dateFormat }}</span>
+                <p><a href="{{ call .Join .Site.BaseURL .Path }}">{{ .Title }}</a></p>
               </li>
             {{ end }}
           </ul>
         {{ else }}
           <h1>{{ .Title }}</h1>
           {{ .Content }}
-          <p><i>{{ .Date.Format .Site.Params.dateFormat }}</i></p>
+          <p><i>{{ .Date.Format "January 2, 2006" }}</i></p>
         {{ end }}
       </article>
     </main>
