@@ -24,7 +24,7 @@ pt
 
 ## Front matter
 
-Front matter is in TOML. Valid fields are `title` and `date`.
+Front matter is in TOML. It must be included within an opening and closing `+++` before the content.
 
 ### Example
 
