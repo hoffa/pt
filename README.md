@@ -28,9 +28,13 @@ Front matter is in TOML. It must be included within an opening and closing `+++`
 
 ### Example
 
-```toml
-title = "PKI for busy people"
+```markdown
++++
+title = "Hello, world!"
 date = 2019-02-11
++++
+
+Hello! 👋
 ```
 
 ### Variables
