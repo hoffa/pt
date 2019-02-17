@@ -55,11 +55,9 @@
             {{ end }}
           </ul>
         {{ else }}
-          <article>
-            <h1 class="mb-0">{{ .Title }}</h1>
-            <span><i>{{ .Date.Format .Site.Params.dateFormat }}</i></span>
-            {{ .Content }}
-          </article>
+          <h1 class="mb-0">{{ .Title }}</h1>
+          <i>{{ .Date.Format .Site.Params.dateFormat }}</i>
+          {{ .Content }}
         {{ end }}
       </article>
     </main>
