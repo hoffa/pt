@@ -34,6 +34,24 @@ Markdown files within the working directory are converted to HTML.
 
 My [website](https://rehn.me) is generated from the [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io) repo.
 
+## Site variables
+
+Site variables are defined in `pt.toml`. They're accessible through `.Site`.
+
+### Variables
+
+#### author
+
+The site author.
+
+#### email
+
+The author's email.
+
+#### baseURL
+
+The URL used to combine with relative paths.
+
 ## Front matter
 
 Front matter is in [TOML](https://github.com/toml-lang/toml).
