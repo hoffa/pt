@@ -32,7 +32,7 @@ pt
 
 `pt` takes no arguments.
 
-Markdown files within the working directory are converted to HTML.
+Markdown files within the working directory are converted to HTML. All pages are generated from [`template.html`](template.html).
 
 ## Configuration
 
