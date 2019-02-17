@@ -22,6 +22,10 @@ pt
 
 `pt` takes no arguments. Markdown files within the working directory are converted to HTML.
 
+## Demo
+
+My [website](https://rehn.me) is generated from the [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io) repo.
+
 ## Front matter
 
 Front matter is in TOML. It must be included within an opening and closing `+++` before the content.
