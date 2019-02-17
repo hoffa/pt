@@ -50,15 +50,13 @@ baseURL = "https://doe.com"
 
 - `author`: the site author
 - `email`: the author's email
-- `baseURL`: the URL used to combine with relative paths
+- `baseURL`: the URL used to resolve relative paths
 
 ## Front matter
 
 Each page can contain a _front matter_. It's the page's metadata.
 
-Front matter is written in [TOML](https://github.com/toml-lang/toml), and must be included before the content within an opening and closing `+++`.
-
-In case of missing values, sensible defaults will be used.
+The front matter is written in [TOML](https://github.com/toml-lang/toml), and must be placed at the top within `+++` delimiters.
 
 ### Example
 
