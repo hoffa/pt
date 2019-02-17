@@ -51,8 +51,9 @@ func replaceExtension(p, ext string) string {
 
 // Separates front matter from Markdown
 func separateContent(b []byte) ([]byte, []byte) {
-	i := bytes.Index(b[3:], []byte("+++"))
-	if i == -1 {
+	delim := []byte("+++")
+	i := bytes.Index(b[3:], delim)
+	if !bytes.Equal(b[:3], delim) || i == -1 {
 		return nil, b
 	}
 	return b[3 : i+3], b[i+6:]
