@@ -17,13 +17,14 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-// Config represents the config in pt.toml.
-type Config struct {
+// Site represents the config in pt.toml.
+type Site struct {
 	Author     string
 	Email      string
 	BaseURL    string
 	DateFormat string
 	Params     map[string]interface{}
+	Pages      []*Page
 }
 
 // FrontMatter represents a page's TOML front matter.
@@ -39,10 +40,9 @@ type FrontMatter struct {
 // The struct is passed to template.html during template execution.
 type Page struct {
 	*FrontMatter
-	Config  *Config
+	Site    *Site
 	Path    string
 	Content string
-	Pages   []*Page
 	Join    func(base, p string) string
 }
 
@@ -95,7 +95,6 @@ func writePages(pages []*Page) error {
 	}
 	sort.Slice(pages, func(i, j int) bool { return pages[i].Date.After(pages[j].Date) })
 	for _, page := range pages {
-		page.Pages = pages
 		f, err := os.Create(page.Path)
 		if err != nil {
 			return err
@@ -108,11 +107,11 @@ func writePages(pages []*Page) error {
 	return nil
 }
 
-func writeRSS(pages []*Page, config *Config) error {
-	author := &feeds.Author{Name: config.Author, Email: config.Email}
+func writeRSS(pages []*Page, site *Site) error {
+	author := &feeds.Author{Name: site.Author, Email: site.Email}
 	feed := &feeds.Feed{
-		Title:   config.Author,
-		Link:    &feeds.Link{Href: config.BaseURL},
+		Title:   site.Author,
+		Link:    &feeds.Link{Href: site.BaseURL},
 		Author:  author,
 		Updated: time.Now(),
 	}
@@ -122,7 +121,7 @@ func writeRSS(pages []*Page, config *Config) error {
 			items = append(items, &feeds.Item{
 				Title:       page.Title,
 				Author:      author,
-				Link:        &feeds.Link{Href: page.Join(config.BaseURL, page.Path)},
+				Link:        &feeds.Link{Href: page.Join(site.BaseURL, page.Path)},
 				Created:     page.Date,
 				Description: page.Description,
 				Content:     page.Content,
@@ -138,8 +137,8 @@ func writeRSS(pages []*Page, config *Config) error {
 }
 
 func main() {
-	var config Config
-	_, err := toml.DecodeFile("pt.toml", &config)
+	var site Site
+	_, err := toml.DecodeFile("pt.toml", &site)
 	if err != nil {
 		panic(err)
 	}
@@ -152,7 +151,7 @@ func main() {
 		frontMatter, content := parsePage(p)
 		pages = append(pages, &Page{
 			FrontMatter: frontMatter,
-			Config:      &config,
+			Site:        &site,
 			Path:        replaceExtension(p, ".html"),
 			Content:     content,
 			Join: func(base, p string) string {
@@ -165,10 +164,11 @@ func main() {
 	}); err != nil {
 		panic(err)
 	}
+	site.Pages = pages
 	if err := writePages(pages); err != nil {
 		panic(err)
 	}
-	if err := writeRSS(pages, &config); err != nil {
+	if err := writeRSS(pages, &site); err != nil {
 		panic(err)
 	}
 }

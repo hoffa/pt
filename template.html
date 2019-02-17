@@ -8,7 +8,7 @@
     <meta name="description" content="{{ .Description }}">
     <meta name="og:title" content="{{ .Title }}">
     <meta name="og:description" content="{{ .Description }}">
-    <meta name="og:url" content="{{ call .Join .Config.BaseURL .Path }}">
+    <meta name="og:url" content="{{ call .Join .Site.BaseURL .Path }}">
     <meta name="og:image" content="https://placekitten.com/g/1200/1200">
     <meta name="twitter:card" content="summary">
     <style>
@@ -36,16 +36,16 @@
   <body>
     <nav>
       <ul id="menu">
-        <li><strong>{{ .Config.Author }}</strong></li>
-        <li><a href="{{ call .Join .Config.BaseURL "index.html" }}">Home</a></li>
-        <li><a href="{{ call .Join .Config.BaseURL "feed.xml" }}">RSS</a></li>
+        <li><strong>{{ .Site.Author }}</strong></li>
+        <li><a href="{{ call .Join .Site.BaseURL "index.html" }}">Home</a></li>
+        <li><a href="{{ call .Join .Site.BaseURL "feed.xml" }}">RSS</a></li>
       </ul>
     </nav>
     <main>
       <article>
         {{ if .Article }}
           <h1 class="mb-0">{{ .Title }}</h1>
-          <span><i>{{ .Date.Format .Config.DateFormat }}</i></span>
+          <span><i>{{ .Date.Format .Site.DateFormat }}</i></span>
         {{ end }}
         {{ .Content }}
       </article>
@@ -53,13 +53,13 @@
         <section>
           <h2>Posts</h2>
           <ul>
-            {{ range .Pages }}
+            {{ range .Site.Pages }}
               {{ if .Article }}
                 <li>
                   <p class="mb-0">
-                    <a href="{{ call .Join .Config.BaseURL .Path }}">{{ .Title }}</a>
+                    <a href="{{ call .Join .Site.BaseURL .Path }}">{{ .Title }}</a>
                   </p>
-                  <span>{{ .Date.Format .Config.DateFormat }}</span>
+                  <span>{{ .Date.Format .Site.DateFormat }}</span>
                 </li>
               {{ end }}
             {{ end }}
