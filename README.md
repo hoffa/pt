@@ -38,19 +38,9 @@ My [website](https://rehn.me) is generated from the [hoffa/hoffa.github.io](http
 
 Site variables are defined in `pt.toml`. They're accessible through `.Site`.
 
-### Variables
-
-#### author
-
-The site author.
-
-#### email
-
-The author's email.
-
-#### baseURL
-
-The URL used to combine with relative paths.
+- `author`: the site author
+- `email`: the author's email
+- `baseURL`: the URL used to combine with relative paths
 
 ## Front matter
 
