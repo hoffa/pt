@@ -36,7 +36,7 @@ My [website](https://rehn.me). Generated from [hoffa/hoffa.github.io](https://gi
 
 ## Configuration
 
-Site variables are defined in `pt.toml`. They're accessible through `.Site`.
+Configuration is defined in `pt.toml`.
 
 ### Example
 
@@ -54,9 +54,9 @@ baseURL = "https://doe.com"
 
 ## Front matter
 
-Front matter is in [TOML](https://github.com/toml-lang/toml).
+Each page can contain a _front matter_. It's the page's metadata.
 
-It must be included before the content within an opening and closing `+++`.
+Front matter is written in [TOML](https://github.com/toml-lang/toml), and must be included before the content within an opening and closing `+++`.
 
 In case of missing values, sensible defaults will be used.
 
