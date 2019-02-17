@@ -44,7 +44,7 @@ Check out the included [`template.html`](template.html) for example usage.
 
 ## Configuration
 
-Configuration is defined in `pt.toml`.
+Configuration is defined in `pt.toml`. It's written in [TOML](https://github.com/toml-lang/toml).
 
 Custom parameters can be defined in the `params` table. They're accessible through `.Site.Params`.
 
@@ -69,7 +69,7 @@ dateFormat = "January 2, 2006"
 
 Each page can contain a front matter. 
 
-The front matter is written in [TOML](https://github.com/toml-lang/toml), and must be placed at the top within `+++` delimiters.
+The TOML front matter must be placed at the top within `+++` delimiters.
 
 Custom parameters can be defined in the `params` table. They're accessible through `.Params`.
 
