@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"text/template"
+	"html/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
