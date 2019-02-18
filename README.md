@@ -6,8 +6,8 @@ A minimalist static site generator.
 
 ## Features
 
+- Super simple
 - Tiny
-- Straighforward
 - Single-file template
 - Minimal configuration
 - Write pages in [Markdown](https://daringfireball.net/projects/markdown/syntax)
