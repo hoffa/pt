@@ -23,7 +23,7 @@ const (
 	configPath    = "pt.toml"
 	rssPath       = "feed.xml"
 	templatePath  = "template.html"
-	summaryLength = 160
+	summaryLength = 150
 )
 
 // Site represents the config in pt.toml.
