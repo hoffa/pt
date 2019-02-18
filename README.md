@@ -81,6 +81,5 @@ date = 2019-02-11
 ### Variables
 
 - `title`: the content title
-- `description`: the content description
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Site.Pages`

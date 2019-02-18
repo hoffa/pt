@@ -8,13 +8,22 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"sort"
+	"strings"
 	"text/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gorilla/feeds"
 	"github.com/russross/blackfriday"
+)
+
+const (
+	configPath    = "pt.toml"
+	rssPath       = "feed.xml"
+	templatePath  = "template.html"
+	summaryLength = 70
 )
 
 // Site represents the config in pt.toml.
@@ -27,11 +36,10 @@ type Site struct {
 
 // FrontMatter represents a page's TOML front matter.
 type FrontMatter struct {
-	Title       string
-	Description string
-	Date        time.Time
-	Exclude     bool
-	Params      map[string]interface{}
+	Title   string
+	Date    time.Time
+	Exclude bool
+	Params  map[string]interface{}
 }
 
 // Page represents a Markdown page with optional front matter.
@@ -41,7 +49,15 @@ type Page struct {
 	Site    *Site
 	Path    string
 	Content string
+	Summary string
 	Join    func(base, p string) string
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func replaceExtension(p, ext string) string {
@@ -58,6 +74,12 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
+func summarize(s string) string {
+	re := regexp.MustCompile("<[^>]*>")
+	fields := strings.Fields(re.ReplaceAllString(s, ""))
+	return strings.Join(fields[:min(len(fields), summaryLength)], " ")
+}
+
 func parsePage(site *Site, p string) *Page {
 	b, err := ioutil.ReadFile(p)
 	if err != nil {
@@ -72,10 +94,6 @@ func parsePage(site *Site, p string) *Page {
 		fmt.Println("warning: missing title; using path")
 		frontMatter.Title = p
 	}
-	if frontMatter.Description == "" {
-		fmt.Println("warning: missing description; using title")
-		frontMatter.Description = frontMatter.Title
-	}
 	if frontMatter.Date.IsZero() {
 		fmt.Println("warning: missing date; using modification time")
 		fileInfo, err := os.Stat(p)
@@ -84,11 +102,13 @@ func parsePage(site *Site, p string) *Page {
 		}
 		frontMatter.Date = fileInfo.ModTime()
 	}
+	content := string(blackfriday.MarkdownCommon(md))
 	return &Page{
 		FrontMatter: &frontMatter,
 		Site:        site,
 		Path:        replaceExtension(p, ".html"),
-		Content:     string(blackfriday.MarkdownCommon(md)),
+		Content:     content,
+		Summary:     summarize(content),
 		Join: func(base, p string) string {
 			u, err := url.Parse(base)
 			if err != nil {
@@ -126,12 +146,12 @@ func writeRSS(pages []*Page, site *Site) {
 			Author:      &feeds.Author{Name: site.Author},
 			Link:        &feeds.Link{Href: page.Join(site.BaseURL, page.Path)},
 			Created:     page.Date,
-			Description: page.Description,
+			Description: page.Summary,
 			Content:     page.Content,
 		})
 	}
 	feed.Items = items
-	f, err := os.Create("feed.xml")
+	f, err := os.Create(rssPath)
 	if err != nil {
 		panic(err)
 	}
@@ -142,11 +162,11 @@ func writeRSS(pages []*Page, site *Site) {
 
 func main() {
 	var site Site
-	_, err := toml.DecodeFile("pt.toml", &site)
+	_, err := toml.DecodeFile(configPath, &site)
 	if err != nil {
 		fmt.Println("warning:", err)
 	}
-	tmpl, err := template.ParseFiles("template.html")
+	tmpl, err := template.ParseFiles(templatePath)
 	if err != nil {
 		panic(err)
 	}
