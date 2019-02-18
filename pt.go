@@ -20,7 +20,6 @@ import (
 // Site represents the config in pt.toml.
 type Site struct {
 	Author  string
-	Email   string
 	BaseURL string
 	Params  map[string]interface{}
 	Pages   []*Page
@@ -115,18 +114,16 @@ func writePages(tmpl *template.Template, pages []*Page) {
 }
 
 func writeRSS(pages []*Page, site *Site) {
-	author := &feeds.Author{Name: site.Author, Email: site.Email}
 	feed := &feeds.Feed{
 		Title:   site.Author,
 		Link:    &feeds.Link{Href: site.BaseURL},
-		Author:  author,
 		Updated: time.Now(),
 	}
 	var items []*feeds.Item
 	for _, page := range pages {
 		items = append(items, &feeds.Item{
 			Title:       page.Title,
-			Author:      author,
+			Author:      &feeds.Author{Name: site.Author},
 			Link:        &feeds.Link{Href: page.Join(site.BaseURL, page.Path)},
 			Created:     page.Date,
 			Description: page.Description,

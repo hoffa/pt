@@ -52,7 +52,6 @@ Custom parameters can be defined in the `params` table. They're accessible throu
 
 ```toml
 author = "Jane Doe"
-email = "jane@doe.com"
 baseURL = "https://doe.com"
 
 [params]
@@ -62,12 +61,11 @@ dateFormat = "January 2, 2006"
 ### Variables
 
 - `author`: the site author
-- `email`: the author's email
 - `baseURL`: the URL used to resolve relative paths
 
 ## Front matter
 
-Each page can contain a front matter. 
+Each page can contain a front matter.
 
 The TOML front matter must be placed at the top within `+++` delimiters.
 
