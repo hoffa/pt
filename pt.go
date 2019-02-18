@@ -78,11 +78,13 @@ func summarize(s string) string {
 	re := regexp.MustCompile("<[^>]*>")
 	fields := strings.Fields(re.ReplaceAllString(s, ""))
 	var summary []string
+	length := 0
 	for _, field := range fields {
-		if len(summary) > summaryLength {
+		if length > summaryLength {
 			break
 		}
 		summary = append(summary, field)
+		length += len(field)
 	}
 	return strings.Join(summary, " ")
 }
