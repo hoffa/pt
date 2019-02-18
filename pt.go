@@ -23,7 +23,7 @@ const (
 	configPath    = "pt.toml"
 	rssPath       = "feed.xml"
 	templatePath  = "template.html"
-	summaryLength = 70
+	summaryLength = 160
 )
 
 // Site represents the config in pt.toml.
@@ -77,7 +77,14 @@ func separateContent(b []byte) ([]byte, []byte) {
 func summarize(s string) string {
 	re := regexp.MustCompile("<[^>]*>")
 	fields := strings.Fields(re.ReplaceAllString(s, ""))
-	return strings.Join(fields[:min(len(fields), summaryLength)], " ")
+	summary := ""
+	for _, field := range fields {
+		if len(summary) > summaryLength {
+			break
+		}
+		summary += " " + field
+	}
+	return summary
 }
 
 func parsePage(site *Site, p string) *Page {
