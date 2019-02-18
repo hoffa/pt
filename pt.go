@@ -77,14 +77,14 @@ func separateContent(b []byte) ([]byte, []byte) {
 func summarize(s string) string {
 	re := regexp.MustCompile("<[^>]*>")
 	fields := strings.Fields(re.ReplaceAllString(s, ""))
-	summary := ""
+	var summary []string
 	for _, field := range fields {
 		if len(summary) > summaryLength {
 			break
 		}
-		summary += " " + field
+		summary = append(summary, field)
 	}
-	return summary
+	return strings.Join(summary, " ")
 }
 
 func parsePage(site *Site, p string) *Page {
