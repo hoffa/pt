@@ -81,6 +81,7 @@ func summarize(s string) string {
 	length := 0
 	for _, field := range fields {
 		if length > summaryLength {
+			summary = append(summary, "...")
 			break
 		}
 		summary = append(summary, field)
