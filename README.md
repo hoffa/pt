@@ -73,7 +73,7 @@ Custom variables can be defined in the `params` table. They're accessible throug
 
 All Markdown files in the working directory are converted to HTML. They're generated from `template.html` using [`text/template`](https://golang.org/pkg/text/template/).
 
-Each page is passed a `Page` structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
+Each page is passed a `Page` structure. This allows the template to access fields such as `.Title` and `.Site.Author`.
 
 Check out the included [`template.html`](template.html) for example usage.
 
