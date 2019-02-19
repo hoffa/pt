@@ -38,7 +38,7 @@ All Markdown files in the working directory are converted to HTML.
 
 All pages are generated from a single `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
 
-Each page is passed a [`Page`](https://github.com/hoffa/pt/blob/5b150b52d5856ecadbab6b5ff1fbcc33f2af832e/pt.go#L38-L46) structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
+Each page is passed a `Page` structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
 
 Check out the included [`template.html`](template.html) for example usage.
 
