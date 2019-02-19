@@ -83,3 +83,7 @@ date = 2019-02-11
 - `title`: the content title
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Site.Pages`
+
+## Functions
+
+* `absURL`: join `baseURL` with input
