@@ -67,7 +67,7 @@ date = 2019-02-11
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Site.Pages`
 
-Custom variables can be defined in the `params` table. They're accessible through `.Params`.
+Custom variables can be defined in a `params` table. They're accessible through `.Params`.
 
 ## Templating
 
