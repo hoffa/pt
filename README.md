@@ -52,7 +52,7 @@ Custom variables can be defined in a `params` [table](https://github.com/toml-la
 
 ## Front matter
 
-Each page can contain a front matter. It must be written in TOML and placed at the top within `+++` delimiters.
+Each page can contain a TOML front matter. It must be placed at the top within `+++` delimiters.
 
 ### Example
 
