@@ -50,7 +50,6 @@ type Page struct {
 	Path    string
 	Content string
 	Summary string
-	Join    func(base, p string) string
 }
 
 func min(a, b int) int {
@@ -62,6 +61,15 @@ func min(a, b int) int {
 
 func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
+}
+
+func joinURL(base, p string) string {
+	u, err := url.Parse(base)
+	if err != nil {
+		panic(err)
+	}
+	u.Path = path.Join(u.Path, p)
+	return u.String()
 }
 
 // Separates front matter from Markdown
@@ -119,14 +127,6 @@ func parsePage(site *Site, p string) *Page {
 		Path:        replaceExtension(p, ".html"),
 		Content:     content,
 		Summary:     summarize(content),
-		Join: func(base, p string) string {
-			u, err := url.Parse(base)
-			if err != nil {
-				panic(err)
-			}
-			u.Path = path.Join(u.Path, p)
-			return u.String()
-		},
 	}
 }
 
@@ -154,7 +154,7 @@ func writeRSS(pages []*Page, site *Site) {
 		items = append(items, &feeds.Item{
 			Title:       page.Title,
 			Author:      &feeds.Author{Name: site.Author},
-			Link:        &feeds.Link{Href: page.Join(site.BaseURL, page.Path)},
+			Link:        &feeds.Link{Href: joinURL(site.BaseURL, page.Path)},
 			Created:     page.Date,
 			Description: page.Summary,
 			Content:     page.Content,
@@ -194,7 +194,12 @@ func main() {
 	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	site.Pages = included
-	tmpl := template.Must(template.New(templatePath).ParseFiles(templatePath))
+	funcMap := template.FuncMap{
+		"absURL": func(p string) string {
+			return joinURL(site.BaseURL, p)
+		},
+	}
+	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
 	writePages(tmpl, included)
 	writePages(tmpl, excluded)
 	writeRSS(included, &site)
