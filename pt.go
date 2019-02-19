@@ -176,10 +176,7 @@ func main() {
 	if err != nil {
 		fmt.Println("warning:", err)
 	}
-	tmpl, err := template.ParseFiles(templatePath)
-	if err != nil {
-		panic(err)
-	}
+	tmpl := template.Must(template.ParseFiles(templatePath))
 	var included []*Page
 	var excluded []*Page
 	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
