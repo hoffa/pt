@@ -137,7 +137,7 @@ func writePages(tmpl *template.Template, pages []*Page) {
 			panic(err)
 		}
 		defer f.Close()
-		if err := tmpl.ExecuteTemplate(f, "template", page); err != nil {
+		if err := tmpl.Execute(f, page); err != nil {
 			panic(err)
 		}
 	}
@@ -176,7 +176,6 @@ func main() {
 	if err != nil {
 		fmt.Println("warning:", err)
 	}
-	tmpl := template.Must(template.ParseFiles(templatePath))
 	var included []*Page
 	var excluded []*Page
 	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
@@ -195,6 +194,7 @@ func main() {
 	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	site.Pages = included
+	tmpl := template.Must(template.New(templatePath).ParseFiles(templatePath))
 	writePages(tmpl, included)
 	writePages(tmpl, excluded)
 	writeRSS(included, &site)
