@@ -36,8 +36,6 @@ pt
 
 Configuration is defined in `pt.toml`. It's written in [TOML](https://github.com/toml-lang/toml).
 
-Custom parameters can be defined in the `params` [table](https://github.com/toml-lang/toml#table). They're accessible through `.Site.Params`.
-
 ### Example
 
 ```toml
@@ -50,13 +48,11 @@ baseURL = "https://doe.com"
 - `author`: the site author
 - `baseURL`: the URL used to resolve relative paths
 
+Custom variables can be defined in a `params` [table](https://github.com/toml-lang/toml#table). They're accessible through `.Site.Params`.
+
 ## Front matter
 
-Each page can contain a front matter.
-
-The TOML front matter must be placed at the top within `+++` delimiters.
-
-Custom parameters can be defined in the `params` table. They're accessible through `.Params`.
+Each page can contain a front matter. It must be written in TOML and placed at the top within `+++` delimiters.
 
 ### Example
 
@@ -70,6 +66,8 @@ date = 2019-02-11
 - `title`: the content title
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Site.Pages`
+
+Custom variables can be defined in the `params` table. They're accessible through `.Params`.
 
 ## Templating
 
