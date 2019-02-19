@@ -32,30 +32,17 @@ pt
 
 `pt` takes no arguments.
 
-## Templating
-
-All Markdown files in the working directory are converted to HTML.
-
-All pages are generated from a single `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
-
-Each page is passed a `Page` structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
-
-Check out the included [`template.html`](template.html) for example usage.
-
 ## Configuration
 
 Configuration is defined in `pt.toml`. It's written in [TOML](https://github.com/toml-lang/toml).
 
-Custom parameters can be defined in the `params` table. They're accessible through `.Site.Params`.
+Custom parameters can be defined in the `params` [table](https://github.com/toml-lang/toml#table). They're accessible through `.Site.Params`.
 
 ### Example
 
 ```toml
 author = "Jane Doe"
 baseURL = "https://doe.com"
-
-[params]
-dateFormat = "January 2, 2006"
 ```
 
 ### Variables
@@ -84,6 +71,16 @@ date = 2019-02-11
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Site.Pages`
 
-## Functions
+## Templating
+
+All Markdown files in the working directory are converted to HTML.
+
+All pages are generated from a single `template.html` using Go's [`text/template`](https://golang.org/pkg/text/template/).
+
+Each page is passed a `Page` structure. This allows allows the template to access fields such as `.Title` and `.Site.Author`.
+
+Check out the included [`template.html`](template.html) for example usage.
+
+### Functions
 
 * `absURL`: join `baseURL` with input
