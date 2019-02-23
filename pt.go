@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -11,7 +12,6 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"text/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -48,7 +48,7 @@ type Page struct {
 	*FrontMatter
 	Site    *Site
 	Path    string
-	Content string
+	Content template.HTML
 	Summary string
 }
 
@@ -125,7 +125,7 @@ func parsePage(site *Site, p string) *Page {
 		FrontMatter: &frontMatter,
 		Site:        site,
 		Path:        replaceExtension(p, ".html"),
-		Content:     content,
+		Content:     template.HTML(content),
 		Summary:     summarize(content),
 	}
 }
@@ -157,7 +157,7 @@ func writeRSS(pages []*Page, site *Site) {
 			Link:        &feeds.Link{Href: joinURL(site.BaseURL, page.Path)},
 			Created:     page.Date,
 			Description: page.Summary,
-			Content:     page.Content,
+			Content:     string(page.Content),
 		})
 	}
 	feed.Items = items
