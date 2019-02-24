@@ -49,7 +49,7 @@ type Page struct {
 	Site    *Site
 	Path    string
 	Content template.HTML
-	Summary string
+	Summary template.HTML
 }
 
 func min(a, b int) int {
@@ -126,7 +126,7 @@ func parsePage(site *Site, p string) *Page {
 		Site:        site,
 		Path:        replaceExtension(p, ".html"),
 		Content:     template.HTML(content),
-		Summary:     summarize(content),
+		Summary:     template.HTML(summarize(content)),
 	}
 }
 
@@ -156,7 +156,7 @@ func writeRSS(pages []*Page, site *Site) {
 			Author:      &feeds.Author{Name: site.Author},
 			Link:        &feeds.Link{Href: joinURL(site.BaseURL, page.Path)},
 			Created:     page.Date,
-			Description: page.Summary,
+			Description: string(page.Summary),
 			Content:     string(page.Content),
 		})
 	}
