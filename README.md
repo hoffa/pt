@@ -87,7 +87,7 @@ Just add your CSS in the `<head>`.
 
 The default template only includes the bare minimum for a navbar. 
 
-If you need inspiration, here's some minimal CSS that can greatly improve readability:
+A tiny touch of CSS can greatly improve readability:
 
 ```css
 body {
