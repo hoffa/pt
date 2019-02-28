@@ -80,3 +80,21 @@ Check out the included [`template.html`](template.html) for example usage.
 ### Functions
 
 * `absURL`: join `baseURL` with input
+
+## Themes
+
+Just add your CSS in the `head`.
+
+The default template includes the bare minimum for a usable navbar. 
+
+If you need some inspiration, a good first step might be:
+
+```css
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  max-width: 40em;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+```
