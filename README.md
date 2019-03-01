@@ -85,7 +85,7 @@ Check out the included [`template.html`](template.html) for example usage.
 
 Just add your CSS in the `<head>`.
 
-The default template only includes the bare minimum for a navbar. 
+The default template only includes the bare minimum for a navbar.
 
 A tiny touch of CSS can greatly improve readability:
 
