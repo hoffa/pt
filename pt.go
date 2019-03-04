@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"sort"
 	"strings"
@@ -197,6 +198,14 @@ func main() {
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
 			return joinURL(site.BaseURL, p)
+		},
+		"first": func(n int, v interface{}) []interface{} {
+			var l []interface{}
+			vv := reflect.ValueOf(v)
+			for i := 0; i < min(n, vv.Len()); i++ {
+				l = append(l, vv.Index(i).Interface())
+			}
+			return l
 		},
 	}
 	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
