@@ -80,6 +80,9 @@ Check out the included [`template.html`](template.html) for example usage.
 ### Functions
 
 * `absURL`: join `baseURL` with input
+* `first n v`: get `n` first values of `v`
+  
+  For example, it allows you to iterate over the 10 most recent pages using `range first 10 .Site.Pages`.
 
 ## Themes
 
