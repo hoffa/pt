@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -20,12 +21,10 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-const (
-	configPath    = "pt.toml"
-	rssPath       = "feed.xml"
-	templatePath  = "template.html"
-	summaryLength = 150
-)
+var configPath string
+var rssPath string
+var templatePath string
+var summaryLength int
 
 // Site represents the config in pt.toml.
 type Site struct {
@@ -172,6 +171,11 @@ func writeRSS(pages []*Page, site *Site) {
 }
 
 func main() {
+	flag.StringVar(&configPath, "config", "pt.toml", "config path")
+	flag.StringVar(&rssPath, "rss", "feed.xml", "RSS feed path")
+	flag.StringVar(&templatePath, "template", "template.html", "template path")
+	flag.Parse()
+
 	var site Site
 	_, err := toml.DecodeFile(configPath, &site)
 	if err != nil {
