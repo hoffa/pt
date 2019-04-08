@@ -16,7 +16,7 @@ A minimalist static site generator.
 
 ## Demo
 
-My [website](https://rehn.me). Generated from [hoffa/hoffa.github.io](https://github.com/hoffa/hoffa.github.io).
+[https://rehn.me](https://rehn.me)
 
 ## Installation
 
