@@ -92,10 +92,9 @@ A tiny touch of CSS can greatly improve readability:
 
 ```css
 body {
-  font-family: system-ui, sans-serif;
   line-height: 1.5;
   max-width: 40em;
-  margin: 0 auto;
-  padding: 0 1em;
+  margin: auto;
+  padding: 1em;
 }
 ```
