@@ -19,10 +19,7 @@ import (
 	"github.com/gorilla/feeds"
 	"github.com/russross/blackfriday"
 	"github.com/tdewolff/minify"
-	"github.com/tdewolff/minify/css"
 	"github.com/tdewolff/minify/html"
-	"github.com/tdewolff/minify/js"
-	"github.com/tdewolff/minify/svg"
 )
 
 const (
@@ -138,12 +135,7 @@ func parsePage(site *Site, p string) *Page {
 
 func minimizePages(pages []*Page) {
 	m := minify.New()
-	m.Add("text/html", &html.Minifier{
-		KeepEndTags: true,
-	})
-	m.AddFunc("text/css", css.Minify)
-	m.AddFunc("image/svg+xml", svg.Minify)
-	m.AddFunc("application/javascript", js.Minify)
+	m.AddFunc("text/html", html.Minify)
 	for _, page := range pages {
 		b, err := ioutil.ReadFile(page.Path)
 		if err != nil {
