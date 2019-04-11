@@ -21,6 +21,7 @@ import (
 	"github.com/tdewolff/minify"
 	"github.com/tdewolff/minify/css"
 	"github.com/tdewolff/minify/html"
+	"github.com/tdewolff/minify/js"
 	"github.com/tdewolff/minify/svg"
 )
 
@@ -140,6 +141,7 @@ func minimizePages(pages []*Page) {
 	m.AddFunc("text/css", css.Minify)
 	m.AddFunc("text/html", html.Minify)
 	m.AddFunc("image/svg+xml", svg.Minify)
+	m.AddFunc("application/javascript", js.Minify)
 	for _, page := range pages {
 		b, err := ioutil.ReadFile(page.Path)
 		if err != nil {
