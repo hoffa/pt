@@ -138,8 +138,10 @@ func parsePage(site *Site, p string) *Page {
 
 func minimizePages(pages []*Page) {
 	m := minify.New()
+	m.Add("text/html", &html.Minifier{
+		KeepEndTags: true,
+	})
 	m.AddFunc("text/css", css.Minify)
-	m.AddFunc("text/html", html.Minify)
 	m.AddFunc("image/svg+xml", svg.Minify)
 	m.AddFunc("application/javascript", js.Minify)
 	for _, page := range pages {
