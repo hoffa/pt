@@ -18,8 +18,6 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gorilla/feeds"
 	"github.com/russross/blackfriday"
-	"github.com/tdewolff/minify"
-	"github.com/tdewolff/minify/html"
 )
 
 const (
@@ -133,24 +131,6 @@ func parsePage(site *Site, p string) *Page {
 	}
 }
 
-func minimizePages(pages []*Page) {
-	m := minify.New()
-	m.AddFunc("text/html", html.Minify)
-	for _, page := range pages {
-		b, err := ioutil.ReadFile(page.Path)
-		if err != nil {
-			panic(err)
-		}
-		minimized, err := m.Bytes("text/html", b)
-		if err != nil {
-			panic(err)
-		}
-		if err := ioutil.WriteFile(page.Path, minimized, 0644); err != nil {
-			panic(err)
-		}
-	}
-}
-
 func writePages(tmpl *template.Template, pages []*Page) {
 	for _, page := range pages {
 		f, err := os.Create(page.Path)
@@ -231,7 +211,5 @@ func main() {
 	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
 	writePages(tmpl, included)
 	writePages(tmpl, excluded)
-	minimizePages(included)
-	minimizePages(excluded)
 	writeRSS(included, &site)
 }
