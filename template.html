@@ -29,23 +29,21 @@
       </ul>
     </nav>
     <main>
-      <article>
-        {{ if eq .Path "index.html" }}
-          {{ .Content }}
-          <h2>Posts</h2>
-          <ul>
-            {{ range .Site.Pages }}
-              <li>
-                <p><a href="{{ .Path | absURL }}">{{ .Title }}</a></p>
-              </li>
-            {{ end }}
-          </ul>
-        {{ else }}
-          <h1>{{ .Title }}</h1>
-          {{ .Content }}
-          <p><i>{{ .Date.Format "January 2, 2006" }}</i></p>
-        {{ end }}
-      </article>
+      {{ if eq .Path "index.html" }}
+        {{ .Content }}
+        <h2>Posts</h2>
+        <ul>
+          {{ range .Site.Pages }}
+            <li>
+              <p><a href="{{ .Path | absURL }}">{{ .Title }}</a></p>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <h1>{{ .Title }}</h1>
+        {{ .Content }}
+        <p><i>{{ .Date.Format "January 2, 2006" }}</i></p>
+      {{ end }}
     </main>
   </body>
 </html>
