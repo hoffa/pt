@@ -11,18 +11,18 @@
     <meta name="og:image" content="https://placekitten.com/g/1200/1200">
     <meta name="twitter:card" content="summary">
     <style>
-      #menu {
+      nav ul {
         padding: 0;
       }
 
-      #menu li {
+      nav ul li {
         display: inline;
       }
     </style>
   </head>
   <body>
     <nav>
-      <ul id="menu">
+      <ul>
         <li><strong>{{ .Site.Author }}</strong></li>
         <li><a href="{{ "index.html" | absURL }}">Home</a></li>
         <li><a href="{{ "feed.xml" | absURL }}">RSS</a></li>
