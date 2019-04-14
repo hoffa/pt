@@ -113,14 +113,6 @@ func parsePage(site *Site, p string) *Page {
 		fmt.Println("warning: missing title; using path")
 		frontMatter.Title = p
 	}
-	if frontMatter.Date.IsZero() {
-		fmt.Println("warning: missing date; using modification time")
-		fileInfo, err := os.Stat(p)
-		if err != nil {
-			panic(err)
-		}
-		frontMatter.Date = fileInfo.ModTime()
-	}
 	content := string(blackfriday.MarkdownCommon(md))
 	return &Page{
 		FrontMatter: &frontMatter,
