@@ -22,6 +22,7 @@ import (
 )
 
 var config struct {
+	rootPath      string
 	configPath    string
 	rssPath       string
 	templatePath  string
@@ -170,6 +171,11 @@ func main() {
 	flag.StringVar(&config.templatePath, "template", "template.html", "template path")
 	flag.IntVar(&config.summaryLength, "summary-length", 150, "summary length in words")
 	flag.Parse()
+	if flag.NArg() > 0 {
+		config.rootPath = flag.Arg(0)
+	} else {
+		config.rootPath = "."
+	}
 
 	var site Site
 	_, err := toml.DecodeFile(config.configPath, &site)
@@ -178,7 +184,7 @@ func main() {
 	}
 	var included []*Page
 	var excluded []*Page
-	if err := filepath.Walk(".", func(p string, f os.FileInfo, err error) error {
+	if err := filepath.Walk(config.rootPath, func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) == ".md" {
 			fmt.Println(p)
 			page := parsePage(&site, p)
