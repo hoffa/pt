@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -20,12 +21,12 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-const (
-	configPath    = "pt.toml"
-	rssPath       = "feed.xml"
-	templatePath  = "template.html"
-	summaryLength = 150
-)
+var config struct {
+	configPath    string
+	rssPath       string
+	templatePath  string
+	summaryLength int
+}
 
 // Site represents the config in pt.toml.
 type Site struct {
@@ -89,7 +90,7 @@ func summarize(s string) string {
 	var summary []string
 	length := 0
 	for _, field := range fields {
-		if length > summaryLength {
+		if length > config.summaryLength {
 			summary = append(summary, "...")
 			break
 		}
@@ -154,7 +155,7 @@ func writeRSS(pages []*Page, site *Site) {
 		})
 	}
 	feed.Items = items
-	f, err := os.Create(rssPath)
+	f, err := os.Create(config.rssPath)
 	if err != nil {
 		panic(err)
 	}
@@ -164,8 +165,14 @@ func writeRSS(pages []*Page, site *Site) {
 }
 
 func main() {
+	flag.StringVar(&config.configPath, "config", "pt.toml", "config path")
+	flag.StringVar(&config.rssPath, "rss", "feed.xml", "RSS feed path")
+	flag.StringVar(&config.templatePath, "template", "template.html", "template path")
+	flag.IntVar(&config.summaryLength, "summary-length", 150, "summary length in words")
+	flag.Parse()
+
 	var site Site
-	_, err := toml.DecodeFile(configPath, &site)
+	_, err := toml.DecodeFile(config.configPath, &site)
 	if err != nil {
 		fmt.Println("warning:", err)
 	}
@@ -200,7 +207,7 @@ func main() {
 			return l
 		},
 	}
-	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
+	tmpl := template.Must(template.New(config.templatePath).Funcs(funcMap).ParseFiles(config.templatePath))
 	writePages(tmpl, included)
 	writePages(tmpl, excluded)
 	writeRSS(included, &site)
