@@ -125,7 +125,8 @@ func parsePage(site *Site, p string) *Page {
 	}
 }
 
-func writePage(tmpl *template.Template, page *Page) {
+func writePage(templatePath string, funcMap template.FuncMap, page *Page) {
+	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
 	if err != nil {
 		panic(err)
@@ -214,9 +215,8 @@ func main() {
 			return l
 		},
 	}
-	tmpl := template.Must(template.New(config.templatePath).Funcs(funcMap).ParseFiles(config.templatePath))
 	for _, page := range append(included, excluded...) {
-		writePage(tmpl, page)
+		writePage(config.templatePath, funcMap, page)
 	}
 	writeRSS(included, &site)
 }
