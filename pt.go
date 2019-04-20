@@ -125,16 +125,14 @@ func parsePage(site *Site, p string) *Page {
 	}
 }
 
-func writePages(tmpl *template.Template, pages []*Page) {
-	for _, page := range pages {
-		f, err := os.Create(page.Path)
-		if err != nil {
-			panic(err)
-		}
-		defer f.Close()
-		if err := tmpl.Execute(f, page); err != nil {
-			panic(err)
-		}
+func writePage(tmpl *template.Template, page *Page) {
+	f, err := os.Create(page.Path)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	if err := tmpl.Execute(f, page); err != nil {
+		panic(err)
 	}
 }
 
@@ -201,6 +199,9 @@ func main() {
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	site.Pages = included
 	funcMap := template.FuncMap{
+		"safeHTML": func(s string) template.HTML {
+			return template.HTML(s)
+		},
 		"absURL": func(p string) string {
 			return joinURL(site.BaseURL, p)
 		},
@@ -214,7 +215,8 @@ func main() {
 		},
 	}
 	tmpl := template.Must(template.New(config.templatePath).Funcs(funcMap).ParseFiles(config.templatePath))
-	writePages(tmpl, included)
-	writePages(tmpl, excluded)
+	for _, page := range append(included, excluded...) {
+		writePage(tmpl, page)
+	}
 	writeRSS(included, &site)
 }
