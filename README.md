@@ -39,13 +39,11 @@ Configuration is defined in `pt.toml`. It's written in [TOML](https://github.com
 ### Example
 
 ```toml
-author = "Jane Doe"
 baseURL = "https://doe.com"
 ```
 
 ### Variables
 
-- `author`: the site author
 - `baseURL`: the URL used to resolve relative paths
 
 Custom variables can be defined in a `params` [table](https://github.com/toml-lang/toml#table). They're accessible through `.Site.Params`.
