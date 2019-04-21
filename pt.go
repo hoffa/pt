@@ -20,15 +20,6 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-var config struct {
-	baseURL          string
-	summaryLength    int
-	pagesRootPath    string
-	pageTemplatePath string
-	feedPath         string
-	feedTemplatePath string
-}
-
 // FrontMatter represents a page's TOML front matter.
 type FrontMatter struct {
 	Title   string
@@ -44,13 +35,6 @@ type Page struct {
 	Content template.HTML
 	Summary string
 	Pages   []*Page
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
 
 func check(err error) {
@@ -73,13 +57,13 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func summarizeHTML(s string) string {
+func summarizeHTML(s string, maxLength int) string {
 	re := regexp.MustCompile("<[^>]*>")
 	fields := strings.Fields(re.ReplaceAllString(s, ""))
 	var summary []string
 	length := 0
 	for _, field := range fields {
-		if length > config.summaryLength {
+		if length > maxLength {
 			summary = append(summary, "...")
 			break
 		}
@@ -89,7 +73,7 @@ func summarizeHTML(s string) string {
 	return html.UnescapeString(strings.Join(summary, " "))
 }
 
-func parsePage(pages []*Page, p string) *Page {
+func parsePage(pages []*Page, p string, summaryLength int) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
@@ -107,7 +91,7 @@ func parsePage(pages []*Page, p string) *Page {
 		Pages:       pages,
 		Path:        replaceExtension(p, ".html"),
 		Content:     template.HTML(content),
-		Summary:     summarizeHTML(content),
+		Summary:     summarizeHTML(content, summaryLength),
 	}
 }
 
@@ -138,20 +122,20 @@ func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page
 }
 
 func main() {
-	flag.StringVar(&config.baseURL, "base-url", "", "base URL")
-	flag.IntVar(&config.summaryLength, "summary-length", 150, "summary length in words")
-	flag.StringVar(&config.pageTemplatePath, "page-template", "template.html", "page template path")
-	flag.StringVar(&config.pagesRootPath, "pages-root", ".", "pages root directory")
-	flag.StringVar(&config.feedPath, "feed", "feed.xml", "feed path")
-	flag.StringVar(&config.feedTemplatePath, "feed-template", "rss.xml", "feed template path")
+	baseURL := flag.String("base-url", "", "base URL")
+	summaryLength := flag.Int("summary-length", 150, "summary length in words")
+	pageTemplatePath := flag.String("page-template", "template.html", "page template path")
+	pagesRootPath := flag.String("pages-root", ".", "pages root directory")
+	feedPath := flag.String("feed", "feed.xml", "feed path")
+	feedTemplatePath := flag.String("feed-template", "rss.xml", "feed template path")
 	flag.Parse()
 
 	var included []*Page
 	var excluded []*Page
-	check(filepath.Walk(config.pagesRootPath, func(p string, f os.FileInfo, err error) error {
+	check(filepath.Walk(*pagesRootPath, func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) == ".md" {
 			fmt.Println(p)
-			page := parsePage(included, p)
+			page := parsePage(included, p, *summaryLength)
 			if page.Exclude {
 				excluded = append(excluded, page)
 			} else {
@@ -163,14 +147,14 @@ func main() {
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
-			u, err := url.Parse(config.baseURL)
+			u, err := url.Parse(*baseURL)
 			check(err)
 			u.Path = path.Join(u.Path, p)
 			return u.String()
 		},
 	}
 	for _, page := range append(included, excluded...) {
-		check(writePage(config.pageTemplatePath, funcMap, page))
+		check(writePage(*pageTemplatePath, funcMap, page))
 	}
-	check(writeRSS(config.feedTemplatePath, config.feedPath, funcMap, included))
+	check(writeRSS(*feedTemplatePath, *feedPath, funcMap, included))
 }
