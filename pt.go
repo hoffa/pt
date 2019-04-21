@@ -22,7 +22,7 @@ import (
 )
 
 var config struct {
-	configPath       string
+	baseURL          string
 	summaryLength    int
 	pagesRootPath    string
 	pageTemplatePath string
@@ -30,11 +30,9 @@ var config struct {
 	feedTemplatePath string
 }
 
-// Site represents the config in pt.toml.
+// Site represents the site-wide config.
 type Site struct {
-	BaseURL string
-	Params  map[string]interface{}
-	Pages   []*Page
+	Pages []*Page
 }
 
 // FrontMatter represents a page's TOML front matter.
@@ -154,7 +152,7 @@ func writeRSS(templatePath, path string, funcMap template.FuncMap, site *Site) e
 }
 
 func main() {
-	flag.StringVar(&config.configPath, "config", "pt.toml", "config path")
+	flag.StringVar(&config.baseURL, "base-url", "", "base URL")
 	flag.IntVar(&config.summaryLength, "summary-length", 150, "summary length in words")
 	flag.StringVar(&config.pageTemplatePath, "page-template", "template.html", "page template path")
 	flag.StringVar(&config.pagesRootPath, "pages-root", ".", "pages root directory")
@@ -163,10 +161,6 @@ func main() {
 	flag.Parse()
 
 	var site Site
-	_, err := toml.DecodeFile(config.configPath, &site)
-	if err != nil {
-		fmt.Println("warning:", err)
-	}
 	var included []*Page
 	var excluded []*Page
 	if err := filepath.Walk(config.pagesRootPath, func(p string, f os.FileInfo, err error) error {
@@ -187,7 +181,7 @@ func main() {
 	site.Pages = included
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
-			return joinURL(site.BaseURL, p)
+			return joinURL(config.baseURL, p)
 		},
 		"first": func(n int, v interface{}) []interface{} {
 			var l []interface{}
