@@ -77,14 +77,8 @@ func parsePage(pages []*Page, p string, summaryLength int) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
-	var frontMatter FrontMatter
-	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
-		fmt.Println("warning:", err)
-	}
-	if frontMatter.Title == "" {
-		fmt.Println("warning: missing title; using path")
-		frontMatter.Title = p
-	}
+	frontMatter := FrontMatter{Title: p}
+	check(toml.Unmarshal(fm, &frontMatter))
 	content := string(blackfriday.MarkdownCommon(md))
 	return &Page{
 		FrontMatter: &frontMatter,
