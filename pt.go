@@ -63,13 +63,6 @@ func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
-func joinURL(base, p string) string {
-	u, err := url.Parse(base)
-	check(err)
-	u.Path = path.Join(u.Path, p)
-	return u.String()
-}
-
 // Separates front matter from Markdown
 func separateContent(b []byte) ([]byte, []byte) {
 	delim := []byte("+++")
@@ -168,11 +161,13 @@ func main() {
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
-			return joinURL(config.baseURL, p)
+			u, err := url.Parse(config.baseURL)
+			check(err)
+			u.Path = path.Join(u.Path, p)
+			return u.String()
 		},
 	}
-	pages := append(included, excluded...)
-	for _, page := range pages {
+	for _, page := range append(included, excluded...) {
 		writePage(config.pageTemplatePath, funcMap, page)
 	}
 	check(writeRSS(config.feedTemplatePath, config.feedPath, funcMap, included))
