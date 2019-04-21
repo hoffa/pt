@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"html"
 	"html/template"
 	"io/ioutil"
 	"net/url"
@@ -17,21 +18,20 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
-	"github.com/gorilla/feeds"
 	"github.com/russross/blackfriday"
 )
 
 var config struct {
-	rootPath      string
-	configPath    string
-	rssPath       string
-	templatePath  string
-	summaryLength int
+	configPath       string
+	summaryLength    int
+	pagesRootPath    string
+	pageTemplatePath string
+	feedPath         string
+	feedTemplatePath string
 }
 
 // Site represents the config in pt.toml.
 type Site struct {
-	Author  string
 	BaseURL string
 	Params  map[string]interface{}
 	Pages   []*Page
@@ -52,7 +52,7 @@ type Page struct {
 	Site    *Site
 	Path    string
 	Content template.HTML
-	Summary template.HTML
+	Summary string
 }
 
 func min(a, b int) int {
@@ -85,7 +85,7 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func summarize(s string) string {
+func summarizeHTML(s string) string {
 	re := regexp.MustCompile("<[^>]*>")
 	fields := strings.Fields(re.ReplaceAllString(s, ""))
 	var summary []string
@@ -98,7 +98,7 @@ func summarize(s string) string {
 		summary = append(summary, field)
 		length += len(field)
 	}
-	return strings.Join(summary, " ")
+	return html.UnescapeString(strings.Join(summary, " "))
 }
 
 func parsePage(site *Site, p string) *Page {
@@ -121,7 +121,7 @@ func parsePage(site *Site, p string) *Page {
 		Site:        site,
 		Path:        replaceExtension(p, ".html"),
 		Content:     template.HTML(content),
-		Summary:     template.HTML(summarize(content)),
+		Summary:     summarizeHTML(content),
 	}
 }
 
@@ -137,44 +137,14 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) {
 	}
 }
 
-func writeRSS(pages []*Page, site *Site) {
-	feed := &feeds.Feed{
-		Title:   site.Author,
-		Link:    &feeds.Link{Href: site.BaseURL},
-		Updated: time.Now(),
-	}
-	var items []*feeds.Item
-	for _, page := range pages {
-		items = append(items, &feeds.Item{
-			Title:       page.Title,
-			Author:      &feeds.Author{Name: site.Author},
-			Link:        &feeds.Link{Href: joinURL(site.BaseURL, page.Path)},
-			Created:     page.Date,
-			Description: string(page.Summary),
-			Content:     string(page.Content),
-		})
-	}
-	feed.Items = items
-	f, err := os.Create(config.rssPath)
-	if err != nil {
-		panic(err)
-	}
-	if err := feed.WriteRss(f); err != nil {
-		panic(err)
-	}
-}
-
 func main() {
 	flag.StringVar(&config.configPath, "config", "pt.toml", "config path")
-	flag.StringVar(&config.rssPath, "rss", "feed.xml", "RSS feed path")
-	flag.StringVar(&config.templatePath, "template", "template.html", "template path")
 	flag.IntVar(&config.summaryLength, "summary-length", 150, "summary length in words")
+	flag.StringVar(&config.pageTemplatePath, "page-template", "template.html", "page template path")
+	flag.StringVar(&config.pagesRootPath, "pages-root", ".", "pages root directory")
+	flag.StringVar(&config.feedPath, "feed", "feed.xml", "feed path")
+	flag.StringVar(&config.feedTemplatePath, "feed-template", "rss.xml", "feed template path")
 	flag.Parse()
-	if flag.NArg() > 0 {
-		config.rootPath = flag.Arg(0)
-	} else {
-		config.rootPath = "."
-	}
 
 	var site Site
 	_, err := toml.DecodeFile(config.configPath, &site)
@@ -183,7 +153,7 @@ func main() {
 	}
 	var included []*Page
 	var excluded []*Page
-	if err := filepath.Walk(config.rootPath, func(p string, f os.FileInfo, err error) error {
+	if err := filepath.Walk(config.pagesRootPath, func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) == ".md" {
 			fmt.Println(p)
 			page := parsePage(&site, p)
@@ -200,9 +170,6 @@ func main() {
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	site.Pages = included
 	funcMap := template.FuncMap{
-		"safeHTML": func(s string) template.HTML {
-			return template.HTML(s)
-		},
 		"absURL": func(p string) string {
 			return joinURL(site.BaseURL, p)
 		},
@@ -215,8 +182,24 @@ func main() {
 			return l
 		},
 	}
-	for _, page := range append(included, excluded...) {
-		writePage(config.templatePath, funcMap, page)
+	pages := append(included, excluded...)
+	for _, page := range pages {
+		writePage(config.pageTemplatePath, funcMap, page)
 	}
-	writeRSS(included, &site)
+	if err := writeRSS(config.feedTemplatePath, config.feedPath, funcMap, &site); err != nil {
+		panic(err)
+	}
+}
+
+func writeRSS(templatePath, path string, funcMap template.FuncMap, site *Site) error {
+	writePage(templatePath, funcMap, &Page{
+		Path: path,
+		Site: site,
+	})
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	header := []byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+	return ioutil.WriteFile(path, append(header, b...), 0644)
 }
