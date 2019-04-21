@@ -57,7 +57,7 @@ Check out the included [`template.html`](template.html) for example usage.
 
 ### Functions
 
-* `absURL s`: join `baseURL` with `s`
+* `absURL s`: join base URL with `s`
 * `first n v`: get `n` first values of `v`
 
 ## Themes
