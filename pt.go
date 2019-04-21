@@ -137,6 +137,22 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) {
 	}
 }
 
+func writeRSS(templatePath, path string, funcMap template.FuncMap, site *Site) error {
+	writePage(templatePath, funcMap, &Page{
+		FrontMatter: &FrontMatter{
+			Date: time.Now(),
+		},
+		Path: path,
+		Site: site,
+	})
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	header := []byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+	return ioutil.WriteFile(path, append(header, b...), 0644)
+}
+
 func main() {
 	flag.StringVar(&config.configPath, "config", "pt.toml", "config path")
 	flag.IntVar(&config.summaryLength, "summary-length", 150, "summary length in words")
@@ -189,20 +205,4 @@ func main() {
 	if err := writeRSS(config.feedTemplatePath, config.feedPath, funcMap, &site); err != nil {
 		panic(err)
 	}
-}
-
-func writeRSS(templatePath, path string, funcMap template.FuncMap, site *Site) error {
-	writePage(templatePath, funcMap, &Page{
-		FrontMatter: &FrontMatter{
-			Date: time.Now(),
-		},
-		Path: path,
-		Site: site,
-	})
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return err
-	}
-	header := []byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
-	return ioutil.WriteFile(path, append(header, b...), 0644)
 }
