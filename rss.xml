@@ -1,0 +1,16 @@
+<rss version="2.0">
+  <channel>
+    <title>Jane Doe</title>
+    <description></description>
+    <link>{{ "feed.xml" | absURL }}</link>
+    <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</lastBuildDate>
+    {{ range .Site.Pages }}
+      <item>
+        <title>{{ .Title }}</title>
+        <description>{{ .Summary }}</description>
+        <link>{{ .Path | absURL }}</link>
+        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</pubDate>
+      </item>
+    {{ end }}
+  </channel>
+</rss>

@@ -193,6 +193,9 @@ func main() {
 
 func writeRSS(templatePath, path string, funcMap template.FuncMap, site *Site) error {
 	writePage(templatePath, funcMap, &Page{
+		FrontMatter: &FrontMatter{
+			Date: time.Now(),
+		},
 		Path: path,
 		Site: site,
 	})
