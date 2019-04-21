@@ -27,26 +27,8 @@ go get github.com/hoffa/pt
 ## Usage
 
 ```shell
-pt
+pt -base-url https://my.site
 ```
-
-`pt` takes no arguments.
-
-## Configuration
-
-Configuration is defined in `pt.toml`. It's written in [TOML](https://github.com/toml-lang/toml).
-
-### Example
-
-```toml
-baseURL = "https://doe.com"
-```
-
-### Variables
-
-- `baseURL`: the URL used to resolve relative paths
-
-Custom variables can be defined in a `params` [table](https://github.com/toml-lang/toml#table). They're accessible through `.Site.Params`.
 
 ## Front matter
 
@@ -64,8 +46,6 @@ date = 2019-02-11
 - `title`: the content title
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Site.Pages`
-
-Custom variables can be defined in a `params` table. They're accessible through `.Params`.
 
 ## Templating
 
