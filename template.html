@@ -32,7 +32,7 @@
         {{ .Content }}
         <h2>Posts</h2>
         <ul>
-          {{ range .Site.Pages }}
+          {{ range .Pages }}
             <li>
               <p><a href="{{ .Path | absURL }}">{{ .Title }}</a></p>
             </li>

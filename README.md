@@ -45,20 +45,17 @@ date = 2019-02-11
 
 - `title`: the content title
 - `date`: the content creation date
-- `exclude`: if `true`, the page won't be included in `.Site.Pages`
+- `exclude`: if `true`, the page won't be included in `.Pages`
 
 ## Templating
 
 All Markdown files in the working directory are converted to HTML. They're generated from `template.html` using [`html/template`](https://golang.org/pkg/html/template/).
 
-Each page is passed a `Page` structure. This allows the template to access fields such as `.Title` and `.Site.Author`.
+Each page is passed a `Page` structure. This allows the template to access fields such as `.Title` and `.Date`.
+
+You can use the `absURL` function to join a string with the base URL.
 
 Check out the included [`template.html`](template.html) for example usage.
-
-### Functions
-
-* `absURL s`: join base URL with `s`
-* `first n v`: get `n` first values of `v`
 
 ## Themes
 

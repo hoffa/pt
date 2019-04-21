@@ -29,11 +29,6 @@ var config struct {
 	feedTemplatePath string
 }
 
-// Site represents the site-wide config.
-type Site struct {
-	Pages []*Page
-}
-
 // FrontMatter represents a page's TOML front matter.
 type FrontMatter struct {
 	Title   string
@@ -45,10 +40,10 @@ type FrontMatter struct {
 // The struct is passed to template.html during template execution.
 type Page struct {
 	*FrontMatter
-	Site    *Site
 	Path    string
 	Content template.HTML
 	Summary string
+	Pages   []*Page
 }
 
 func min(a, b int) int {
@@ -97,7 +92,7 @@ func summarizeHTML(s string) string {
 	return html.UnescapeString(strings.Join(summary, " "))
 }
 
-func parsePage(site *Site, p string) *Page {
+func parsePage(pages []*Page, p string) *Page {
 	b, err := ioutil.ReadFile(p)
 	if err != nil {
 		panic(err)
@@ -114,7 +109,7 @@ func parsePage(site *Site, p string) *Page {
 	content := string(blackfriday.MarkdownCommon(md))
 	return &Page{
 		FrontMatter: &frontMatter,
-		Site:        site,
+		Pages:       pages,
 		Path:        replaceExtension(p, ".html"),
 		Content:     template.HTML(content),
 		Summary:     summarizeHTML(content),
@@ -133,13 +128,13 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) {
 	}
 }
 
-func writeRSS(templatePath, path string, funcMap template.FuncMap, site *Site) error {
+func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page) error {
 	writePage(templatePath, funcMap, &Page{
 		FrontMatter: &FrontMatter{
 			Date: time.Now(),
 		},
-		Path: path,
-		Site: site,
+		Path:  path,
+		Pages: pages,
 	})
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -158,13 +153,12 @@ func main() {
 	flag.StringVar(&config.feedTemplatePath, "feed-template", "rss.xml", "feed template path")
 	flag.Parse()
 
-	var site Site
 	var included []*Page
 	var excluded []*Page
 	if err := filepath.Walk(config.pagesRootPath, func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) == ".md" {
 			fmt.Println(p)
-			page := parsePage(&site, p)
+			page := parsePage(included, p)
 			if page.Exclude {
 				excluded = append(excluded, page)
 			} else {
@@ -176,7 +170,6 @@ func main() {
 		panic(err)
 	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
-	site.Pages = included
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
 			return joinURL(config.baseURL, p)
@@ -186,7 +179,7 @@ func main() {
 	for _, page := range pages {
 		writePage(config.pageTemplatePath, funcMap, page)
 	}
-	if err := writeRSS(config.feedTemplatePath, config.feedPath, funcMap, &site); err != nil {
+	if err := writeRSS(config.feedTemplatePath, config.feedPath, funcMap, included); err != nil {
 		panic(err)
 	}
 }
