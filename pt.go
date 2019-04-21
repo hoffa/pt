@@ -61,14 +61,12 @@ func summarizeHTML(s string, maxLength int) string {
 	re := regexp.MustCompile("<[^>]*>")
 	fields := strings.Fields(re.ReplaceAllString(s, ""))
 	var summary []string
-	length := 0
-	for _, field := range fields {
-		if length > maxLength {
+	for i, field := range fields {
+		if i > maxLength {
 			summary = append(summary, "...")
 			break
 		}
 		summary = append(summary, field)
-		length += len(field)
 	}
 	return html.UnescapeString(strings.Join(summary, " "))
 }
@@ -117,7 +115,7 @@ func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page
 
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
-	summaryLength := flag.Int("summary-length", 150, "summary length in words")
+	summaryLength := flag.Int("summary-length", 70, "summary length in words")
 	pageTemplatePath := flag.String("page-template", "template.html", "page template path")
 	pagesRootPath := flag.String("pages-root", ".", "pages root directory")
 	feedPath := flag.String("feed", "feed.xml", "feed path")
