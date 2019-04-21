@@ -53,15 +53,19 @@ func min(a, b int) int {
 	return b
 }
 
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 func replaceExtension(p, ext string) string {
 	return p[:len(p)-len(filepath.Ext(p))] + ext
 }
 
 func joinURL(base, p string) string {
 	u, err := url.Parse(base)
-	if err != nil {
-		panic(err)
-	}
+	check(err)
 	u.Path = path.Join(u.Path, p)
 	return u.String()
 }
@@ -94,9 +98,7 @@ func summarizeHTML(s string) string {
 
 func parsePage(pages []*Page, p string) *Page {
 	b, err := ioutil.ReadFile(p)
-	if err != nil {
-		panic(err)
-	}
+	check(err)
 	fm, md := separateContent(b)
 	var frontMatter FrontMatter
 	if err := toml.Unmarshal(fm, &frontMatter); err != nil {
@@ -119,13 +121,9 @@ func parsePage(pages []*Page, p string) *Page {
 func writePage(templatePath string, funcMap template.FuncMap, page *Page) {
 	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
-	if err != nil {
-		panic(err)
-	}
+	check(err)
 	defer f.Close()
-	if err := tmpl.Execute(f, page); err != nil {
-		panic(err)
-	}
+	check(tmpl.Execute(f, page))
 }
 
 func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page) error {
@@ -155,7 +153,7 @@ func main() {
 
 	var included []*Page
 	var excluded []*Page
-	if err := filepath.Walk(config.pagesRootPath, func(p string, f os.FileInfo, err error) error {
+	check(filepath.Walk(config.pagesRootPath, func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) == ".md" {
 			fmt.Println(p)
 			page := parsePage(included, p)
@@ -166,9 +164,7 @@ func main() {
 			}
 		}
 		return nil
-	}); err != nil {
-		panic(err)
-	}
+	}))
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
@@ -179,7 +175,5 @@ func main() {
 	for _, page := range pages {
 		writePage(config.pageTemplatePath, funcMap, page)
 	}
-	if err := writeRSS(config.feedTemplatePath, config.feedPath, funcMap, included); err != nil {
-		panic(err)
-	}
+	check(writeRSS(config.feedTemplatePath, config.feedPath, funcMap, included))
 }
