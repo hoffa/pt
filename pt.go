@@ -111,12 +111,14 @@ func parsePage(pages []*Page, p string) *Page {
 	}
 }
 
-func writePage(templatePath string, funcMap template.FuncMap, page *Page) {
+func writePage(templatePath string, funcMap template.FuncMap, page *Page) error {
 	tmpl := template.Must(template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
-	check(err)
+	if err != nil {
+		return err
+	}
 	defer f.Close()
-	check(tmpl.Execute(f, page))
+	return tmpl.Execute(f, page)
 }
 
 func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page) error {
@@ -168,7 +170,7 @@ func main() {
 		},
 	}
 	for _, page := range append(included, excluded...) {
-		writePage(config.pageTemplatePath, funcMap, page)
+		check(writePage(config.pageTemplatePath, funcMap, page))
 	}
 	check(writeRSS(config.feedTemplatePath, config.feedPath, funcMap, included))
 }
