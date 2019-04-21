@@ -40,7 +40,6 @@ type FrontMatter struct {
 	Title   string
 	Date    time.Time
 	Exclude bool
-	Params  map[string]interface{}
 }
 
 // Page represents a Markdown page with optional front matter.
