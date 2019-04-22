@@ -114,9 +114,9 @@ func writeRSS(templatePath string, funcMap template.FuncMap, page *Page) error {
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
 	summaryLength := flag.Int("summary-length", 70, "summary length in words")
-	pageTemplatePath := flag.String("page-template", "templates/page.html", "page template path")
-	feedPath := flag.String("feed", "feed.xml", "feed path")
-	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template path")
+	pageTemplatePath := flag.String("template", "templates/page.html", "page template")
+	feedPath := flag.String("feed", "feed.xml", "feed target")
+	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template")
 	flag.Parse()
 
 	var included []*Page
