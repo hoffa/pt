@@ -143,12 +143,14 @@ func main() {
 		check(writePage(*pageTemplatePath, funcMap, page))
 		fmt.Println(page.Path)
 	}
-	check(writeRSS(*feedTemplatePath, funcMap, &Page{
-		FrontMatter: &FrontMatter{
-			Date: time.Now(),
-		},
-		Path:  *feedPath,
-		Pages: included,
-	}))
-	fmt.Println(*feedPath)
+	if len(included) > 0 {
+		check(writeRSS(*feedTemplatePath, funcMap, &Page{
+			FrontMatter: &FrontMatter{
+				Date: time.Now(),
+			},
+			Path:  *feedPath,
+			Pages: included,
+		}))
+		fmt.Println(*feedPath)
+	}
 }
