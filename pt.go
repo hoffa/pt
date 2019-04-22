@@ -71,7 +71,7 @@ func summarizeHTML(s string, maxLength int) string {
 	return html.UnescapeString(strings.Join(summary, " "))
 }
 
-func parsePage(pages []*Page, p string, summaryLength int) *Page {
+func parsePage(p string, summaryLength int) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
@@ -80,7 +80,6 @@ func parsePage(pages []*Page, p string, summaryLength int) *Page {
 	content := string(blackfriday.MarkdownCommon(md))
 	return &Page{
 		FrontMatter: &frontMatter,
-		Pages:       pages,
 		Path:        replaceExtension(p, ".html"),
 		Content:     template.HTML(content),
 		Summary:     summarizeHTML(content, summaryLength),
@@ -101,13 +100,16 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) error 
 }
 
 func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page) error {
-	writePage(templatePath, funcMap, &Page{
+	page := &Page{
 		FrontMatter: &FrontMatter{
 			Date: time.Now(),
 		},
 		Path:  path,
 		Pages: pages,
-	})
+	}
+	if err := writePage(templatePath, funcMap, page); err != nil {
+		fmt.Println("warning:", err)
+	}
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
@@ -130,7 +132,7 @@ func main() {
 	check(filepath.Walk(*pagesRootPath, func(p string, f os.FileInfo, err error) error {
 		if filepath.Ext(p) == ".md" {
 			fmt.Println(p)
-			page := parsePage(included, p, *summaryLength)
+			page := parsePage(p, *summaryLength)
 			if page.Exclude {
 				excluded = append(excluded, page)
 			} else {
@@ -149,9 +151,8 @@ func main() {
 		},
 	}
 	for _, page := range append(included, excluded...) {
-		if err := writePage(*pageTemplatePath, funcMap, page); err != nil {
-			fmt.Println("warning:", err)
-		}
+		page.Pages = included
+		check(writePage(*pageTemplatePath, funcMap, page))
 	}
 	check(writeRSS(*feedTemplatePath, *feedPath, funcMap, included))
 }
