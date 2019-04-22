@@ -117,7 +117,7 @@ func main() {
 	pageTemplatePath := flag.String("page-template", "template.html", "page template path")
 	pagesRootPath := flag.String("pages-root", ".", "pages root directory")
 	feedPath := flag.String("feed", "feed.xml", "feed path")
-	feedTemplatePath := flag.String("feed-template", "rss.xml", "feed template path")
+	feedTemplatePath := flag.String("feed-template", "feed.template.xml", "feed template path")
 	flag.Parse()
 
 	var included []*Page
