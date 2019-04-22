@@ -87,7 +87,7 @@ func parsePage(p string, summaryLength int) *Page {
 }
 
 func writePage(templatePath string, funcMap template.FuncMap, page *Page) error {
-	tmpl, err := template.New(templatePath).Funcs(funcMap).ParseFiles(templatePath)
+	tmpl, err := template.New(path.Base(templatePath)).Funcs(funcMap).ParseFiles(templatePath)
 	if err != nil {
 		return err
 	}
@@ -114,10 +114,10 @@ func writeRSS(templatePath string, funcMap template.FuncMap, page *Page) error {
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
 	summaryLength := flag.Int("summary-length", 70, "summary length in words")
-	pageTemplatePath := flag.String("page-template", "template.html", "page template path")
+	pageTemplatePath := flag.String("page-template", "templates/page.html", "page template path")
 	pagesRootPath := flag.String("pages-root", ".", "pages root directory")
 	feedPath := flag.String("feed", "feed.xml", "feed path")
-	feedTemplatePath := flag.String("feed-template", "feed.template.xml", "feed template path")
+	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template path")
 	flag.Parse()
 
 	var included []*Page
