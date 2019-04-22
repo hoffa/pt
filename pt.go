@@ -101,7 +101,7 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) error 
 
 func writeRSS(templatePath string, funcMap template.FuncMap, page *Page) error {
 	if err := writePage(templatePath, funcMap, page); err != nil {
-		fmt.Println("warning:", err)
+		return err
 	}
 	b, err := ioutil.ReadFile(page.Path)
 	if err != nil {
@@ -123,8 +123,8 @@ func main() {
 	var included []*Page
 	var excluded []*Page
 	check(filepath.Walk(*pagesRootPath, func(p string, f os.FileInfo, err error) error {
+
 		if filepath.Ext(p) == ".md" {
-			fmt.Println(p)
 			page := parsePage(p, *summaryLength)
 			if page.Exclude {
 				excluded = append(excluded, page)
@@ -146,12 +146,15 @@ func main() {
 	for _, page := range append(included, excluded...) {
 		page.Pages = included
 		check(writePage(*pageTemplatePath, funcMap, page))
+		fmt.Println(page.Path)
 	}
-	check(writeRSS(*feedTemplatePath, funcMap, &Page{
+	if err := writeRSS(*feedTemplatePath, funcMap, &Page{
 		FrontMatter: &FrontMatter{
 			Date: time.Now(),
 		},
 		Path:  *feedPath,
 		Pages: included,
-	}))
+	}); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
 }
