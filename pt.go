@@ -148,13 +148,12 @@ func main() {
 		check(writePage(*pageTemplatePath, funcMap, page))
 		fmt.Println(page.Path)
 	}
-	if err := writeRSS(*feedTemplatePath, funcMap, &Page{
+	check(writeRSS(*feedTemplatePath, funcMap, &Page{
 		FrontMatter: &FrontMatter{
 			Date: time.Now(),
 		},
 		Path:  *feedPath,
 		Pages: included,
-	}); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	}))
+	fmt.Println(*feedPath)
 }
