@@ -99,23 +99,16 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) error 
 	return tmpl.Execute(f, page)
 }
 
-func writeRSS(templatePath, path string, funcMap template.FuncMap, pages []*Page) error {
-	page := &Page{
-		FrontMatter: &FrontMatter{
-			Date: time.Now(),
-		},
-		Path:  path,
-		Pages: pages,
-	}
+func writeRSS(templatePath string, funcMap template.FuncMap, page *Page) error {
 	if err := writePage(templatePath, funcMap, page); err != nil {
 		fmt.Println("warning:", err)
 	}
-	b, err := ioutil.ReadFile(path)
+	b, err := ioutil.ReadFile(page.Path)
 	if err != nil {
 		return err
 	}
 	header := []byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
-	return ioutil.WriteFile(path, append(header, b...), 0644)
+	return ioutil.WriteFile(page.Path, append(header, b...), 0644)
 }
 
 func main() {
@@ -154,5 +147,11 @@ func main() {
 		page.Pages = included
 		check(writePage(*pageTemplatePath, funcMap, page))
 	}
-	check(writeRSS(*feedTemplatePath, *feedPath, funcMap, included))
+	check(writeRSS(*feedTemplatePath, funcMap, &Page{
+		FrontMatter: &FrontMatter{
+			Date: time.Now(),
+		},
+		Path:  *feedPath,
+		Pages: included,
+	}))
 }
