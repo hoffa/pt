@@ -8,8 +8,6 @@ A minimalist static site generator.
 
 - Super simple
 - Tiny
-- Single-file template
-- Minimal configuration
 - Write pages in [Markdown](https://daringfireball.net/projects/markdown/syntax)
 - Generates pages instantly
 - Generates RSS feed
