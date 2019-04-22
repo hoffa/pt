@@ -115,25 +115,20 @@ func main() {
 	baseURL := flag.String("base-url", "", "base URL")
 	summaryLength := flag.Int("summary-length", 70, "summary length in words")
 	pageTemplatePath := flag.String("page-template", "templates/page.html", "page template path")
-	pagesRootPath := flag.String("pages-root", ".", "pages root directory")
 	feedPath := flag.String("feed", "feed.xml", "feed path")
 	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template path")
 	flag.Parse()
 
 	var included []*Page
 	var excluded []*Page
-	check(filepath.Walk(*pagesRootPath, func(p string, f os.FileInfo, err error) error {
-
-		if filepath.Ext(p) == ".md" {
-			page := parsePage(p, *summaryLength)
-			if page.Exclude {
-				excluded = append(excluded, page)
-			} else {
-				included = append(included, page)
-			}
+	for _, p := range flag.Args() {
+		page := parsePage(p, *summaryLength)
+		if page.Exclude {
+			excluded = append(excluded, page)
+		} else {
+			included = append(included, page)
 		}
-		return nil
-	}))
+	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	funcMap := template.FuncMap{
 		"absURL": func(p string) string {
