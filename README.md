@@ -59,8 +59,6 @@ You can use the `absURL` function to join a string with the base URL.
 
 Just add your CSS in the `<head>`.
 
-The default template only includes the bare minimum for a navbar.
-
 A tiny touch of CSS can greatly improve readability:
 
 ```css
