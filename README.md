@@ -25,7 +25,7 @@ go get github.com/hoffa/pt
 ## Usage
 
 ```shell
-pt -base-url https://my.site
+pt -base-url https://my.site *.md
 ```
 
 ## Front matter
