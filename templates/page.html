@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ .Summary }}">
     <meta name="og:title" content="{{ .Title }}">
-    <meta name="og:url" content="{{ .Path | absURL }}">
+    <meta name="og:url" content="{{ .URL }}">
     <meta name="og:image" content="https://placekitten.com/g/1200/1200">
     <meta name="twitter:card" content="summary">
     <style>
@@ -23,8 +23,8 @@
     <nav>
       <ul>
         <li><strong>Jane Doe</strong></li>
-        <li><a href="{{ "index.html" | absURL }}">Home</a></li>
-        <li><a href="{{ "feed.xml" | absURL }}">RSS</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/feed.xml">RSS</a></li>
       </ul>
     </nav>
     <main>
@@ -34,14 +34,18 @@
         <ul>
           {{ range .Pages }}
             <li>
-              <p><a href="{{ .Path | absURL }}">{{ .Title }}</a></p>
+              <p>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+              </p>
             </li>
           {{ end }}
         </ul>
       {{ else }}
         <h1>{{ .Title }}</h1>
         {{ .Content }}
-        <p><i>{{ .Date.Format "January 2, 2006" }}</i></p>
+        <p>
+          <i>{{ .Date.Format "January 2, 2006" }}</i>
+        </p>
       {{ end }}
     </main>
   </body>

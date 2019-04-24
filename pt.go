@@ -32,6 +32,7 @@ type FrontMatter struct {
 type Page struct {
 	*FrontMatter
 	Path    string
+	URL     string
 	Content template.HTML
 	Summary string
 	Pages   []*Page
@@ -71,23 +72,25 @@ func summarizeHTML(s string, maxLength int) string {
 	return html.UnescapeString(strings.Join(summary, " "))
 }
 
-func parsePage(p string, summaryLength int) *Page {
+func parsePage(p, baseURL string, summaryLength int) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
-	frontMatter := FrontMatter{Title: p}
-	check(toml.Unmarshal(fm, &frontMatter))
+	frontMatter := &FrontMatter{Title: p}
+	check(toml.Unmarshal(fm, frontMatter))
 	content := string(blackfriday.MarkdownCommon(md))
+	target := replaceExtension(p, ".html")
 	return &Page{
-		FrontMatter: &frontMatter,
-		Path:        replaceExtension(p, ".html"),
+		FrontMatter: frontMatter,
+		Path:        target,
+		URL:         urlJoin(baseURL, target),
 		Content:     template.HTML(content),
 		Summary:     summarizeHTML(content, summaryLength),
 	}
 }
 
-func writePage(templatePath string, funcMap template.FuncMap, page *Page) error {
-	tmpl, err := template.New(path.Base(templatePath)).Funcs(funcMap).ParseFiles(templatePath)
+func writePage(templatePath string, page *Page) error {
+	tmpl, err := template.New(path.Base(templatePath)).ParseFiles(templatePath)
 	if err != nil {
 		return err
 	}
@@ -99,8 +102,8 @@ func writePage(templatePath string, funcMap template.FuncMap, page *Page) error 
 	return tmpl.Execute(f, page)
 }
 
-func writeRSS(templatePath string, funcMap template.FuncMap, page *Page) error {
-	if err := writePage(templatePath, funcMap, page); err != nil {
+func writeRSS(templatePath string, page *Page) error {
+	if err := writePage(templatePath, page); err != nil {
 		return err
 	}
 	b, err := ioutil.ReadFile(page.Path)
@@ -109,6 +112,13 @@ func writeRSS(templatePath string, funcMap template.FuncMap, page *Page) error {
 	}
 	header := []byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
 	return ioutil.WriteFile(page.Path, append(header, b...), 0644)
+}
+
+func urlJoin(base, p string) string {
+	u, err := url.Parse(base)
+	check(err)
+	u.Path = path.Join(u.Path, p)
+	return u.String()
 }
 
 func main() {
@@ -122,7 +132,7 @@ func main() {
 	var included []*Page
 	var excluded []*Page
 	for _, p := range flag.Args() {
-		page := parsePage(p, *summaryLength)
+		page := parsePage(p, *baseURL, *summaryLength)
 		if page.Exclude {
 			excluded = append(excluded, page)
 		} else {
@@ -130,25 +140,18 @@ func main() {
 		}
 	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
-	funcMap := template.FuncMap{
-		"absURL": func(p string) string {
-			u, err := url.Parse(*baseURL)
-			check(err)
-			u.Path = path.Join(u.Path, p)
-			return u.String()
-		},
-	}
 	for _, page := range append(included, excluded...) {
 		page.Pages = included
-		check(writePage(*pageTemplatePath, funcMap, page))
+		check(writePage(*pageTemplatePath, page))
 		fmt.Println(page.Path)
 	}
 	if len(included) > 0 {
-		check(writeRSS(*feedTemplatePath, funcMap, &Page{
+		check(writeRSS(*feedTemplatePath, &Page{
 			FrontMatter: &FrontMatter{
 				Date: time.Now(),
 			},
 			Path:  *feedPath,
+			URL:   urlJoin(*baseURL, *feedPath),
 			Pages: included,
 		}))
 		fmt.Println(*feedPath)

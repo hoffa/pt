@@ -2,14 +2,14 @@
   <channel>
     <title>Jane Doe</title>
     <description></description>
-    <link>{{ "feed.xml" | absURL }}</link>
+    <link>https://jane.doe</link>
     <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</lastBuildDate>
     {{ range .Pages }}
       <item>
         <title>{{ .Title }}</title>
         <description>{{ .Summary }}</description>
-        <link>{{ .Path | absURL }}</link>
-        <guid>{{ .Path | absURL }}</guid>
+        <link>{{ .URL }}</link>
+        <guid>{{ .URL }}</guid>
         <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</pubDate>
       </item>
     {{ end }}
