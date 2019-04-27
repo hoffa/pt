@@ -3,14 +3,14 @@
     <title>Jane Doe</title>
     <description></description>
     <link>https://jane.doe</link>
-    <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</lastBuildDate>
+    <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
     {{ range .Pages }}
       <item>
         <title>{{ .Title }}</title>
         <description>{{ .Summary }}</description>
         <link>{{ .URL }}</link>
         <guid>{{ .URL }}</guid>
-        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</pubDate>
+        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
       </item>
     {{ end }}
   </channel>
