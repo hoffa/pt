@@ -80,10 +80,24 @@ Now let's create our first page:
 cat > index.md << EOF
 +++
 title = "Hello!"
+exclude = true
 +++
 
-Hello, world!
+Hello, _world_!
+
+This is an example paragraph.
 EOF
+```
+
+```shell
+cat > my-first-post.md << EOF
++++
+title = "My first post"
++++
+
+This is an example post.
+
+Nothing much to see.
 ```
 
 And finally build it:
