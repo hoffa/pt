@@ -1,14 +1,9 @@
 +++
 title = "Jane Doe"
+date = 2019-01-01
 exclude = true
 +++
 
-# Hi there!
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-Integer at varius nisl. Maecenas finibus turpis dui, eget volutpat augue ultricies sit amet. Curabitur sapien eros, blandit non semper in, ornare vel ipsum. Etiam tristique pretium lectus, id semper diam sagittis dignissim.
-
-Aenean non tellus id lorem sagittis gravida. Mauris a neque gravida, fringilla dui eget, tristique mi. Suspendisse metus justo, volutpat quis rhoncus nec, efficitur at ex.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at varius nisl. Maecenas finibus turpis dui, eget volutpat augue ultricies sit amet. Curabitur sapien eros, blandit non semper in, ornare vel ipsum.
 
 Cras vel dui neque <jane@doe.com>.

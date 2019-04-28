@@ -9,44 +9,23 @@
     <meta name="og:url" content="{{ .URL }}">
     <meta name="og:image" content="https://placekitten.com/g/1200/1200">
     <meta name="twitter:card" content="summary">
-    <style>
-      nav ul {
-        padding: 0;
-      }
-
-      nav ul li {
-        display: inline;
-      }
-    </style>
   </head>
   <body>
-    <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/feed.xml">RSS</a></li>
+    </ul>
+    <hr>
+    <h1>{{ .Title }}</h1>
+    <p><i>{{ .Date.Format "January 2, 2006" }}</i></p>
+    {{ .Content }}
+    {{ if eq .Path "index.html" }}
+      <h2>Posts</h2>
       <ul>
-        <li><strong>Jane Doe</strong></li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/feed.xml">RSS</a></li>
+        {{ range .Pages }}
+          <li><a href="{{ .URL }}">{{ .Title }}</a></li>
+        {{ end }}
       </ul>
-    </nav>
-    <main>
-      {{ if eq .Path "index.html" }}
-        {{ .Content }}
-        <h2>Posts</h2>
-        <ul>
-          {{ range .Pages }}
-            <li>
-              <p>
-                <a href="{{ .URL }}">{{ .Title }}</a>
-              </p>
-            </li>
-          {{ end }}
-        </ul>
-      {{ else }}
-        <h1>{{ .Title }}</h1>
-        {{ .Content }}
-        <p>
-          <i>{{ .Date.Format "January 2, 2006" }}</i>
-        </p>
-      {{ end }}
-    </main>
+    {{ end }}
   </body>
 </html>
