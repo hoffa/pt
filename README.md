@@ -47,7 +47,7 @@ date = 2019-02-11
 
 ## Templating
 
-All Markdown files in the working directory are converted to HTML. They're generated from [`template.html`](template.html) using [`html/template`](https://golang.org/pkg/html/template/).
+All Markdown files passed as arguments are converted to HTML. They're generated from [`template.html`](template.html) using [`html/template`](https://golang.org/pkg/html/template/).
 
 Each page is passed a `Page` structure. This allows the template to access fields such as `.Title` and `.URL`.
 
