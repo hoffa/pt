@@ -17,7 +17,7 @@
     </ul>
     <hr>
     <h1>{{ .Title }}</h1>
-    <p><i>{{ .Date.Format "January 2, 2006" }}</i></p>
+    <p>{{ .Date.Format "January 2, 2006" }}</p>
     {{ .Content }}
     {{ if eq .Path "index.html" }}
       <h2>Posts</h2>
