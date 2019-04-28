@@ -43,12 +43,6 @@ Each page can contain a TOML front matter. It must be placed at the top within `
 - `date`: the content creation date
 - `exclude`: if `true`, the page won't be included in `.Pages`
 
-## Templating
-
-All Markdown files passed as arguments are converted to HTML. They're generated from [`template.html`](template.html) using [`html/template`](https://golang.org/pkg/html/template/).
-
-Each page is passed a `Page` structure. This allows the template to access fields such as `.Title` and `.URL`.
-
 ## Themes
 
 Just add your CSS in the `<head>`.
