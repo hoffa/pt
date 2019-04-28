@@ -30,14 +30,12 @@ pt -base-url https://my.site *.md
 
 ## Front matter
 
-Each page can contain a TOML front matter. It must be placed at the top within `+++` delimiters.
-
-### Example
-
 ```toml
 title = "Hello, world!"
 date = 2019-02-11
 ```
+
+Each page can contain a TOML front matter. It must be placed at the top within `+++` delimiters.
 
 ### Variables
 
