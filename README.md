@@ -74,34 +74,36 @@ curl -L https://github.com/hoffa/pt/archive/master.tar.gz \
   | tar xz --strip-components=1 pt-master/templates
 ```
 
-Now let's create our first page:
+Now let's create our index page:
 
 ```shell
 cat > index.md << EOF
 +++
 title = "Hello!"
+date = 2019-01-01
 exclude = true
 +++
 
 Hello, _world_!
 
-This is an example paragraph.
+This is an example **paragraph**.
 EOF
 ```
 
+And a post:
+
 ```shell
-cat > my-first-post.md << EOF
 +++
 title = "My first post"
+date = 2019-04-20
 +++
 
 This is an example post.
 
 Nothing much to see.
-EOF
 ```
 
-And finally build it:
+And finally build:
 
 ```shell
 pt *.md
