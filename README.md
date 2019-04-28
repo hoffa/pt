@@ -54,8 +54,7 @@ Each page is passed a `Page` structure. This allows the template to access field
 ## Themes
 
 Just add your CSS in the `<head>`.
-
-A tiny touch of CSS can greatly improve readability:
+For example:
 
 ```css
 body {
