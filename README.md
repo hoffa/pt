@@ -67,7 +67,7 @@ Now let's create our index page:
 ```shell
 cat > index.md << EOF
 +++
-title = "Hello!"
+title = "Jane Doe"
 date = 2019-01-01
 exclude = true
 +++
