@@ -4,8 +4,6 @@
 
 A minimalist static site generator.
 
-## Features
-
 - Super simple
 - Write pages in [Markdown](https://daringfireball.net/projects/markdown/syntax)
 - Generates valid [RSS 2.0](https://validator.w3.org/feed/docs/rss2.html) feed
