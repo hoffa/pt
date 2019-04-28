@@ -8,10 +8,6 @@ A minimalist static site generator.
 - Write pages in [Markdown](https://daringfireball.net/projects/markdown/syntax)
 - Generates valid [RSS 2.0](https://validator.w3.org/feed/docs/rss2.html) feed
 
-## Demo
-
-[https://rehn.me](https://rehn.me)
-
 ## Installation
 
 ```shell
@@ -33,7 +29,7 @@ date = 2019-02-11
 
 Each page can contain a TOML front matter. It must be placed at the top within `+++` delimiters.
 
-### Variables
+Valid variables are:
 
 - `title`: the content title
 - `date`: the content creation date
