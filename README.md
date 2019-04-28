@@ -93,6 +93,7 @@ EOF
 And a post:
 
 ```shell
+cat > my-first-post.md << EOF
 +++
 title = "My first post"
 date = 2019-04-20
@@ -101,6 +102,7 @@ date = 2019-04-20
 This is an example post.
 
 Nothing much to see.
+EOF
 ```
 
 And finally build:
