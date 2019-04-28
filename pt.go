@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	textTemplate "text/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -103,15 +104,16 @@ func writePage(templatePath string, page *Page) error {
 }
 
 func writeRSS(templatePath string, page *Page) error {
-	if err := writePage(templatePath, page); err != nil {
-		return err
-	}
-	b, err := ioutil.ReadFile(page.Path)
+	tmpl, err := textTemplate.New(path.Base(templatePath)).ParseFiles(templatePath)
 	if err != nil {
 		return err
 	}
-	header := []byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
-	return ioutil.WriteFile(page.Path, append(header, b...), 0644)
+	f, err := os.Create(page.Path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return tmpl.Execute(f, page)
 }
 
 func urlJoin(base, p string) string {
