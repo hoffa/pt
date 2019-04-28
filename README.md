@@ -64,3 +64,30 @@ body {
   padding: 1em;
 }
 ```
+
+## Example
+
+First, get the page and RSS feed templates:
+
+```shell
+curl -L https://github.com/hoffa/pt/archive/master.tar.gz \
+  | tar xz --strip-components=1 pt-master/templates
+```
+
+Now let's create our first page:
+
+```shell
+cat > index.md << EOF
++++
+title = "Hello!"
++++
+
+Hello, world!
+EOF
+```
+
+And finally build it:
+
+```shell
+pt *.md
+```
