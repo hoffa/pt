@@ -98,6 +98,7 @@ title = "My first post"
 This is an example post.
 
 Nothing much to see.
+EOF
 ```
 
 And finally build it:
