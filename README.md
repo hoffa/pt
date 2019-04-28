@@ -105,7 +105,7 @@ Nothing much to see.
 EOF
 ```
 
-And finally build:
+Finally, build:
 
 ```shell
 pt *.md
