@@ -125,7 +125,7 @@ func urlJoin(base, p string) string {
 
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
-	summaryLength := flag.Int("summary-length", 70, "summary length in words")
+	summaryLength := flag.Int("summary-length", 50, "summary length in words")
 	pageTemplatePath := flag.String("template", "templates/page.html", "page template")
 	feedPath := flag.String("feed", "feed.xml", "feed target")
 	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template")
