@@ -156,6 +156,5 @@ func main() {
 			URL:   urlJoin(*baseURL, *feedPath),
 			Pages: included,
 		}))
-		fmt.Println(*feedPath)
 	}
 }
