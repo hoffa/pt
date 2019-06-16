@@ -33,7 +33,7 @@ type FrontMatter struct {
 type Page struct {
 	*FrontMatter
 	Path    string
-	URL     string
+	URL     template.URL
 	Content template.HTML
 	Summary string
 	Pages   []*Page
@@ -84,7 +84,7 @@ func parsePage(p, baseURL string, summaryLength int) *Page {
 	return &Page{
 		FrontMatter: frontMatter,
 		Path:        target,
-		URL:         urlJoin(baseURL, target),
+		URL:         template.URL(urlJoin(baseURL, target)),
 		Content:     template.HTML(content),
 		Summary:     summarizeHTML(content, summaryLength),
 	}
@@ -153,7 +153,7 @@ func main() {
 				Date: time.Now(),
 			},
 			Path:  *feedPath,
-			URL:   urlJoin(*baseURL, *feedPath),
+			URL:   template.URL(urlJoin(*baseURL, *feedPath)),
 			Pages: included,
 		}))
 	}
