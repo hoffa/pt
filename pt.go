@@ -4,16 +4,13 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"html"
 	"html/template"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"sort"
-	"strings"
 	textTemplate "text/template"
 	"time"
 
@@ -35,7 +32,6 @@ type Page struct {
 	Path    string
 	URL     template.URL
 	Content template.HTML
-	Summary string
 	Pages   []*Page
 }
 
@@ -59,20 +55,6 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func summarizeHTML(s string, maxLength int) string {
-	re := regexp.MustCompile("<[^>]*>")
-	fields := strings.Fields(re.ReplaceAllString(s, ""))
-	var summary []string
-	for i, field := range fields {
-		if i > maxLength {
-			summary = append(summary, "...")
-			break
-		}
-		summary = append(summary, field)
-	}
-	return html.UnescapeString(strings.Join(summary, " "))
-}
-
 func parsePage(p, baseURL string, summaryLength int) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
@@ -86,7 +68,6 @@ func parsePage(p, baseURL string, summaryLength int) *Page {
 		Path:        target,
 		URL:         template.URL(urlJoin(baseURL, target)),
 		Content:     template.HTML(content),
-		Summary:     summarizeHTML(content, summaryLength),
 	}
 }
 
