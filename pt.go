@@ -55,7 +55,7 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func parsePage(p, baseURL string, summaryLength int) *Page {
+func parsePage(p, baseURL string) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
@@ -106,7 +106,6 @@ func urlJoin(base, p string) string {
 
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
-	summaryLength := flag.Int("summary-length", 50, "summary length in words")
 	pageTemplatePath := flag.String("template", "templates/page.html", "page template")
 	feedPath := flag.String("feed", "feed.xml", "feed target")
 	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template")
@@ -115,7 +114,7 @@ func main() {
 	var included []*Page
 	var excluded []*Page
 	for _, p := range flag.Args() {
-		page := parsePage(p, *baseURL, *summaryLength)
+		page := parsePage(p, *baseURL)
 		if page.Exclude {
 			excluded = append(excluded, page)
 		} else {
