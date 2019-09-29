@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"html/template"
+	htmlTemplate "html/template"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -30,8 +30,8 @@ type FrontMatter struct {
 type Page struct {
 	*FrontMatter
 	Path    string
-	URL     template.URL
-	Content template.HTML
+	URL     htmlTemplate.URL
+	Content htmlTemplate.HTML
 	Pages   []*Page
 }
 
@@ -66,13 +66,13 @@ func parsePage(p, baseURL string) *Page {
 	return &Page{
 		FrontMatter: frontMatter,
 		Path:        target,
-		URL:         template.URL(urlJoin(baseURL, target)),
-		Content:     template.HTML(content),
+		URL:         htmlTemplate.URL(urlJoin(baseURL, target)),
+		Content:     htmlTemplate.HTML(content),
 	}
 }
 
 func writePage(templatePath string, page *Page) error {
-	tmpl, err := template.New(path.Base(templatePath)).ParseFiles(templatePath)
+	tmpl, err := htmlTemplate.New(path.Base(templatePath)).ParseFiles(templatePath)
 	if err != nil {
 		return err
 	}
@@ -133,7 +133,7 @@ func main() {
 				Date: time.Now(),
 			},
 			Path:  *feedPath,
-			URL:   template.URL(urlJoin(*baseURL, *feedPath)),
+			URL:   htmlTemplate.URL(urlJoin(*baseURL, *feedPath)),
 			Pages: included,
 		}))
 	}
