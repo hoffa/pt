@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/hoffa/pt.svg?branch=master)](https://travis-ci.org/hoffa/pt)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hoffa/pt)](https://goreportcard.com/report/github.com/hoffa/pt)
 
-A minimalist static site generator.
+A minimalist static blog generator.
 
 - Super simple
 - Write pages in [Markdown](https://daringfireball.net/projects/markdown/syntax)
