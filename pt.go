@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	htmlTemplate "html/template"
+	"io"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -14,7 +15,10 @@ import (
 	textTemplate "text/template"
 	"time"
 
-	"github.com/russross/blackfriday"
+	"github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
+	"gopkg.in/russross/blackfriday.v2"
 	"gopkg.in/yaml.v3"
 )
 
@@ -33,6 +37,39 @@ type Page struct {
 	URL     htmlTemplate.URL
 	Content htmlTemplate.HTML
 	Pages   []*Page
+}
+
+// Renderer is a Blackfriday renderer for Chroma.
+type Renderer struct {
+	html  *blackfriday.HTMLRenderer
+	style string
+}
+
+func newRenderer(style string) *Renderer {
+	return &Renderer{
+		html:  blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{}),
+		style: style,
+	}
+}
+
+func (r *Renderer) RenderHeader(w io.Writer, ast *blackfriday.Node) {}
+func (r *Renderer) RenderFooter(w io.Writer, ast *blackfriday.Node) {}
+func (r *Renderer) RenderNode(w io.Writer, node *blackfriday.Node, entering bool) blackfriday.WalkStatus {
+	if node.Type == blackfriday.CodeBlock {
+		lexer := lexers.Get(string(node.CodeBlockData.Info))
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
+		style := styles.Get(r.style)
+		if style == nil {
+			style = styles.Fallback
+		}
+		iterator, err := lexer.Tokenise(nil, string(node.Literal))
+		check(err)
+		check(html.New().Format(w, style, iterator))
+		return blackfriday.GoToNext
+	}
+	return r.html.RenderNode(w, node, entering)
 }
 
 func check(err error) {
@@ -55,18 +92,19 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func parsePage(p, baseURL string) *Page {
+func parsePage(p, baseURL, style string) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
 	frontMatter := &FrontMatter{Title: p}
 	check(yaml.Unmarshal(fm, frontMatter))
 	target := replaceExtension(p, ".html")
+	content := blackfriday.Run(md, blackfriday.WithRenderer(newRenderer(style)))
 	return &Page{
 		FrontMatter: frontMatter,
 		Path:        target,
 		URL:         htmlTemplate.URL(urlJoin(baseURL, target)),
-		Content:     htmlTemplate.HTML(blackfriday.MarkdownCommon(md)),
+		Content:     htmlTemplate.HTML(content),
 	}
 }
 
@@ -98,12 +136,13 @@ func main() {
 	pageTemplatePath := flag.String("template", "templates/page.html", "page template")
 	feedPath := flag.String("feed", "feed.xml", "feed target")
 	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template")
+	style := flag.String("highlight", "lovelace", "code highlight style")
 	flag.Parse()
 
 	var included []*Page
 	var excluded []*Page
 	for _, p := range flag.Args() {
-		page := parsePage(p, *baseURL)
+		page := parsePage(p, *baseURL, *style)
 		if page.Exclude {
 			excluded = append(excluded, page)
 		} else {
