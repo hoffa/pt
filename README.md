@@ -59,10 +59,9 @@ curl -L https://github.com/hoffa/pt/archive/master.tar.gz \
   | tar xz --strip-components=1 pt-master/templates
 ```
 
-Now let's create our index page:
+Create the index page as `index.md`:
 
-```shell
-cat > index.md << EOF
+```Markdown
 ---
 title: Jane Doe
 date: 2019-01-01
@@ -72,13 +71,11 @@ exclude: yes
 Hello, _world_!
 
 This is an example **paragraph**.
-EOF
 ```
 
-And a post:
+And a post within a file called `my-first-post.md`:
 
-```shell
-cat > my-first-post.md << EOF
+```Markdown
 ---
 title: My first post
 date: 2019-04-20
@@ -87,7 +84,6 @@ date: 2019-04-20
 This is an example post.
 
 Nothing much to see.
-EOF
 ```
 
 Finally, build:
