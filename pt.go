@@ -70,24 +70,20 @@ func parsePage(p, baseURL string) *Page {
 	}
 }
 
-func writePage(templatePath string, page *Page) error {
+func writePage(templatePath string, page *Page) {
 	tmpl := htmlTemplate.Must(htmlTemplate.ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
-	if err != nil {
-		return err
-	}
+	check(err)
 	defer f.Close()
-	return tmpl.Execute(f, page)
+	check(tmpl.Execute(f, page))
 }
 
-func writeRSS(templatePath string, page *Page) error {
+func writeRSS(templatePath string, page *Page) {
 	tmpl := textTemplate.Must(textTemplate.ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
-	if err != nil {
-		return err
-	}
+	check(err)
 	defer f.Close()
-	return tmpl.Execute(f, page)
+	check(tmpl.Execute(f, page))
 }
 
 func urlJoin(base, p string) string {
@@ -117,17 +113,17 @@ func main() {
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 	for _, page := range append(included, excluded...) {
 		page.Pages = included
-		check(writePage(*pageTemplatePath, page))
+		writePage(*pageTemplatePath, page)
 		fmt.Println(page.Path)
 	}
 	if len(included) > 0 {
-		check(writeRSS(*feedTemplatePath, &Page{
+		writeRSS(*feedTemplatePath, &Page{
 			FrontMatter: &FrontMatter{
 				Date: time.Now(),
 			},
 			Path:  *feedPath,
 			URL:   htmlTemplate.URL(urlJoin(*baseURL, *feedPath)),
 			Pages: included,
-		}))
+		})
 	}
 }
