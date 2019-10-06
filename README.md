@@ -28,15 +28,17 @@ pt -base-url https://my.site *.md
 title: Hello, world!
 date: 2019-02-11
 ---
+
+This is an example page!
 ```
 
 Each page can contain a YAML front matter. It must be placed at the top within `---` delimiters.
 
 Valid variables are:
 
-- `title`: the content title
-- `date`: the content creation date
-- `exclude`: if `yes`, the page won't be included in `.Pages` or the RSS feed
+- `title`: the title
+- `date`: the creation date
+- `exclude`: if `yes`, the page will be excluded from `.Pages` and the RSS feed
 
 ## Themes
 
