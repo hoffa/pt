@@ -72,10 +72,7 @@ func parsePage(p, baseURL string) *Page {
 }
 
 func writePage(templatePath string, page *Page) error {
-	tmpl, err := htmlTemplate.New(path.Base(templatePath)).ParseFiles(templatePath)
-	if err != nil {
-		return err
-	}
+	tmpl := htmlTemplate.Must(htmlTemplate.ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
 	if err != nil {
 		return err
