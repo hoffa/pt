@@ -81,10 +81,7 @@ func writePage(templatePath string, page *Page) error {
 }
 
 func writeRSS(templatePath string, page *Page) error {
-	tmpl, err := textTemplate.New(path.Base(templatePath)).ParseFiles(templatePath)
-	if err != nil {
-		return err
-	}
+	tmpl := textTemplate.Must(textTemplate.ParseFiles(templatePath))
 	f, err := os.Create(page.Path)
 	if err != nil {
 		return err
