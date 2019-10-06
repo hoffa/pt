@@ -23,6 +23,8 @@ pt -base-url https://my.site *.md
 
 ## Front matter
 
+Each page can contain a YAML front matter. It must be placed at the top within `---` delimiters:
+
 ```markdown
 ---
 title: Hello, world!
@@ -31,8 +33,6 @@ date: 2019-02-11
 
 This is an example page!
 ```
-
-Each page can contain a YAML front matter. It must be placed at the top within `---` delimiters.
 
 Valid variables are:
 
