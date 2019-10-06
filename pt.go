@@ -14,11 +14,11 @@ import (
 	textTemplate "text/template"
 	"time"
 
-	"github.com/BurntSushi/toml"
 	"github.com/russross/blackfriday"
+	"gopkg.in/yaml.v3"
 )
 
-// FrontMatter represents a page's TOML front matter.
+// FrontMatter represents a page's front matter.
 type FrontMatter struct {
 	Title   string
 	Date    time.Time
@@ -47,7 +47,7 @@ func replaceExtension(p, ext string) string {
 
 // Separates front matter from Markdown
 func separateContent(b []byte) ([]byte, []byte) {
-	delim := []byte("+++")
+	delim := []byte("---")
 	i := bytes.Index(b[3:], delim)
 	if !bytes.Equal(b[:3], delim) || i == -1 {
 		return nil, b
@@ -60,7 +60,7 @@ func parsePage(p, baseURL string) *Page {
 	check(err)
 	fm, md := separateContent(b)
 	frontMatter := &FrontMatter{Title: p}
-	check(toml.Unmarshal(fm, frontMatter))
+	check(yaml.Unmarshal(fm, frontMatter))
 	target := replaceExtension(p, ".html")
 	return &Page{
 		FrontMatter: frontMatter,

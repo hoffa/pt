@@ -23,18 +23,18 @@ pt -base-url https://my.site *.md
 
 ## Front matter
 
-```toml
-title = "Hello, world!"
-date = 2019-02-11
+```yaml
+title: Hello, world!
+date: 2019-02-11
 ```
 
-Each page can contain a TOML front matter. It must be placed at the top within `+++` delimiters.
+Each page can contain a YAML front matter. It must be placed at the top within `---` delimiters.
 
 Valid variables are:
 
 - `title`: the content title
 - `date`: the content creation date
-- `exclude`: if `true`, the page won't be included in `.Pages`
+- `exclude`: if `yes`, the page won't be included in `.Pages`
 
 ## Themes
 
@@ -63,11 +63,11 @@ Now let's create our index page:
 
 ```shell
 cat > index.md << EOF
-+++
-title = "Jane Doe"
-date = 2019-01-01
-exclude = true
-+++
+---
+title: Jane Doe
+date: 2019-01-01
+exclude: yes
+---
 
 Hello, _world_!
 
@@ -79,10 +79,10 @@ And a post:
 
 ```shell
 cat > my-first-post.md << EOF
-+++
-title = "My first post"
-date = 2019-04-20
-+++
+---
+title: My first post
+date: 2019-04-20
+---
 
 This is an example post.
 
