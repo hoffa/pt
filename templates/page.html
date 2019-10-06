@@ -6,21 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/feed.xml">RSS</a></li>
-    </ul>
-    <hr>
-    <h1>{{ .Title }}</h1>
-    <p>{{ .Date.Format "January 2, 2006" }}</p>
-    {{ .Content }}
     {{ if eq .Path "index.html" }}
-      <h2>Posts</h2>
+      <h1>{{ .Title }}</h1>
+      {{ .Content }}
       <ul>
         {{ range .Pages }}
           <li><a href="{{ .URL }}">{{ .Title }}</a></li>
         {{ end }}
       </ul>
+    {{ else }}
+      <h1>{{ .Title }}</h1>
+      <p>{{ .Date.Format "January 2, 2006" }}</p>
+      {{ .Content }}
+      <a href="/">Home</a>
     {{ end }}
   </body>
 </html>
