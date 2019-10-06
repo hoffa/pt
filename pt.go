@@ -116,14 +116,12 @@ func main() {
 		writePage(*pageTemplatePath, page)
 		fmt.Println(page.Path)
 	}
-	if len(included) > 0 {
-		writeRSS(*feedTemplatePath, &Page{
-			FrontMatter: &FrontMatter{
-				Date: time.Now(),
-			},
-			Path:  *feedPath,
-			URL:   htmlTemplate.URL(urlJoin(*baseURL, *feedPath)),
-			Pages: included,
-		})
-	}
+	writeRSS(*feedTemplatePath, &Page{
+		FrontMatter: &FrontMatter{
+			Date: time.Now(),
+		},
+		Path:  *feedPath,
+		URL:   htmlTemplate.URL(urlJoin(*baseURL, *feedPath)),
+		Pages: included,
+	})
 }
