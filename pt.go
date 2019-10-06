@@ -61,13 +61,12 @@ func parsePage(p, baseURL string) *Page {
 	fm, md := separateContent(b)
 	frontMatter := &FrontMatter{Title: p}
 	check(toml.Unmarshal(fm, frontMatter))
-	content := string(blackfriday.MarkdownCommon(md))
 	target := replaceExtension(p, ".html")
 	return &Page{
 		FrontMatter: frontMatter,
 		Path:        target,
 		URL:         htmlTemplate.URL(urlJoin(baseURL, target)),
-		Content:     htmlTemplate.HTML(content),
+		Content:     htmlTemplate.HTML(blackfriday.MarkdownCommon(md)),
 	}
 }
 
