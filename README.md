@@ -23,9 +23,11 @@ pt -base-url https://my.site *.md
 
 ## Front matter
 
-```yaml
+```markdown
+---
 title: Hello, world!
 date: 2019-02-11
+---
 ```
 
 Each page can contain a YAML front matter. It must be placed at the top within `---` delimiters.
@@ -64,13 +66,10 @@ Create the index page as `index.md`:
 ```Markdown
 ---
 title: Jane Doe
-date: 2019-01-01
 exclude: yes
 ---
 
-Hello, _world_!
-
-This is an example **paragraph**.
+Subscribe via [RSS](/feed.xml).
 ```
 
 And a post within a file called `my-first-post.md`:
@@ -81,9 +80,8 @@ title: My first post
 date: 2019-04-20
 ---
 
-This is an example post.
-
-Nothing much to see.
+This is an example **Markdown** _post_.
+I like `turtles`.
 ```
 
 Finally, build:
