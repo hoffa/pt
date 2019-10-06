@@ -36,7 +36,7 @@ Valid variables are:
 
 - `title`: the content title
 - `date`: the content creation date
-- `exclude`: if `yes`, the page won't be included in `.Pages`
+- `exclude`: if `yes`, the page won't be included in `.Pages` or the RSS feed
 
 ## Themes
 
