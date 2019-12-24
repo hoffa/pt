@@ -41,20 +41,6 @@ Valid variables are:
 - `date`: the creation date
 - `exclude`: if `yes`, the page will be excluded from `.Pages` and the RSS feed
 
-## Themes
-
-Just add your CSS in the `<head>`.
-For example:
-
-```css
-body {
-  line-height: 1.5;
-  max-width: 40em;
-  margin: auto;
-  padding: 1em;
-}
-```
-
 ## Example
 
 First, get the page and RSS feed templates:
