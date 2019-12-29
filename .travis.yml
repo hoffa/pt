@@ -1,6 +1,1 @@
 language: go
-go:
-  - master
-script:
-  - go vet ./...
-  - go build ./...
