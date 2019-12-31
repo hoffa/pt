@@ -1,6 +1,6 @@
 # pt
 
-[![Build Status](https://travis-ci.org/hoffa/pt.svg?branch=master)](https://travis-ci.org/hoffa/pt)
+[![Build Status](https://github.com/hoffa/pt/workflows/.github/workflows/workflow.yml/badge.svg)](https://github.com/hoffa/pt/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hoffa/pt)](https://goreportcard.com/report/github.com/hoffa/pt)
 
 A minimalist static blog generator.
