@@ -91,7 +91,7 @@ print("Hello!")
 Finally, build:
 
 ```shell
-pt -base-url https://mysite.com *.md
+pt -base-url https://mysite.com -highlight monokailight *.md
 ```
 
-You can change the syntax highlighting style with `-highlight`. See the [Chroma Playground](https://swapoff.org/chroma/playground/) for available styles.
+See the [Chroma Playground](https://swapoff.org/chroma/playground/) for available syntax highlighting styles.
