@@ -27,7 +27,7 @@ Usage of pt:
   -feed-template string
     	feed template (default "templates/feed.xml")
   -highlight string
-    	code highlight style (default "pygments")
+    	code highlight style
   -template string
     	page template (default "templates/page.html")
 ```
