@@ -19,8 +19,26 @@ go get github.com/hoffa/pt
 ## Usage
 
 ```shell
-pt -base-url https://my.site *.md
+Usage of pt:
+  -base-url string
+    	base URL
+  -feed string
+    	feed target (default "feed.xml")
+  -feed-template string
+    	feed template (default "templates/feed.xml")
+  -highlight string
+    	code highlight style (default "pygments")
+  -template string
+    	page template (default "templates/page.html")
 ```
+
+## Example
+
+```shell
+pt -base-url https://my.site -highlight monokailight *.md
+```
+
+See the [Chroma Playground](https://swapoff.org/chroma/playground/) for available syntax highlighter styles.
 
 ## Front matter
 
