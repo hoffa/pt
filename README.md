@@ -32,14 +32,6 @@ Usage of pt:
     	page template (default "templates/page.html")
 ```
 
-## Example
-
-```shell
-pt -base-url https://my.site -highlight monokailight *.md
-```
-
-See the [Chroma Playground](https://swapoff.org/chroma/playground/) for available syntax highlighter styles.
-
 ## Front matter
 
 Each page can contain a YAML front matter. It must be placed at the top within `---` delimiters:
@@ -81,7 +73,7 @@ Subscribe via [RSS](/feed.xml).
 
 And a post within a file called `my-first-post.md`:
 
-```Markdown
+````Markdown
 ---
 title: My first post
 date: 2019-04-20
@@ -89,10 +81,17 @@ date: 2019-04-20
 
 This is an example **Markdown** _post_.
 I like `turtles`.
+
+```python
+print("Hello!")
 ```
+
+````
 
 Finally, build:
 
 ```shell
-pt *.md
+pt -base-url https://mysite.com *.md
 ```
+
+You can change the syntax highlighting style with `-highlight`. See the [Chroma Playground](https://swapoff.org/chroma/playground/) for available styles.
