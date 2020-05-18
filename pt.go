@@ -99,7 +99,12 @@ func parsePage(p, baseURL, style string) *Page {
 	frontMatter := &FrontMatter{Title: p}
 	check(yaml.Unmarshal(fm, frontMatter))
 	target := replaceExtension(p, ".html")
-	content := blackfriday.Run(md, blackfriday.WithRenderer(newRenderer(style)))
+	var content []byte
+	if style == "" {
+		content = blackfriday.Run(md)
+	} else {
+		content = blackfriday.Run(md, blackfriday.WithRenderer(newRenderer(style)))
+	}
 	return &Page{
 		FrontMatter: frontMatter,
 		Path:        target,
@@ -136,7 +141,7 @@ func main() {
 	pageTemplatePath := flag.String("template", "templates/page.html", "page template")
 	feedPath := flag.String("feed", "feed.xml", "feed target")
 	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template")
-	style := flag.String("highlight", "pygments", "code highlight style")
+	style := flag.String("highlight", "", "code highlight style")
 	flag.Parse()
 
 	var included []*Page
