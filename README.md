@@ -57,7 +57,7 @@ First, get the page and RSS feed templates:
 
 ```shell
 curl -L https://github.com/hoffa/pt/archive/master.tar.gz \
-  | tar zxf- --strip-components=1 pt-master/templates
+  | tar -zxf- --strip-components=1 pt-master/templates
 ```
 
 Create the index page as `index.md`:
