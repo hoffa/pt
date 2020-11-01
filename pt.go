@@ -99,11 +99,12 @@ func parsePage(p, baseURL, style string) *Page {
 	frontMatter := &FrontMatter{Title: p}
 	check(yaml.Unmarshal(fm, frontMatter))
 	target := replaceExtension(p, ".html")
+	var enabledExtensions blackfriday.Extensions = blackfriday.CommonExtensions | blackfriday.Footnotes
 	var content []byte
 	if style == "" {
-		content = blackfriday.Run(md)
+		content = blackfriday.Run(md, blackfriday.WithExtensions(enabledExtensions))
 	} else {
-		content = blackfriday.Run(md, blackfriday.WithRenderer(newRenderer(style)))
+		content = blackfriday.Run(md, blackfriday.WithExtensions(enabledExtensions), blackfriday.WithRenderer(newRenderer(style)))
 	}
 	return &Page{
 		FrontMatter: frontMatter,
