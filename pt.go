@@ -183,7 +183,8 @@ func main() {
 	}
 	writeRSS(*feedTemplate, &Page{
 		FrontMatter: &FrontMatter{
-			Date: time.Now(),
+			Title: *feedPath,
+			Date:  time.Now(),
 		},
 		Path:  *feedPath,
 		URL:   htmlTemplate.URL(urlJoin(*baseURL, *feedPath)),
