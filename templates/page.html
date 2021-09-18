@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <title>{{ .Title }}</title>
     <meta charset="utf-8">
@@ -7,8 +7,6 @@
   </head>
   <body>
     {{ if eq .Path "index.html" }}
-      <h1>{{ .Title }}</h1>
-      {{ .Content }}
       <ul>
         {{ range .Pages }}
           <li><a href="{{ .URL }}">{{ .Title }}</a></li>
@@ -18,7 +16,6 @@
       <h1>{{ .Title }}</h1>
       <p>{{ .Date.Format "January 2, 2006" }}</p>
       {{ .Content }}
-      <a href="/">Home</a>
     {{ end }}
   </body>
 </html>
