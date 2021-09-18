@@ -7,14 +7,13 @@
   </head>
   <body>
     {{ if eq .Path "index.html" }}
+      {{ .Content }}
       <ul>
         {{ range .Pages }}
-          <li><a href="{{ .URL }}">{{ .Title }}</a></li>
+          <li><a href="{{ .URL }}">{{ .Title }}</a> ({{ .Date.Format "January 2, 2006" }})</li>
         {{ end }}
       </ul>
     {{ else }}
-      <h1>{{ .Title }}</h1>
-      <p>{{ .Date.Format "January 2, 2006" }}</p>
       {{ .Content }}
     {{ end }}
   </body>
