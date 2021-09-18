@@ -103,7 +103,10 @@ func parsePage(p, baseURL, style string) *Page {
 	b, err := ioutil.ReadFile(p)
 	check(err)
 	fm, md := separateContent(b)
-	frontMatter := &FrontMatter{Title: p}
+	frontMatter := &FrontMatter{
+		Title: p,
+		Date:  time.Now(),
+	}
 	check(yaml.Unmarshal(fm, frontMatter))
 	target := replaceExtension(p, ".html")
 	var enabledExtensions blackfriday.Extensions = blackfriday.CommonExtensions | blackfriday.Footnotes
