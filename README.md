@@ -1,7 +1,6 @@
 # pt
 
 [![Build Status](https://github.com/hoffa/pt/workflows/.github/workflows/workflow.yml/badge.svg)](https://github.com/hoffa/pt/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/hoffa/pt)](https://goreportcard.com/report/github.com/hoffa/pt)
 
 A minimalist static blog generator.
 
@@ -52,13 +51,6 @@ Valid variables are:
 - `exclude`: if `yes`, the page will be excluded from `.Pages` and the RSS feed
 
 ## Example
-
-First, get the page and RSS feed templates:
-
-```shell
-curl -L https://github.com/hoffa/pt/archive/master.tar.gz \
-  | tar -zxf- --strip-components=1 pt-master/templates
-```
 
 Create the index page as `index.md`:
 
