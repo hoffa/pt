@@ -24,11 +24,11 @@ Usage of pt:
   -feed string
     	feed target (default "feed.xml")
   -feed-template string
-    	feed template (default "templates/feed.xml")
+    	feed template
   -highlight string
     	code highlight style
   -template string
-    	page template (default "templates/page.html")
+    	page template
 ```
 
 ## Front matter
