@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	_ "embed"
 	"flag"
 	"fmt"
 	htmlTemplate "html/template"
@@ -21,6 +22,12 @@ import (
 	"github.com/russross/blackfriday/v2"
 	"gopkg.in/yaml.v2"
 )
+
+//go:embed templates/page.html
+var defaultPageTemplate string
+
+//go:embed templates/feed.xml
+var defaultFeedTemplate string
 
 // FrontMatter represents a page's front matter.
 type FrontMatter struct {
@@ -115,7 +122,11 @@ func parsePage(p, baseURL, style string) *Page {
 }
 
 func writePage(templatePath string, page *Page) {
-	tmpl := htmlTemplate.Must(htmlTemplate.ParseFiles(templatePath))
+	tmpl, err := htmlTemplate.ParseFiles(templatePath)
+	if err != nil {
+		fmt.Println("cannot parse", templatePath, "using default page template")
+		tmpl = htmlTemplate.Must(htmlTemplate.New(templatePath).Parse(defaultPageTemplate))
+	}
 	f, err := os.Create(page.Path)
 	check(err)
 	defer f.Close()
@@ -123,7 +134,11 @@ func writePage(templatePath string, page *Page) {
 }
 
 func writeRSS(templatePath string, page *Page) {
-	tmpl := textTemplate.Must(textTemplate.ParseFiles(templatePath))
+	tmpl, err := textTemplate.ParseFiles(templatePath)
+	if err != nil {
+		fmt.Println("cannot parse", templatePath, "using default feed template")
+		tmpl = textTemplate.Must(textTemplate.New(templatePath).Parse(defaultFeedTemplate))
+	}
 	f, err := os.Create(page.Path)
 	check(err)
 	defer f.Close()
