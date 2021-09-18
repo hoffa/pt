@@ -121,24 +121,14 @@ func parsePage(p, baseURL, style string) *Page {
 	}
 }
 
-func writePage(templatePath string, page *Page) {
-	tmpl, err := htmlTemplate.ParseFiles(templatePath)
-	if err != nil {
-		fmt.Println("cannot parse", templatePath, "using default page template")
-		tmpl = htmlTemplate.Must(htmlTemplate.New(templatePath).Parse(defaultPageTemplate))
-	}
+func writePage(tmpl htmlTemplate.Template, page *Page) {
 	f, err := os.Create(page.Path)
 	check(err)
 	defer f.Close()
 	check(tmpl.Execute(f, page))
 }
 
-func writeRSS(templatePath string, page *Page) {
-	tmpl, err := textTemplate.ParseFiles(templatePath)
-	if err != nil {
-		fmt.Println("cannot parse", templatePath, "using default feed template")
-		tmpl = textTemplate.Must(textTemplate.New(templatePath).Parse(defaultFeedTemplate))
-	}
+func writeRSS(tmpl textTemplate.Template, page *Page) {
 	f, err := os.Create(page.Path)
 	check(err)
 	defer f.Close()
@@ -171,13 +161,25 @@ func main() {
 		}
 	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
+
+	pageTemplate, err := htmlTemplate.ParseFiles(*pageTemplatePath)
+	if err != nil {
+		fmt.Println("cannot parse", *pageTemplatePath, "using default page template")
+		pageTemplate = htmlTemplate.Must(htmlTemplate.New(*pageTemplatePath).Parse(defaultPageTemplate))
+	}
+	feedTemplate, err := textTemplate.ParseFiles(*feedTemplatePath)
+	if err != nil {
+		fmt.Println("cannot parse", *feedTemplatePath, "using default feed template")
+		feedTemplate = textTemplate.Must(textTemplate.New(*feedTemplatePath).Parse(defaultFeedTemplate))
+	}
+
 	for _, page := range append(included, excluded...) {
 		page.Pages = included
-		writePage(*pageTemplatePath, page)
+		writePage(*pageTemplate, page)
 		fmt.Println(page.Path)
 	}
 	if len(included) > 0 {
-		writeRSS(*feedTemplatePath, &Page{
+		writeRSS(*feedTemplate, &Page{
 			FrontMatter: &FrontMatter{
 				Date: time.Now(),
 			},
