@@ -18,8 +18,8 @@ import (
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
-	"gopkg.in/russross/blackfriday.v2"
-	"gopkg.in/yaml.v3"
+	"github.com/russross/blackfriday/v2"
+	"gopkg.in/yaml.v2"
 )
 
 // FrontMatter represents a page's front matter.
