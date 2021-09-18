@@ -4,7 +4,6 @@ import (
 	"bytes"
 	_ "embed"
 	"flag"
-	"fmt"
 	htmlTemplate "html/template"
 	"io"
 	"io/ioutil"
@@ -150,9 +149,9 @@ func urlJoin(base, p string) string {
 
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
-	pageTemplatePath := flag.String("template", "templates/page.html", "page template")
+	pageTemplatePath := flag.String("template", "", "page template")
 	feedPath := flag.String("feed", "feed.xml", "feed target")
-	feedTemplatePath := flag.String("feed-template", "templates/feed.xml", "feed template")
+	feedTemplatePath := flag.String("feed-template", "", "feed template")
 	style := flag.String("highlight", "", "code highlight style")
 	flag.Parse()
 
@@ -168,15 +167,14 @@ func main() {
 	}
 	sort.Slice(included, func(i, j int) bool { return included[i].Date.After(included[j].Date) })
 
-	pageTemplate, err := htmlTemplate.ParseFiles(*pageTemplatePath)
-	if err != nil {
-		fmt.Println("cannot parse", *pageTemplatePath, "using default page template")
-		pageTemplate = htmlTemplate.Must(htmlTemplate.New(*pageTemplatePath).Parse(defaultPageTemplate))
+	pageTemplate := htmlTemplate.Must(htmlTemplate.New("page").Parse(defaultPageTemplate))
+	if *pageTemplatePath != "" {
+		pageTemplate = htmlTemplate.Must(htmlTemplate.ParseFiles(*pageTemplatePath))
 	}
-	feedTemplate, err := textTemplate.ParseFiles(*feedTemplatePath)
-	if err != nil {
-		fmt.Println("cannot parse", *feedTemplatePath, "using default feed template")
-		feedTemplate = textTemplate.Must(textTemplate.New(*feedTemplatePath).Parse(defaultFeedTemplate))
+
+	feedTemplate := textTemplate.Must(textTemplate.New("feed").Parse(defaultFeedTemplate))
+	if *feedTemplatePath != "" {
+		feedTemplate = textTemplate.Must(textTemplate.ParseFiles(*feedTemplatePath))
 	}
 
 	for _, page := range append(included, excluded...) {
