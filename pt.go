@@ -182,7 +182,6 @@ func main() {
 	for _, page := range append(included, excluded...) {
 		page.Pages = included
 		writePage(*pageTemplate, page)
-		fmt.Println(page.Path)
 	}
 	if *feedPath != "" {
 		writeRSS(*feedTemplate, &Page{
