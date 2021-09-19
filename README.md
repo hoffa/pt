@@ -52,6 +52,31 @@ Valid variables are:
 
 ## Example
 
+Create a page template as `template.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ .Title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    {{ if eq .Path "index.html" }}
+      {{ .Content }}
+      <ul>
+        {{ range .Pages }}
+          <li><a href="{{ .URL }}">{{ .Title }}</a> ({{ .Date.Format "January 2, 2006" }})</li>
+        {{ end }}
+      </ul>
+    {{ else }}
+      {{ .Content }}
+    {{ end }}
+  </body>
+</html>
+```
+
 Create the index page as `index.md`:
 
 ```Markdown
@@ -83,7 +108,7 @@ print("Hello!")
 Finally, build:
 
 ```shell
-pt -base-url https://mysite.com -highlight monokailight *.md
+pt -base-url https://mysite.com -template template.html -highlight monokailight *.md
 ```
 
 See the [Chroma Playground](https://swapoff.org/chroma/playground/) for available syntax highlighting styles.
