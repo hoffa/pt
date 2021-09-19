@@ -6,15 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    {{ if eq .Path "index.html" }}
-      {{ .Content }}
-      <ul>
-        {{ range .Pages }}
-          <li><a href="{{ .URL }}">{{ .Title }}</a> ({{ .Date.Format "January 2, 2006" }})</li>
-        {{ end }}
-      </ul>
-    {{ else }}
-      {{ .Content }}
-    {{ end }}
+    {{ .Content }}
   </body>
 </html>
