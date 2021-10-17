@@ -20,37 +20,31 @@
 </ul>
 
 <h2>Installation</h2>
-
-<pre><code class="language-shell">go get github.com/hoffa/pt
-</code></pre>
-
+<pre tabindex="0" style="background-color:#fff">go get github.com/hoffa/pt
+</pre>
 <h2>Usage</h2>
-
-<pre><code class="language-shell">Usage of pt:
+<pre tabindex="0" style="background-color:#fff">Usage of pt:
   -base-url string
     	base URL
   -feed string
-    	feed target (default &quot;feed.xml&quot;)
+    	feed target (default <span style="color:#00f">&#34;feed.xml&#34;</span>)
   -feed-template string
     	feed template
   -highlight string
     	code highlight style
   -template string
     	page template
-</code></pre>
-
+</pre>
 <h2>Front matter</h2>
 
 <p>Each page can contain a YAML front matter. It must be placed at the top within <code>---</code> delimiters:</p>
-
-<pre><code class="language-markdown">---
+<pre tabindex="0" style="background-color:#fff">---
 title: Hello, world!
 date: 2019-02-11
 ---
 
 This is an example page!
-</code></pre>
-
+</pre>
 <p>Valid variables are:</p>
 
 <ul>
@@ -62,60 +56,52 @@ This is an example page!
 <h2>Example</h2>
 
 <p>Create a page template as <code>template.html</code>:</p>
-
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;{{ .Title }}&lt;/title&gt;
-    &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    {{ if eq .Path &quot;index.html&quot; }}
+<pre tabindex="0" style="background-color:#fff"><span style="color:#008080">&lt;!DOCTYPE html&gt;</span>
+&lt;<span style="color:#000080;font-weight:bold">html</span>&gt;
+  &lt;<span style="color:#000080;font-weight:bold">head</span>&gt;
+    &lt;<span style="color:#000080;font-weight:bold">title</span>&gt;{{ .Title }}&lt;/<span style="color:#000080;font-weight:bold">title</span>&gt;
+    &lt;<span style="color:#000080;font-weight:bold">meta</span> <span style="color:#f00">charset</span>=<span style="color:#00f">&#34;utf-8&#34;</span>&gt;
+    &lt;<span style="color:#000080;font-weight:bold">meta</span> <span style="color:#f00">name</span>=<span style="color:#00f">&#34;viewport&#34;</span> <span style="color:#f00">content</span>=<span style="color:#00f">&#34;width=device-width, initial-scale=1&#34;</span>&gt;
+  &lt;/<span style="color:#000080;font-weight:bold">head</span>&gt;
+  &lt;<span style="color:#000080;font-weight:bold">body</span>&gt;
+    {{ if eq .Path &#34;index.html&#34; }}
       {{ .Content }}
-      &lt;ul&gt;
+      &lt;<span style="color:#000080;font-weight:bold">ul</span>&gt;
         {{ range .Pages }}
-          &lt;li&gt;&lt;a href=&quot;{{ .URL }}&quot;&gt;{{ .Title }}&lt;/a&gt; ({{ .Date.Format &quot;January 2, 2006&quot; }})&lt;/li&gt;
+          &lt;<span style="color:#000080;font-weight:bold">li</span>&gt;&lt;<span style="color:#000080;font-weight:bold">a</span> <span style="color:#f00">href</span>=<span style="color:#00f">&#34;{{ .URL }}&#34;</span>&gt;{{ .Title }}&lt;/<span style="color:#000080;font-weight:bold">a</span>&gt; ({{ .Date.Format &#34;January 2, 2006&#34; }})&lt;/<span style="color:#000080;font-weight:bold">li</span>&gt;
         {{ end }}
-      &lt;/ul&gt;
+      &lt;/<span style="color:#000080;font-weight:bold">ul</span>&gt;
     {{ else }}
       {{ .Content }}
     {{ end }}
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
+  &lt;/<span style="color:#000080;font-weight:bold">body</span>&gt;
+&lt;/<span style="color:#000080;font-weight:bold">html</span>&gt;
+</pre>
 <p>Create the index page as <code>index.md</code>:</p>
-
-<pre><code class="language-Markdown">---
+<pre tabindex="0" style="background-color:#fff">---
 title: Jane Doe
 exclude: yes
 ---
 
-Subscribe via [RSS](/feed.xml).
-</code></pre>
-
+Subscribe via [<span style="color:#000080;font-weight:bold">RSS</span>](<span style="color:#f00">/feed.xml</span>).
+</pre>
 <p>And a post within a file called <code>my-first-post.md</code>:</p>
-
-<pre><code class="language-Markdown">---
+<pre tabindex="0" style="background-color:#fff">---
 title: My first post
 date: 2019-04-20
 ---
 
-This is an example **Markdown** _post_.
-I like `turtles`.
+This is an example <span style="font-weight:bold">**Markdown**</span> <span style="font-style:italic">_post_</span>.
+I like <span style="color:#00f">`turtles`</span>.
 
-```python
-print(&quot;Hello!&quot;)
-```
+<span style="color:#00f">```python
+</span><span style="color:#00f"></span>print(<span style="color:#00f">&#34;Hello!&#34;</span>)
+<span style="color:#00f">```</span>
 
-</code></pre>
-
+</pre>
 <p>Finally, build:</p>
-
-<pre><code class="language-shell">pt -base-url https://mysite.com -template template.html -highlight monokailight *.md
-</code></pre>
-
+<pre tabindex="0" style="background-color:#fff">pt -base-url https://mysite.com -template template.html -highlight monokailight *.md
+</pre>
 <p>See the <a href="https://swapoff.org/chroma/playground/">Chroma Playground</a> for available syntax highlighting styles.</p>
 
   </body>
