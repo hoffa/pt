@@ -9,6 +9,10 @@ A minimalist static blog generator.
 - Generates valid [RSS 2.0](https://validator.w3.org/feed/docs/rss2.html) feed
 - Supports code highlighting (using [Chroma](https://github.com/alecthomas/chroma))
 
+## Demo
+
+https://hoffa.github.io/pt
+
 ## Installation
 
 ```shell
