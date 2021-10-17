@@ -3,9 +3,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-go@v2
-      with:
-        go-version: "1.17"
-    - run: go build -v ./...
-    - run: go test -v ./...
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.17"
+      - run: go build -v ./...
+      - run: go test -v ./...
+      - run: go run pt.go -feed "" README.md
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add README.html
+          git commit -m "Update README.html"
+          git push
