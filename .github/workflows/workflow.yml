@@ -9,7 +9,7 @@ jobs:
           go-version: "1.17"
       - run: go build -v ./...
       - run: go test -v ./...
-      - run: go run pt.go -highlight borland -feed "" README.md
+      - run: go run pt.go -highlight tango -feed "" README.md
       - run: mv README.html index.html
       - run: |
           git config user.name github-actions
