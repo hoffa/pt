@@ -24,14 +24,14 @@
 <p>This README is published at <a href="https://hoffa.github.io/pt">https://hoffa.github.io/pt</a></p>
 
 <h2>Installation</h2>
-<pre tabindex="0" style="background-color:#fff">go get github.com/hoffa/pt
+<pre tabindex="0" style="background-color:#f8f8f8">go get github.com/hoffa/pt
 </pre>
 <h2>Usage</h2>
-<pre tabindex="0" style="background-color:#fff">Usage of pt:
+<pre tabindex="0" style="background-color:#f8f8f8">Usage of pt:
   -base-url string
     	base URL
   -feed string
-    	feed target (default <span style="color:#00f">&#34;feed.xml&#34;</span>)
+    	feed target <span style="color:#ce5c00;font-weight:bold">(</span>default <span style="color:#4e9a06">&#34;feed.xml&#34;</span><span style="color:#ce5c00;font-weight:bold">)</span>
   -feed-template string
     	feed template
   -highlight string
@@ -42,7 +42,7 @@
 <h2>Front matter</h2>
 
 <p>Each page can contain a YAML front matter. It must be placed at the top within <code>---</code> delimiters:</p>
-<pre tabindex="0" style="background-color:#fff">---
+<pre tabindex="0" style="background-color:#f8f8f8">---
 title: Hello, world!
 date: 2019-02-11
 ---
@@ -60,50 +60,50 @@ This is an example page!
 <h2>Example</h2>
 
 <p>Create a page template as <code>template.html</code>:</p>
-<pre tabindex="0" style="background-color:#fff"><span style="color:#008080">&lt;!DOCTYPE html&gt;</span>
-&lt;<span style="color:#000080;font-weight:bold">html</span>&gt;
-  &lt;<span style="color:#000080;font-weight:bold">head</span>&gt;
-    &lt;<span style="color:#000080;font-weight:bold">title</span>&gt;{{ .Title }}&lt;/<span style="color:#000080;font-weight:bold">title</span>&gt;
-    &lt;<span style="color:#000080;font-weight:bold">meta</span> <span style="color:#f00">charset</span>=<span style="color:#00f">&#34;utf-8&#34;</span>&gt;
-    &lt;<span style="color:#000080;font-weight:bold">meta</span> <span style="color:#f00">name</span>=<span style="color:#00f">&#34;viewport&#34;</span> <span style="color:#f00">content</span>=<span style="color:#00f">&#34;width=device-width, initial-scale=1&#34;</span>&gt;
-  &lt;/<span style="color:#000080;font-weight:bold">head</span>&gt;
-  &lt;<span style="color:#000080;font-weight:bold">body</span>&gt;
+<pre tabindex="0" style="background-color:#f8f8f8"><span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE html&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>{{ .Title }}<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">meta</span> <span style="color:#c4a000">charset</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;utf-8&#34;</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">meta</span> <span style="color:#c4a000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;viewport&#34;</span> <span style="color:#c4a000">content</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;width=device-width, initial-scale=1&#34;</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>
     {{ if eq .Path &#34;index.html&#34; }}
       {{ .Content }}
-      &lt;<span style="color:#000080;font-weight:bold">ul</span>&gt;
+      <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">ul</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>
         {{ range .Pages }}
-          &lt;<span style="color:#000080;font-weight:bold">li</span>&gt;&lt;<span style="color:#000080;font-weight:bold">a</span> <span style="color:#f00">href</span>=<span style="color:#00f">&#34;{{ .URL }}&#34;</span>&gt;{{ .Title }}&lt;/<span style="color:#000080;font-weight:bold">a</span>&gt; ({{ .Date.Format &#34;January 2, 2006&#34; }})&lt;/<span style="color:#000080;font-weight:bold">li</span>&gt;
+          <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">li</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">a</span> <span style="color:#c4a000">href</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;{{ .URL }}&#34;</span><span style="color:#000;font-weight:bold"></span><span style="color:#000;font-weight:bold">&gt;</span>{{ .Title }}<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">a</span><span style="color:#000;font-weight:bold">&gt;</span> ({{ .Date.Format &#34;January 2, 2006&#34; }})<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">li</span><span style="color:#000;font-weight:bold">&gt;</span>
         {{ end }}
-      &lt;/<span style="color:#000080;font-weight:bold">ul</span>&gt;
+      <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">ul</span><span style="color:#000;font-weight:bold">&gt;</span>
     {{ else }}
       {{ .Content }}
     {{ end }}
-  &lt;/<span style="color:#000080;font-weight:bold">body</span>&gt;
-&lt;/<span style="color:#000080;font-weight:bold">html</span>&gt;
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
 </pre>
 <p>Create the index page as <code>index.md</code>:</p>
-<pre tabindex="0" style="background-color:#fff">---
+<pre tabindex="0" style="background-color:#f8f8f8">---
 title: Jane Doe
 exclude: yes
 ---
 
-Subscribe via [<span style="color:#000080;font-weight:bold">RSS</span>](<span style="color:#f00">/feed.xml</span>).
+Subscribe via [<span style="color:#204a87;font-weight:bold">RSS</span>](<span style="color:#c4a000">/feed.xml</span>).
 </pre>
 <p>And a post within a file called <code>my-first-post.md</code>:</p>
-<pre tabindex="0" style="background-color:#fff">---
+<pre tabindex="0" style="background-color:#f8f8f8">---
 title: My first post
 date: 2019-04-20
 ---
 
-This is an example <span style="font-weight:bold">**Markdown**</span> <span style="font-style:italic">_post_</span>.
-I like <span style="color:#00f">`turtles`</span>.
+This is an example <span style="color:#000;font-weight:bold">**Markdown**</span> <span style="color:#000;font-style:italic">_post_</span>.
+I like <span style="color:#4e9a06">`turtles`</span>.
 
-<span style="color:#00f">```python
-</span><span style="color:#00f"></span>print(<span style="color:#00f">&#34;Hello!&#34;</span>)
-<span style="color:#00f">```</span>
+<span style="color:#4e9a06">```python
+</span><span style="color:#4e9a06"></span><span style="color:#204a87">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;Hello!&#34;</span><span style="color:#000;font-weight:bold">)</span>
+<span style="color:#4e9a06">```</span>
 </pre>
 <p>Finally, build:</p>
-<pre tabindex="0" style="background-color:#fff">pt -base-url https://mysite.com -template template.html -highlight monokailight *.md
+<pre tabindex="0" style="background-color:#f8f8f8">pt -base-url https://mysite.com -template template.html -highlight monokailight *.md
 </pre>
 <p>See the <a href="https://swapoff.org/chroma/playground/">Chroma Playground</a> for available syntax highlighting styles.</p>
 
