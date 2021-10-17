@@ -11,7 +11,7 @@ A minimalist static blog generator.
 
 ## Demo
 
-https://hoffa.github.io/pt
+This README is published at https://hoffa.github.io/pt
 
 ## Installation
 
@@ -106,7 +106,6 @@ I like `turtles`.
 ```python
 print("Hello!")
 ```
-
 ````
 
 Finally, build:
