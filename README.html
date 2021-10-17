@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>README.md</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h1>pt</h1>
+
+<p><a href="https://github.com/hoffa/pt/actions"><img src="https://github.com/hoffa/pt/workflows/.github/workflows/workflow.yml/badge.svg" alt="Build Status" /></a></p>
+
+<p>A minimalist static blog generator.</p>
+
+<ul>
+<li>Super simple</li>
+<li>Write pages in <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a></li>
+<li>Generates valid <a href="https://validator.w3.org/feed/docs/rss2.html">RSS 2.0</a> feed</li>
+<li>Supports code highlighting (using <a href="https://github.com/alecthomas/chroma">Chroma</a>)</li>
+</ul>
+
+<h2>Installation</h2>
+
+<pre><code class="language-shell">go get github.com/hoffa/pt
+</code></pre>
+
+<h2>Usage</h2>
+
+<pre><code class="language-shell">Usage of pt:
+  -base-url string
+    	base URL
+  -feed string
+    	feed target (default &quot;feed.xml&quot;)
+  -feed-template string
+    	feed template
+  -highlight string
+    	code highlight style
+  -template string
+    	page template
+</code></pre>
+
+<h2>Front matter</h2>
+
+<p>Each page can contain a YAML front matter. It must be placed at the top within <code>---</code> delimiters:</p>
+
+<pre><code class="language-markdown">---
+title: Hello, world!
+date: 2019-02-11
+---
+
+This is an example page!
+</code></pre>
+
+<p>Valid variables are:</p>
+
+<ul>
+<li><code>title</code>: the title</li>
+<li><code>date</code>: the creation date</li>
+<li><code>exclude</code>: if <code>yes</code>, the page will be excluded from <code>.Pages</code> and the RSS feed</li>
+</ul>
+
+<h2>Example</h2>
+
+<p>Create a page template as <code>template.html</code>:</p>
+
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;{{ .Title }}&lt;/title&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    {{ if eq .Path &quot;index.html&quot; }}
+      {{ .Content }}
+      &lt;ul&gt;
+        {{ range .Pages }}
+          &lt;li&gt;&lt;a href=&quot;{{ .URL }}&quot;&gt;{{ .Title }}&lt;/a&gt; ({{ .Date.Format &quot;January 2, 2006&quot; }})&lt;/li&gt;
+        {{ end }}
+      &lt;/ul&gt;
+    {{ else }}
+      {{ .Content }}
+    {{ end }}
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Create the index page as <code>index.md</code>:</p>
+
+<pre><code class="language-Markdown">---
+title: Jane Doe
+exclude: yes
+---
+
+Subscribe via [RSS](/feed.xml).
+</code></pre>
+
+<p>And a post within a file called <code>my-first-post.md</code>:</p>
+
+<pre><code class="language-Markdown">---
+title: My first post
+date: 2019-04-20
+---
+
+This is an example **Markdown** _post_.
+I like `turtles`.
+
+```python
+print(&quot;Hello!&quot;)
+```
+
+</code></pre>
+
+<p>Finally, build:</p>
+
+<pre><code class="language-shell">pt -base-url https://mysite.com -template template.html -highlight monokailight *.md
+</code></pre>
+
+<p>See the <a href="https://swapoff.org/chroma/playground/">Chroma Playground</a> for available syntax highlighting styles.</p>
+
+  </body>
+</html>
