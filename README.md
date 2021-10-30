@@ -9,7 +9,7 @@ A minimalist static blog generator.
 - Generates valid [RSS 2.0](https://validator.w3.org/feed/docs/rss2.html) feed
 - Supports code highlighting (using [Chroma](https://github.com/alecthomas/chroma))
 
-## Minimal example
+## Example
 
 ```bash
 echo 'Some `cool` _arbitrary_ *Markdown*!' | pt
