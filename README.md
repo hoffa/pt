@@ -64,6 +64,8 @@ Valid variables are:
 - `.Exclude`: boolean specifying whether this page is in `.Pages`
 - `.Pages`: array of all non-`exclude`d pages sorted by `date`
 
+See [`templates/page.html`](https://github.com/hoffa/pt/blob/main/templates/page.html) and [`templates/feed.xml`](https://github.com/hoffa/pt/blob/main/templates/feed.xml) for the default templates.
+
 ## Example
 
 Create a page template as `template.html`:
