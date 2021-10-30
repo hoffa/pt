@@ -15,6 +15,22 @@ A minimalist static blog generator.
 echo 'Some `cool` _arbitrary_ *Markdown*!' | pt
 ```
 
+Which prints:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <p>Some <code>cool</code> <em>arbitrary</em> <em>Markdown</em>!</p>
+  </body>
+</html>
+```
+
 ## Demo
 
 This README is published at https://hoffa.github.io/pt
