@@ -6,7 +6,6 @@ import (
 	"flag"
 	htmlTemplate "html/template"
 	"io"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path"
@@ -101,16 +100,29 @@ func separateContent(b []byte) ([]byte, []byte) {
 	return b[3 : i+3], b[i+6:]
 }
 
-func parsePage(p, baseURL, style string) *Page {
-	b, err := ioutil.ReadFile(p)
+func isTTY(f *os.File) bool {
+	stat, err := f.Stat()
+	check(err)
+	return stat.Mode()&os.ModeCharDevice != 0
+}
+
+// also exclude feed if stdin, since only one will be written to stdout
+// and title should be empty, seeing /dev/stdin is a bit of a hack
+
+func parsePage(f *os.File, baseURL, style string) *Page {
+	b, err := io.ReadAll(f)
 	check(err)
 	fm, md := separateContent(b)
 	frontMatter := &FrontMatter{
-		Title: p,
-		Date:  time.Now(),
+		Date: time.Now(),
 	}
 	check(yaml.Unmarshal(fm, frontMatter))
-	target := replaceExtension(p, ".html")
+	target := ""
+	if isTTY(f) {
+		target = replaceExtension(f.Name(), ".html")
+	} else {
+		frontMatter.Exclude = true
+	}
 	var enabledExtensions blackfriday.Extensions = blackfriday.CommonExtensions | blackfriday.Footnotes
 	var content []byte
 	if style == "" {
@@ -127,16 +139,22 @@ func parsePage(p, baseURL, style string) *Page {
 }
 
 func writePage(tmpl htmlTemplate.Template, page *Page) {
-	f, err := os.Create(page.Path)
-	check(err)
-	defer f.Close()
+	f := os.Stdout
+	if page.Path != "" {
+		f, err := os.Create(page.Path)
+		check(err)
+		defer f.Close()
+	}
 	check(tmpl.Execute(f, page))
 }
 
 func writeRSS(tmpl textTemplate.Template, page *Page) {
-	f, err := os.Create(page.Path)
-	check(err)
-	defer f.Close()
+	f := os.Stdout
+	if page.Path != "" {
+		f, err := os.Create(page.Path)
+		check(err)
+		defer f.Close()
+	}
 	check(tmpl.Execute(f, page))
 }
 
@@ -157,8 +175,15 @@ func main() {
 
 	var included []*Page
 	var excluded []*Page
-	for _, p := range flag.Args() {
-		page := parsePage(p, *baseURL, *style)
+	ps := flag.Args()
+	if len(ps) == 0 {
+		ps = []string{os.Stdin.Name()}
+	}
+	for _, p := range ps {
+		f, err := os.Open(p)
+		check(err)
+		defer f.Close()
+		page := parsePage(f, *baseURL, *style)
 		if page.Exclude {
 			excluded = append(excluded, page)
 		} else {
@@ -181,7 +206,7 @@ func main() {
 		page.Pages = included
 		writePage(*pageTemplate, page)
 	}
-	if *feedPath != "" {
+	if *feedPath != "" && len(included) > 0 {
 		writeRSS(*feedTemplate, &Page{
 			FrontMatter: &FrontMatter{
 				Title: *feedPath,
