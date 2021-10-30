@@ -50,9 +50,19 @@ This is an example page!
 
 Valid variables are:
 
-- `title`: the title
-- `date`: the creation date
+- `title`: page title
+- `date`: page creation date
 - `exclude`: if `yes`, the page will be excluded from `.Pages` and the RSS feed
+
+## Template fields
+
+- `.Title`: page title
+- `.Date`: page creation date
+- `.Path`: path to the generated HTML file
+- `.Content`: content of the generated HTML file
+- `.URL`: URL of the generated file (i.e. prefixed by the value of `-base-url`)
+- `.Exclude`: boolean specifying whether this page is in `.Pages`
+- `.Pages`: array of all pages of all non-`exclude`d pages sorted by `date`
 
 ## Example
 
