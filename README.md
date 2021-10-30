@@ -12,7 +12,7 @@ A minimalist static blog generator.
 ## Example
 
 ```bash
-echo 'Some `cool` _arbitrary_ *Markdown*!' | pt
+echo 'Some `cool` _arbitrary_ **Markdown**!' | pt
 ```
 
 Which prints:
@@ -26,7 +26,7 @@ Which prints:
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <p>Some <code>cool</code> <em>arbitrary</em> <em>Markdown</em>!</p>
+    <p>Some <code>cool</code> <em>arbitrary</em> <strong>Markdown</strong>!</p>
   </body>
 </html>
 ```
