@@ -60,9 +60,9 @@ Valid variables are:
 - `.Date`: page creation date
 - `.Path`: path to the generated HTML file
 - `.Content`: content of the generated HTML file
-- `.URL`: URL of the generated file (i.e. prefixed by the value of `-base-url`)
+- `.URL`: URL of the generated HTML file prefixed by the value of `-base-url`
 - `.Exclude`: boolean specifying whether this page is in `.Pages`
-- `.Pages`: array of all pages of all non-`exclude`d pages sorted by `date`
+- `.Pages`: array of all non-`exclude`d pages sorted by `date`
 
 ## Example
 
