@@ -52,9 +52,21 @@ This is an example page!
 <p>Valid variables are:</p>
 
 <ul>
-<li><code>title</code>: the title</li>
-<li><code>date</code>: the creation date</li>
+<li><code>title</code>: page title</li>
+<li><code>date</code>: page creation date</li>
 <li><code>exclude</code>: if <code>yes</code>, the page will be excluded from <code>.Pages</code> and the RSS feed</li>
+</ul>
+
+<h2>Template fields</h2>
+
+<ul>
+<li><code>.Title</code>: page title</li>
+<li><code>.Date</code>: page creation date</li>
+<li><code>.Path</code>: path to the generated HTML file</li>
+<li><code>.Content</code>: content of the generated HTML file</li>
+<li><code>.URL</code>: URL of the generated file (i.e. prefixed by the value of <code>-base-url</code>)</li>
+<li><code>.Exclude</code>: boolean specifying whether this page is in <code>.Pages</code></li>
+<li><code>.Pages</code>: array of all pages of all non-<code>exclude</code>d pages sorted by <code>date</code></li>
 </ul>
 
 <h2>Example</h2>
