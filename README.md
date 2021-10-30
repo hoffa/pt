@@ -9,6 +9,12 @@ A minimalist static blog generator.
 - Generates valid [RSS 2.0](https://validator.w3.org/feed/docs/rss2.html) feed
 - Supports code highlighting (using [Chroma](https://github.com/alecthomas/chroma))
 
+## Minimal example
+
+```bash
+echo 'Some `cool` _arbitrary_ *Markdown*!' | pt
+```
+
 ## Demo
 
 This README is published at https://hoffa.github.io/pt
@@ -66,7 +72,7 @@ Valid variables are:
 
 See [`templates/page.html`](https://github.com/hoffa/pt/blob/main/templates/page.html) and [`templates/feed.xml`](https://github.com/hoffa/pt/blob/main/templates/feed.xml) for the default templates.
 
-## Example
+## Longer example
 
 Create a page template as `template.html`:
 
