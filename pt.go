@@ -156,6 +156,7 @@ func main() {
 	feedPath := flag.String("feed", "feed.xml", "feed target")
 	feedTemplatePath := flag.String("feed-template", "", "feed template")
 	style := flag.String("highlight", "", "code highlight style")
+	dir := flag.String("dir", ".", "where to save generated files")
 	flag.Parse()
 
 	var included []*Page
@@ -171,7 +172,7 @@ func main() {
 		for _, p := range ps {
 			b, err := os.ReadFile(p)
 			check(err)
-			target := replaceExtension(p, ".html")
+			target := filepath.Join(*dir, replaceExtension(p, ".html"))
 			page := parsePage(b, target, *baseURL, *style)
 			if page.Exclude {
 				excluded = append(excluded, page)
