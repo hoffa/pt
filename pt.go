@@ -125,6 +125,7 @@ func writePage(tmpl htmlTemplate.Template, page *Page) {
 	if page.Path == "" {
 		check(tmpl.Execute(os.Stdout, page))
 	} else {
+		check(os.MkdirAll(filepath.Dir(page.Path), 0755))
 		f, err := os.Create(page.Path)
 		check(err)
 		defer f.Close()
@@ -136,6 +137,7 @@ func writeRSS(tmpl textTemplate.Template, page *Page) {
 	if page.Path == "" {
 		check(tmpl.Execute(os.Stdout, page))
 	} else {
+		check(os.MkdirAll(filepath.Dir(page.Path), 0755))
 		f, err := os.Create(page.Path)
 		check(err)
 		defer f.Close()
