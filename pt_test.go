@@ -12,7 +12,7 @@ func TestStdinMarkdown(t *testing.T) {
 	actual, err := cmd.Output()
 	check(err)
 	expected := `<!DOCTYPE html>
-<html>
+<html lang="">
   <head>
     <title></title>
     <meta charset="utf-8">
