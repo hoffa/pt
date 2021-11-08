@@ -47,6 +47,8 @@ go get github.com/hoffa/pt
 Usage of pt:
   -base-url string
     	base URL
+  -dir string
+    	where to save generated files (default ".")
   -feed string
     	feed target (default "feed.xml")
   -feed-template string
