@@ -19,7 +19,7 @@ Which prints:
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="">
   <head>
     <title></title>
     <meta charset="utf-8">
