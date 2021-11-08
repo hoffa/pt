@@ -78,7 +78,7 @@ Valid variables are:
 - `date`: page creation date
 - `exclude`: if `yes`, the page will be excluded from `.Pages` and the RSS feed
 
-## Template fields
+## [Template fields](https://pkg.go.dev/text/template)
 
 - `.Title`: page title
 - `.Date`: page creation date
