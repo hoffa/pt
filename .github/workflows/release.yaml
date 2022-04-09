@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+      - run: go test
+      - run: |
+          mkdir dist
+          GOOS=linux GOARCH=arm go build -o dist/linux_arm
+          GOOS=linux GOARCH=amd64 go build -o dist/linux_amd64
+          GOOS=darwin GOARCH=amd64 go build -o dist/darwin_amd64
+          git tag --force v1
+          git push --force origin v1
+          gh release upload v1 dist/* --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
