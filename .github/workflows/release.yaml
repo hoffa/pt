@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
+      - run: go build
       - run: go test
       - run: |
           GOOS=linux GOARCH=arm go build -o dist/linux_arm
