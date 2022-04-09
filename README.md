@@ -1,6 +1,6 @@
 # pt
 
-[![Build Status](https://github.com/hoffa/pt/workflows/.github/workflows/workflow.yml/badge.svg)](https://github.com/hoffa/pt/actions)
+[![.github/workflows/release.yaml](https://github.com/hoffa/pt/actions/workflows/release.yaml/badge.svg)](https://github.com/hoffa/pt/actions/workflows/release.yaml)
 
 A minimalist static blog generator.
 
