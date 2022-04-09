@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: "1.18"
-      - run: go build
+      - run: go test
       - run: |
           GOOS=linux GOARCH=arm go build -o dist/linux_arm
           GOOS=linux GOARCH=amd64 go build -o dist/linux_amd64
