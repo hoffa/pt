@@ -32,10 +32,6 @@ Which prints:
 </html>
 ```
 
-## Demo
-
-This README is published [here](https://hoffa.github.io/pt).
-
 ## Installation
 
 ```shell
