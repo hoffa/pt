@@ -15,6 +15,7 @@ jobs:
           GOOS=linux GOARCH=arm go build -o dist/linux_arm
           GOOS=linux GOARCH=amd64 go build -o dist/linux_amd64
           GOOS=darwin GOARCH=amd64 go build -o dist/darwin_amd64
+          GOOS=darwin GOARCH=arm64 go build -o dist/darwin_arm64
       - run: |
           git tag --force v1
           git push --force origin v1
