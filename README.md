@@ -1,7 +1,6 @@
 # pt
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/hoffa/pt)](https://goreportcard.com/report/github.com/hoffa/pt)
-[![.github/workflows/release.yaml](https://github.com/hoffa/pt/actions/workflows/release.yaml/badge.svg)](https://github.com/hoffa/pt/actions/workflows/release.yaml)
+[![Release](https://github.com/hoffa/pt/actions/workflows/release.yaml/badge.svg)](https://github.com/hoffa/pt/actions/workflows/release.yaml)
 
 A minimalist static blog generator.
 
