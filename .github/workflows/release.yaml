@@ -21,4 +21,6 @@ jobs:
       - run: |
           git tag --force v1
           git push --force origin v1
-          gh release upload v1 dist/* --clobber
+      - run: gh release upload v1 dist/* --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
