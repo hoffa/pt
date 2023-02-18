@@ -19,7 +19,7 @@ jobs:
           GOOS=darwin GOARCH=amd64 go build -o dist/darwin_amd64
           GOOS=darwin GOARCH=arm64 go build -o dist/darwin_arm64
       - run: |
-          git tag --force v1
+          git tag --force v1 HEAD
           git push --force origin v1
       - run: gh release upload v1 dist/* --clobber
         env:
