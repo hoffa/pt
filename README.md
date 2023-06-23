@@ -34,7 +34,7 @@ Which prints:
 ## Installation
 
 ```shell
-go get github.com/hoffa/pt
+go install github.com/hoffa/pt@latest
 ```
 
 ## Usage
