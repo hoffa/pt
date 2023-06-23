@@ -48,14 +48,16 @@ Usage of pt:
   -dir string
     	where to save generated files (default ".")
   -feed string
-    	feed target (default "feed.xml")
+    	feed target path (default "feed.xml")
   -feed-template string
-    	feed template
+    	feed template path
   -highlight string
     	code highlight style
   -template string
-    	page template
+    	page template path
 ```
+
+Pass the list of Markdown files to convert at the end.
 
 ## Front matter
 
