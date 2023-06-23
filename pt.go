@@ -154,9 +154,9 @@ func urlJoin(base, p string) string {
 
 func main() {
 	baseURL := flag.String("base-url", "", "base URL")
-	pageTemplatePath := flag.String("template", "", "page template")
-	feedPath := flag.String("feed", "feed.xml", "feed target")
-	feedTemplatePath := flag.String("feed-template", "", "feed template")
+	pageTemplatePath := flag.String("template", "", "page template path")
+	feedPath := flag.String("feed", "feed.xml", "feed target path")
+	feedTemplatePath := flag.String("feed-template", "", "feed template path")
 	style := flag.String("highlight", "", "code highlight style")
 	dir := flag.String("dir", ".", "where to save generated files")
 	flag.Parse()
