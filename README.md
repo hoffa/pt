@@ -37,6 +37,8 @@ Which prints:
 go install github.com/hoffa/pt@latest
 ```
 
+Or check [releases](https://github.com/hoffa/pt/releases) for the latest binaries.
+
 ## Usage
 
 ```shell
